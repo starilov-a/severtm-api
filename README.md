@@ -26,6 +26,15 @@
    ```sh
    docker compose -f ./docker/docker-compose.yml up --build -d
    ```
+5. Подтягивание зависимостей **composer**  
+    На **develop**:
+    ```sh
+    composer install
+    ```
+    На **production**:
+    ```sh
+    composer install --no-dev --optimize-autoloader
+    ```
 ### Особенности настройки
 
 1. Настройки **Xdebug** в PHPstorm.
