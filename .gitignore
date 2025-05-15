@@ -52,6 +52,9 @@ package-lock.json
 # logs and cache
 /var
 
+# vendor
+/vendor
+
 /.docker/log/*
 /.docker/mysql/data/
 /.docker-compose.yml
