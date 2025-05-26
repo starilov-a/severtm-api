@@ -3,17 +3,20 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
+use App\Modules\UserCabinet\Service\UserInformation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\ErrorHandler\Debug;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use function Symfony\Component\Console\CI\debug;
 
 class Controller extends AbstractController
 {
-    #[Route('/get-short-user-info', name: 'getShortUserInfo', methods: ['GET'])]
-    public function getShortUserInfo(): Response
+    #[Route(
+        '/get-short-user-info/{uid}',
+        name: 'getShortUserInfo',
+        methods: ['GET'],
+        requirements: ['uid' => '\d{8}']
+    )]
+    public function getShortUserInfo(int $uid, UserInformation $userInfoService)
     {
-        return new Response('Краткая информация о пользователе');
+        return $this->json($userInfoService->getShortUserInfo($uid));
     }
 }

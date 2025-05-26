@@ -1,5 +1,5 @@
 user-cabinet-api-v1:
-    prefix: /user-cabinet/api/v1
+    prefix: /user-cabinet/
     resource: ../src/Modules/UserCabinet/Controllers/APIv1
     type:     attribute
     defaults:

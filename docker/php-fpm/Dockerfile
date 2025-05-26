@@ -16,6 +16,8 @@ RUN apk add --no-cache \
     libtool \
     linux-headers
 
+RUN docker-php-ext-install pdo pdo_mysql
+
 ARG INSTALL_XDEBUG=false
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
     then \
