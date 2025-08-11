@@ -32,7 +32,7 @@ final class ExceptionListener
         ];
 
         $event->setResponse(new JsonResponse(
-            $payload,
+            $payload, 
             $this->e->getHttpStatus()
         ));
     }

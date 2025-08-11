@@ -105,23 +105,23 @@ src/
 
 ### Детали каталогов
 
-#### Controllers `Modules/UserCabinet/Controllers/APIv1`
+#### Controllers `Modules/<Module>/Controllers/APIv1`
 
 * Версионирование через подкаталоги (`APIv1`, `APIv2`, …).
 * Проверяют формат входных данных и вызывают сервис.
 * Возвращают `JsonResponse` в нужном формате.
 
-#### Services `Modules/UserCabinet/Service`
+#### Services `Modules/<Module>/Service`
 
 * Каждый публичный метод — одно бизнес‑действие.
 * При нарушении правил бросают наследника `BusinessException`.
 
-#### Entity `Modules/UserCabinet/Entity`
+#### Entity `Modules/<Module>/Entity`
 
 * Сущности описываются атрибутами Doctrine.
 * Для крупных областей сущности группируются подпапками (например, `User`, `Tariff`).
 
-#### Repository `Modules/UserCabinet/Repository`
+#### Repository `Modules/<Module>/Repository`
 
 * Наследуются от `BaseRepository` из `Modules/Common`.
 * Содержат сложные выборки, вызовы процедур и т. п.

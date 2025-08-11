@@ -33,7 +33,6 @@ class UserInformation
 
     public function getFullUserInfo(): array
     {
-
-
+        return [];
     }
 }
