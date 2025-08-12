@@ -5,9 +5,9 @@ namespace App\Modules\UserCabinet\Service\Exception;
 abstract class BusinessException extends \DomainException
 {
     public function __construct(
-        string $publicMessage,         // то, что увидит клиент
-        string $codeKey,               // машинный код: ACCOUNT_NEGATIVE_BALANCE
-        int    $httpStatus = 400,      // какой статус отдать наружу
+        string $publicMessage,
+        string $codeKey,
+        int    $httpStatus = 400,
         ?\Throwable $previous = null
     ) {
         parent::__construct($publicMessage, 0, $previous);

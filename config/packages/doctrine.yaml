@@ -28,6 +28,18 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity/User'
                 prefix: 'App\Modules\UserCabinet\Entity\User'
                 alias: User
+            Balance:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity'
+                prefix: 'App\Modules\UserCabinet\Entity'
+                alias: Balance
+            WriteOff:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity'
+                prefix: 'App\Modules\UserCabinet\Entity'
+                alias: WriteOff
         controller_resolver:
             auto_mapping: false
 

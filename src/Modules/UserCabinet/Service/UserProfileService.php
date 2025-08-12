@@ -5,16 +5,23 @@ namespace App\Modules\UserCabinet\Service;
 
 
 use App\Modules\UserCabinet\Entity\User\User;
+use App\Modules\UserCabinet\Entity\WriteOff;
+use App\Modules\UserCabinet\Repository\BalanceRepository;
 use App\Modules\UserCabinet\Repository\User\UserRepository;
+use App\Modules\UserCabinet\Repository\WriteOffRepository;
 use App\Modules\UserCabinet\Service\Exception\UserNotFoundException;
 
-class UserInformation
+class UserProfileService
 {
     protected UserRepository $userRepo;
-    public function __construct(UserRepository $userRepo)
+    public function __construct(
+        UserRepository $userRepo
+    )
     {
         $this->userRepo = $userRepo;
+
     }
+
     public function getShortUserInfo(int $uid): array
     {
         $user = $this->userRepo->find($uid);
@@ -26,13 +33,7 @@ class UserInformation
         return [
             'id' => $user->getId(),
             'login' => $user->getLogin(),
-            'full_name' => $user->getFullName(),
             'email' => $user->getEmail()
         ];
-    }
-
-    public function getFullUserInfo(): array
-    {
-        return [];
     }
 }
