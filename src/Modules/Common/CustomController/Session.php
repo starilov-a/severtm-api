@@ -1,14 +1,8 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers\CustomController;
+namespace App\Modules\Common\CustomController;
 
-use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Exception\Exception;
-
-
-class Session extends AbstractController
+final class Session
 {
     // реализуем SingleTone дабы избежать повторного создания сессии,
     // в один жзненный цикл скрипта.

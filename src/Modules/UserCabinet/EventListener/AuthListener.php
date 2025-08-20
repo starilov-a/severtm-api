@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\EventListener;
 
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpFoundation\Response;
+use App\Modules\Common\CustomController\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class AuthListener
 {
@@ -17,7 +17,7 @@ class AuthListener
 
             if (method_exists($controllerObject, 'authenticate')) {
                 $result = $controllerObject->authenticate();
-                if ($result !== true) {
+                if ($result !== true && !UserSession::checkAuth()) {
                     $event->setController(function() use ($result) {
                         return new RedirectResponse('/login');
                     });

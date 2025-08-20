@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers\CustomController;
+namespace App\Modules\UserCabinet\Controllers;
 
-use Symfony\Bridge\Twig\Extension\HttpFoundationExtension;
+use App\Modules\Common\CustomController\UserSession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
