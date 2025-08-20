@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Modules\UserCabinet\Service\Dto;
+namespace App\Modules\UserCabinet\Service\Dto\Request;
 
-class FilterDto
+use App\Modules\UserCabinet\Service\Dto\Dto;
+
+class FilterDto extends Dto
 {
     private $limit ;
     private $offset;

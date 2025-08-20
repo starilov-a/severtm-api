@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\Modules\UserCabinet\Entity\User;
+namespace App\Modules\UserCabinet\Entity;
 
-use App\Modules\UserCabinet\Repository\User\UserRepository;
+use App\Modules\UserCabinet\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,7 +14,6 @@ class User
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true])]
-    // Если в MySQL сделаете AUTO_INCREMENT → замените на #[ORM\GeneratedValue('AUTO')]
     private int $id;
 
     /* ---------- Аутентификация ---------- */
@@ -79,6 +78,7 @@ class User
     #[ORM\Column(name: 'credit_deadline', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creditDeadline = null;
 
+
     /* ---------- Блокировка ---------- */
 
 //    #[ORM\ManyToOne(targetEntity: BlockState::class)]
@@ -118,6 +118,14 @@ class User
 
     #[ORM\Column(name: 'comments', type: Types::TEXT)]
     private string $comments;
+
+    #[ORM\ManyToOne(targetEntity: Tariff::class, fetch: 'EAGER')]
+    #[ORM\JoinColumn(name: 'tariff', referencedColumnName: 'id', nullable: true)]
+    private ?Tariff $currentTariff = null;
+
+    #[ORM\ManyToOne(targetEntity: Tariff::class, fetch: 'EAGER')]
+    #[ORM\JoinColumn(name: 'tariff_next', referencedColumnName: 'id', nullable: true)]
+    private ?Tariff $nextTariff = null;
 
     /* ---------- Отношения с другими справочниками ---------- */
 
@@ -173,6 +181,7 @@ class User
         return $this;
     }
 
-    /* …добавьте остальные геттеры/сеттеры генератором:
-       php bin/console make:entity --regenerate App\\Entity\\User */
+    public function getCurrentTariff(): ?Tariff { return $this->currentTariff; }
+
+    public function getNextTariff(): ?Tariff { return $this->nextTariff; }
 }

@@ -4,11 +4,7 @@
 namespace App\Modules\UserCabinet\Service;
 
 
-use App\Modules\UserCabinet\Entity\User\User;
-use App\Modules\UserCabinet\Entity\WriteOff;
-use App\Modules\UserCabinet\Repository\BalanceRepository;
-use App\Modules\UserCabinet\Repository\User\UserRepository;
-use App\Modules\UserCabinet\Repository\WriteOffRepository;
+use App\Modules\UserCabinet\Repository\UserRepository;
 use App\Modules\UserCabinet\Service\Exception\UserNotFoundException;
 
 class UserProfileService
@@ -19,7 +15,6 @@ class UserProfileService
     )
     {
         $this->userRepo = $userRepo;
-
     }
 
     public function getShortUserInfo(int $uid): array
@@ -28,7 +23,6 @@ class UserProfileService
 
         if (!$user)
             throw new UserNotFoundException($uid);
-
 
         return [
             'id' => $user->getId(),

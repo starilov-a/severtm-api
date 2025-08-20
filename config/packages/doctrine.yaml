@@ -25,8 +25,8 @@ doctrine:
             User:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity/User'
-                prefix: 'App\Modules\UserCabinet\Entity\User'
+                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity'
+                prefix: 'App\Modules\UserCabinet\Entity'
                 alias: User
             Balance:
                 is_bundle: false
