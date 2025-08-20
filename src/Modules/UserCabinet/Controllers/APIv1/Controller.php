@@ -2,11 +2,11 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\UserCabinet\Service\Dto\FilterDto;
+use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
+use App\Modules\UserCabinet\Service\TariffService;
 use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -20,7 +20,8 @@ class Controller extends AbstractController
     )]
     public function getShortUserInfo(int $uid, UserProfileService $userInfoService)
     {
-        return $this->json($userInfoService->getShortUserInfo($uid));
+        $dtoResponse = $userInfoService->getShortUserInfo($uid);
+        return $this->json($dtoResponse);
     }
 
     #[Route(
@@ -70,4 +71,18 @@ class Controller extends AbstractController
     {
         return $this->json($paymentsService->getDebt($uid));
     }
+
+    #[Route(
+        '/get-current-tariff/{uid}',
+        name: 'getCurrentTariff',
+        methods: ['GET'],
+        requirements: ['uid' => '\d{8}']
+    )]
+    public function getCurrentTariff(int $uid, TariffService $tariffService)
+    {
+        $responseDto = $tariffService->getCurrentTariff($uid);
+        return $this->json($responseDto->toArray());
+    }
+
+
 }

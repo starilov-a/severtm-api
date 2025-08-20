@@ -6,7 +6,7 @@ use App\Modules\UserCabinet\Repository\BalanceRepository;
 use App\Modules\UserCabinet\Repository\DebtRepository;
 use App\Modules\UserCabinet\Repository\ReplenishmentRepository;
 use App\Modules\UserCabinet\Repository\WriteOffRepository;
-use App\Modules\UserCabinet\Service\Dto\FilterDto;
+use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 
 class PaymentsService
 {
@@ -33,7 +33,7 @@ class PaymentsService
 
     public function getBalance(int $uid): array
     {
-        $balance = $this->balanceRepo->get($uid);
+        $balance = $this->balanceRepo->find($uid);
 
         return [
             'balance' => $balance->get()
@@ -51,7 +51,7 @@ class PaymentsService
 
     public function getWriteOffs(FilterDto $filter, int $uid): array
     {
-        $writeOffs = $this->writeOffRepo->findByUser($uid, $filter->getLimit(), $filter->getOffset());
+        $writeOffs = $this->writeOffRepo->findByUser($filter, $uid);
 
         return array_map(function ($writeOff) {
             return [
@@ -64,7 +64,7 @@ class PaymentsService
 
     public function getReplenishments(FilterDto $filter, int $uid): array
     {
-        $replenishments = $this->replenishmentRepo->findByUser($uid, $filter->getLimit(), $filter->getOffset());
+        $replenishments = $this->replenishmentRepo->findByUser($filter, $uid);
 
         return array_map(function ($replenishment) {
             return [
