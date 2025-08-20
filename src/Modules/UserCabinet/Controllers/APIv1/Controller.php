@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
+use App\Modules\UserCabinet\Controllers\CustomController\BaseController;
 use App\Modules\UserCabinet\Service\Dto\FilterDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\UserProfileService;
@@ -10,8 +11,31 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-class Controller extends AbstractController
+class Controller extends BaseController
 {
+
+    private function authenticate(): true
+    {
+        return true;
+    }
+
+    #[Route(
+        '/index',
+        name: 'api_v1_index',
+        methods: ['GET']
+    )]
+    public function index(): JsonResponse
+    {
+        try{
+            $this->checkAuth();
+        }catch (\Exception $e){
+            return $this->json2($e->getMessage(), 401);
+        }
+
+        return $this->json([1,2,3,4]);
+    }
+
+
     #[Route(
         '/get-short-user-info/{uid}',
         name: 'getShortUserInfo',
