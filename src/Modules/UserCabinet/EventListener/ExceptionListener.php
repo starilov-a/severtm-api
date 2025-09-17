@@ -22,7 +22,7 @@ final class ExceptionListener
         $responseData = [
             'message' => $exception->getMessage()
         ];
-        $response = new JsonResponse($responseData, $exception->getCode());
+        $response = new JsonResponse($responseData, 404);
         $event->setResponse($response);
     }
 

@@ -7,11 +7,12 @@ use App\Modules\UserCabinet\Controllers\BaseController;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\TariffService;
 use App\Modules\UserCabinet\Service\UserProfileService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-class Controller extends BaseController
+class Controller extends AbstractController
 {
     // Данный метод нужен для того, чтобы подвязать конкретный контроллер к listener
     // В нашем случаем данный метод прослушивается в AuthListener.php
