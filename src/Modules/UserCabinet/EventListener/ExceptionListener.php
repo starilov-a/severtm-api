@@ -2,13 +2,10 @@
 
 namespace App\Modules\UserCabinet\EventListener;
 
-use App\Modules\UserCabinet\Service\Exception\BusinessException;
-use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Throwable;
 
 #[AsEventListener(event: KernelEvents::EXCEPTION)]
 final class ExceptionListener
