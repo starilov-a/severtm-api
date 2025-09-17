@@ -2,6 +2,8 @@
 
 namespace App\Modules\Common\CustomController;
 
+use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
+
 final class Session
 {
     // реализуем SingleTone дабы избежать повторного создания сессии,

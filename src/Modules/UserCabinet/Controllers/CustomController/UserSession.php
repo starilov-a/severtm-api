@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Controllers\CustomController;
 
+use App\Modules\Common\CustomController\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 

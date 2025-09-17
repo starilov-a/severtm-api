@@ -3,10 +3,12 @@
 namespace App\Modules\UserCabinet\EventListener;
 
 use App\Modules\UserCabinet\Service\Exception\BusinessException;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Throwable;
 
 #[AsEventListener(event: KernelEvents::EXCEPTION)]
 final class ExceptionListener
@@ -15,25 +17,13 @@ final class ExceptionListener
 
     public function __invoke(ExceptionEvent $event): void
     {
-        $this->e = $event->getThrowable();
+        $exception = $event->getThrowable();
 
-        if ($this->e instanceof BusinessException) {
-            $this->setResponse($event);
-        }
-
-        return;
-    }
-
-    protected function setResponse(ExceptionEvent $event): void
-    {
-        $payload = [
-            'code'    => $this->e->getCodeKey(),
-            'message' => $this->e->getMessage(),
+        $responseData = [
+            'message' => $exception->getMessage()
         ];
-
-        $event->setResponse(new JsonResponse(
-            $payload, 
-            $this->e->getHttpStatus()
-        ));
+        $response = new JsonResponse($responseData, $exception->getCode());
+        $event->setResponse($response);
     }
+
 }

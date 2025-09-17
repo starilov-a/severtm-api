@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\CustomController;
 
+use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 final class Auth

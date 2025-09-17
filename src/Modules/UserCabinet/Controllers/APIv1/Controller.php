@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\UserCabinet\Controllers\BaseController;
-use App\Modules\UserCabinet\Service\Dto\FilterDto;
+//use App\Modules\UserCabinet\Service\Dto\FilterDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\TariffService;
 use App\Modules\UserCabinet\Service\UserProfileService;
@@ -13,8 +13,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class Controller extends BaseController
 {
+    // Данный метод нужен для того, чтобы подвязать конкретный контроллер к listener
+    // В нашем случаем данный метод прослушивается в AuthListener.php
+    // данный метод стоит присваивать каждому контроллеру,
+    // тк если вынести это в BaseController, то будет проверяться авторизация каждый раз!
 
-    protected  function authenticate(): bool
+    // Важно!!! Все контроллеры стоит наследовать от BaseController
+    public function authenticate(): bool
     {
         return true;
     }
