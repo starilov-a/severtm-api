@@ -16,7 +16,7 @@ class ResponseListener
     {
         $response = $event->getResponse();
         // проверка, на то что не используется в контроллере view/twig
-        if (!$response instanceof JsonResponse) {
+        if (!$response instanceof JsonResponse || $response->getStatusCode() !== 200) {
             return;
         }
         $data = [

@@ -22,7 +22,7 @@ class AuthListener
 
             if (method_exists($controllerObject, 'authenticate')) {
                 $result = $controllerObject->authenticate();
-                if ($result && UserSession::checkAuth()) {
+                if ($result && !UserSession::checkAuth()) {
                     throw new Exception("User is not found",Response::HTTP_UNAUTHORIZED);
                 }
             }
