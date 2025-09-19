@@ -15,7 +15,7 @@ class ResponseListener
     public function __invoke(ResponseEvent $event): void
     {
         $response = $event->getResponse();
-        // проверка, на то что не используется в контроллере view/twig
+        // РїСЂРѕРІРµСЂРєР°, РЅР° С‚Рѕ С‡С‚Рѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ view/twig
         if (!$response instanceof JsonResponse || $response->getStatusCode() !== 200) {
             return;
         }

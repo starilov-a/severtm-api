@@ -6,16 +6,16 @@ use App\Modules\Common\CustomController\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-class UserSession extends AbstractController
+class UserSession
 {
 
     static public function checkAuth():bool {
         return self::loggedIn();
     }
 
-    // возможно после разлогирования будут производиться доп операции,
-    // к примеру отметка времени, когда пользователь был в сети последний раз.
-    // но пока это метод просто уничтожает сессию
+    // РІРѕР·РјРѕР¶РЅРѕ РїРѕСЃР»Рµ СЂР°Р·Р»РѕРіРёСЂРѕРІР°РЅРёСЏ Р±СѓРґСѓС‚ РїСЂРѕРёР·РІРѕРґРёС‚СЊСЃСЏ РґРѕРї РѕРїРµСЂР°С†РёРё,
+    // Рє РїСЂРёРјРµСЂСѓ РѕС‚РјРµС‚РєР° РІСЂРµРјРµРЅРё, РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р±С‹Р» РІ СЃРµС‚Рё РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·.
+    // РЅРѕ РїРѕРєР° СЌС‚Рѕ РјРµС‚РѕРґ РїСЂРѕСЃС‚Рѕ СѓРЅРёС‡С‚РѕР¶Р°РµС‚ СЃРµСЃСЃРёСЋ
     static public function logOut(): void {
         Session::destroy();
     }

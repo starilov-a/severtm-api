@@ -35,7 +35,7 @@ class TariffService
         //1. Получаем пользака
         $user = $this->userRepo->find($uid);
 
-        //2.Логика
+        // 2. Логика
         // 2.1. получаем новый тариф
         $newTariff = $this->tariffRepo->find($newTariffId);
         $currentTariff = $user->getCurrentTariff();
