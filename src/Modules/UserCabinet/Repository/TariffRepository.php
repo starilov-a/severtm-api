@@ -38,4 +38,9 @@ class TariffRepository extends BaseRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function issetForAddress(int $tariffId, int $addressId): bool
+    {
+
+    }
 }

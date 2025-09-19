@@ -2,84 +2,57 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\UserCabinet\Entity\Tariff;
+use App\Modules\UserCabinet\Entity\User;
 use App\Modules\UserCabinet\Repository\TariffRepository;
 use App\Modules\UserCabinet\Repository\UserRepository;
-use App\Modules\UserCabinet\Service\Dto\Response\TariffDto;
-use Symfony\Component\Config\Definition\BooleanNode;
 
 class TariffService
 {
     protected $tariffRepo;
     protected $userRepo;
+    protected $tariffService;
     public function __construct(
         TariffRepository $tariffRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        TariffService $tariffService
     )
     {
         $this->tariffRepo = $tariffRepository;
         $this->userRepo = $userRepository;
-    }
-    public function getCurrentTariff(int $uid): TariffDto
-    {
-        $user = $this->userRepo->find($uid);
-        $currentTariff = $user->getCurrentTariff();
-
-        return new TariffDto(
-            $currentTariff->getName(),
-            $currentTariff->getPrice()
-        );
+        $this->tariffService = $tariffService;
     }
 
-    public function changeCurrentTariff(int $uid, int $newTariffId): Bool
+    public function changeNextTariff(User $user, Tariff $newNextTariff)
     {
-        //1. Получаем пользака
-        $user = $this->userRepo->find($uid);
-
-        //2.Логика
-        // 2.1. получаем новый тариф
-        $newTariff = $this->tariffRepo->find($newTariffId);
-        $currentTariff = $user->getCurrentTariff();
-
-        // 2.2 Тарифы одинаковые
-        if ($newTariff->getId() == $currentTariff->getId())
+        $oldNextTariff = $user->getCurrentNextTariff();
+        // ВАЛИДАЦИЯ
+        //
+        // ЛОГИКА
+        // 1. не пакетный режим (пока оставим)
+        // 2. проверка тарифа по адресу
+        if (!$this->tariffRepo->issetForAddress($newNextTariff->getId(), $user->getAddressId()))
+            throw new \Exception('Тариф не соответстует адресу');
+        // 4. если имеется аренда - нельзя disconnected
+        if ($this->serviceClinetRepo->issetRentService($user->getId()))
+            throw new \Exception('Присутствует услуга аренды');
+        // 5 Тарифы одинаковые
+        if ($newNextTariff->getId() == $oldNextTariff->getId())
             throw new \Exception('Старый и новый тариф совпадают');
 
-        // 2.3 Вычисление коэффициента для перерасчета
+        // ДЕЙСТВИЯ
+        // 5. корретный finid - получим тут
+        $finPeriod = $this->finPeriodRepo->getNext();
+        // 6. чистка finid
+        $this->finPeriodRepo->clearForNextFinPeriods($finPeriod->getId());
+        // 7. чистка servpack - не используется / чистка любых user_serv_modes за будущие периоды
+        $this->userServModeRepo->clearForNextTariff($finPeriod->getId(), $user->getId());
 
-        // 2.2 Подвязка нового тарифа
-        $this->tariffRepo->changeCurrentTariff(...);
+        // 8. Добавление нового user_serv_mode (user_serv_mode + users)
+        $this->tariffRepo->setNextTariffForClient($finPeriod, $user->getId(), $newNextTariff->getId());
+        $this->userRepo->changeNextTariff($user->getId(), $newNextTariff->getId());
 
-        // 2.3 Перерасчет
-        $this->
-
-        // 2.4 Саписание за новый
-
-
-        // 2.3 Запись истории
-        $this->historyRepo->changeCurrentTariff(...);
-
-
-
-
-        //3. Меняем тариф
-
-        //4. возвращаем статус
-        return true;
-
-
-
-
-    //    1. можно ли менять тариф в течении какого либо времени
-    // 2.
-        // 2. разнцаи месцево когда устанавливали и меняют
-        // 3. меняет ли в принципе
-        // Либо юрик лиюо физ на юрике
-        //
-
-
-
-
-
-
+        // 9. запись в историю об успехе
+        $this->historyRepo->changeNextTariff(...);
     }
 }

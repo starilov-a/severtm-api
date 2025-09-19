@@ -27,11 +27,11 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
 COPY ./docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Configure non-root user.
-ARG PUID=1000
-ARG PGID=1000
-RUN apk --no-cache add shadow && \
-    groupmod -o -g ${PGID} www-data && \
-    usermod -o -u ${PUID} -g www-data www-data
+#ARG PUID=1000
+#ARG PGID=1000
+#RUN apk --no-cache add shadow && \
+#    groupmod -o -g ${PGID} www-data && \
+#    usermod -o -u ${PUID} -g www-data www-data
 
 # Source code
 COPY ./ /var/www
