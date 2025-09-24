@@ -146,3 +146,15 @@ src/
 * **Формат/структура входных данных** проверяется в контроллере (или через DTO).
 * **Бизнес‑валидность** (существует ли пользователь, разрешено ли действие) проверяет сервис.
 * **Транспортный слой** (контроллер + listener) превращает исключения из сервиса в единообразные JSON‑ответы.
+
+# Явно задать прокси
+composer config -g --unset http-proxy 2>/dev/null || true
+composer config -g --unset https-proxy 2>/dev/null || true
+
+composer config -g http-proxy  http://proxy.izet.ru:3128
+composer config -g https-proxy http://proxy.izet.ru:3128
+
+env | grep -i proxy
+curl -I https://repo.packagist.org/packages.json
+composer diagnose
+composer -vvv install
