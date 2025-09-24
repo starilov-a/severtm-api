@@ -1,5 +1,15 @@
 FROM php:8.2-fpm-alpine
 
+
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG NO_PROXY
+
+# И сделаем их доступными всем RUN-командам и приложениям
+ENV http_proxy=${HTTP_PROXY} \
+    https_proxy=${HTTPS_PROXY} \
+    no_proxy=${NO_PROXY}
+
 # Install packages
 # Устанавливаем необходимые системные зависимости
 RUN apk add --no-cache \
