@@ -37,24 +37,23 @@ class ClientTariffService
     // Изменение тарифа на след месяц
     public function changeNextTariff(int $uid, int $newTariffId): Bool
     {
-        //1. Получаем пользака
-        $user = $this->userRepo->find($uid);
+        // 1. Получаем клиента
+        $client = $this->userRepo->find($uid);
 
-        //2.Логика
+        // 2. Логика для клиента
         // 2.1. получаем новый тариф
         $newNextTariff = $this->tariffRepo->find($newTariffId);
-        $oldNextTariff = $user->getCurrentNextTariff();
 
-        // 2.1.2 Является ли доступным тарифом на измеение
-        if ($this->tariffRepo->belongsToGroup($newNextTariff->getId(), 'changeByClient'))
-            throw new \Exception('Тариф не явялется доступным для смены клиентом');
+        // 2.1.2 Является ли доступным тарифом на изменение самим клиентом
+        if ($newNextTariff->canBeChangedByClient())
+            throw new \Exception('Тариф не является доступным для смены клиентом');
 
-        // 2.3 новый тариф не является "Отключен от сети"
-        if ($this->tariffRepo->tariffIsDisconnected())
-            throw new \Exception('Невозможно ввыбрать тарифа "Отключён от сети"');
+        // 2.3 Новый тариф не является "Отключен от сети"
+        if ($newNextTariff->isDisconnected())
+            throw new \Exception('Невозможно выбрать тарифа "Отключён от сети"');
 
         // 2.2 Подвязка нового тарифа
-        $this->tariffService->changeNextTariff($user, $newNextTariff);
+        $this->tariffService->changeNextTariff($client, $newNextTariff);
 
         // 2.3 Запись истории
         $this->historyRepo->changeNextClintTariff(...);

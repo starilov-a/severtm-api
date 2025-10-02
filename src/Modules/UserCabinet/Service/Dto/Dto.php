@@ -2,8 +2,7 @@
 
 namespace App\Modules\UserCabinet\Service\Dto;
 
-use App\Shared\Traits\ArrayableTrait;
-use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
+use App\Modules\Common\Traits\ArrayableTrait;
 
 abstract class Dto
 {

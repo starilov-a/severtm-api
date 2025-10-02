@@ -2,12 +2,12 @@
 
 namespace App\Modules\UserCabinet\Repository;
 
-use App\Modules\Common\BaseRepository;
 use App\Modules\UserCabinet\Entity\Debt;
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class DebtRepository extends BaseRepository
+class DebtRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

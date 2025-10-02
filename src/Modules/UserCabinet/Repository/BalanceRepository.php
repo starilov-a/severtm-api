@@ -2,12 +2,11 @@
 
 namespace App\Modules\UserCabinet\Repository;
 
-use App\Modules\Common\BaseRepository;
 use App\Modules\UserCabinet\Entity\Balance;
-use App\Modules\UserCabinet\Service\Exception\UserNotFoundException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class BalanceRepository extends BaseRepository
+class BalanceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
