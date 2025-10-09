@@ -3,25 +3,32 @@
 namespace App\Modules\UserCabinet\Controllers\CustomController;
 
 use App\Modules\Common\CustomController\Session;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 
 class UserSession
 {
+    private RequestStack $requestStack;
 
-    static public function checkAuth():bool {
-        return self::loggedIn();
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
+     public function checkAuth():bool {
+        return $this->loggedIn();
     }
 
     // возможно после разлогирования будут производиться доп операции,
     // к примеру отметка времени, когда пользователь был в сети последний раз.
     // но пока это метод просто уничтожает сессию
-    static public function logOut(): void {
-        Session::destroy();
+    static public function logOut(\Symfony\Component\HttpFoundation\Session\Session $session): void {
+        Session::destroy($session);
     }
 
-    static public function loggedIn(): bool{
-        return $_SESSION['loggedIn'] ?? false;
+    public function loggedIn(): bool{
+        $session = $this->requestStack->getSession();
+        return $session->get('loggedIn', false);
     }
 
     static public function getUserId(): bool{
