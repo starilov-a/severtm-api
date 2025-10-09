@@ -3,6 +3,8 @@
 namespace App\Modules\Common\CustomController;
 
 use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
+use App\Modules\UserCabinet\Service\Dto\Session\SessionDto;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 final class Session
 {
@@ -23,36 +25,35 @@ final class Session
     private ?int $district;
     private ?array $roles = [];
 
+    private RequestStack $requestStack;
 
-    private function __construct(){}
-    protected function __clone(){}
-
-    static public function create(
-        int    $userId,
-        string $userName,
-        array  $perms,
-        array  $permsBuilder,
-        int    $district,
-        array  $roles
-    ): void
+    private function __construct()
     {
-        if (!UserSession::loggedIn()) {
-            $_SESSION['loggedIn'] = true;
-            $_SESSION['userId'] = $userId;
-            $_SESSION['userName'] = $userName;
-            $_SESSION['perms'] = $perms;
-            $_SESSION['permsBuilder'] = $permsBuilder;
-            $_SESSION['district'] = $district;
-            $_SESSION['roles'] = $roles;
-            $_SESSION['userIp'] = self::getUserIp();
-            $_SESSION['userAgent'] = self::getUserAgent();
-        }
     }
 
-    static function destroy(): void
+    protected function __clone()
     {
-        $_SESSION = [];
-        session_destroy();
+    }
+
+    static public function create(
+        SessionDto                                        $dto,
+        \Symfony\Component\HttpFoundation\Session\Session $session
+    ): void
+    {
+        $session->set('loggedIn', $dto->isLoggedIn());
+        $session->set('userId', $dto->getUserId());
+        $session->set('userName', $dto->getUserName());
+        $session->set('perms', $dto->getPerms());
+        $session->set('permsBuilder', $dto->getPermsBuilder());
+        $session->set('district', $dto->getDistrict());
+        $session->set('roles', $dto->getRoles());
+        $session->set('userIp', self::getUserIp());
+        $session->set('userAgent', self::getUserAgent());
+    }
+
+    static function destroy(\Symfony\Component\HttpFoundation\Session\Session $session): void
+    {
+        $session->clear();
     }
 
     static public function getUserIp(): string
