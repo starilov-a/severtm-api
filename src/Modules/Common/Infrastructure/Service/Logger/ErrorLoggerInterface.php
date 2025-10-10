@@ -2,7 +2,9 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Logger;
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLog;
+
 interface ErrorLoggerInterface
 {
-    public function logError( string $message, array $context = [], ?\DateTimeImmutable $at = null): void;
+    public function logError(ErrorLog $log): void;
 }

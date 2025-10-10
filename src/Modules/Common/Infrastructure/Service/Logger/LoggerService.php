@@ -3,6 +3,7 @@
 namespace App\Modules\Common\Infrastructure\Service\Logger;
 
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLog;
 use Psr\Log\LoggerInterface;
 
 class LoggerService
@@ -17,8 +18,9 @@ class LoggerService
         $this->businessLogger->log($log);
     }
 
-    public function errorLog(): void
+    public function errorLog(ErrorLog $log): void
     {
-        $this->errorLogger->logError();
+        //TODO: реализовать
+        $this->errorLogger->logError($log);
     }
 }
