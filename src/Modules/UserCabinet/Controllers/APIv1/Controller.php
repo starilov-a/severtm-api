@@ -38,19 +38,6 @@ class Controller extends AbstractController
 
 
     #[Route(
-        '/get-short-user-info/{uid}',
-        name: 'getShortUserInfo',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getShortUserInfo(UserProfileService $userInfoService, UserSessionService $userSessionService): JsonResponse
-    {
-        $uid = $userSessionService->getUserId();
-        $dtoResponse = $userInfoService->getShortUserInfo($uid);
-        return $this->json($dtoResponse);
-    }
-
-    #[Route(
         '/get-balance/{uid}',
         name: 'getBalance',
         methods: ['GET'],
