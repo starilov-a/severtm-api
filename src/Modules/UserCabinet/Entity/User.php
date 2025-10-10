@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'users')]
 class User
 {
+
+    #[ORM\OneToOne(targetEntity: WebUser::class, mappedBy: 'user')]
+    private ?WebUser $webUser;
+
     /* ---------- PK ---------- */
 
     #[ORM\Id]
@@ -48,12 +52,13 @@ class User
 
     /* ---------- Адрес ---------- */
 
-//    #[ORM\ManyToOne(targetEntity: Address::class)]
-//    #[ORM\JoinColumn(name: 'user_address', referencedColumnName: 'address_id', nullable: true)]
-//    private ?Address $address = null;
+    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn(name: 'user_address', referencedColumnName: 'address_id', nullable: true)]
+    private ?Address $address = null;
 
     #[ORM\Column(name: 'user_district', type: Types::INTEGER, nullable: true)]
     private ?int $district = null;
+
 
     #[ORM\Column(name: 'user_flat', type: Types::SMALLINT, nullable: true, options: ['unsigned' => true])]
     private ?int $flat = null;
@@ -179,6 +184,17 @@ class User
     {
         $this->email = $email;
         return $this;
+    }
+
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    public function getDistrict(): ?int
+    {
+        return $this->district;
     }
 
     public function getCurrentTariff(): ?Tariff { return $this->currentTariff; }

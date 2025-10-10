@@ -4,8 +4,8 @@
 namespace App\Modules\UserCabinet\Service;
 
 
+use App\Modules\Common\Infrastructure\Exception\UserNotFoundException;
 use App\Modules\UserCabinet\Repository\UserRepository;
-use App\Modules\UserCabinet\Service\Exception\UserNotFoundException;
 
 class UserProfileService
 {
