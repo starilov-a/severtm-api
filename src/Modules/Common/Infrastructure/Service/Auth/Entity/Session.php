@@ -2,8 +2,7 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Auth\Entity;
 
-use App\Modules\UserCabinet\Service\Dto\Session\SessionDto;
-use Symfony\Component\HttpFoundation\RequestStack;
+use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
 
 final class Session
 {
@@ -23,8 +22,7 @@ final class Session
     private array $permsBuilder = [];
     private ?int $district;
     private ?array $roles = [];
-
-    private RequestStack $requestStack;
+    private ?int $sid;
 
     private function __construct()
     {
@@ -35,24 +33,24 @@ final class Session
     }
 
     static public function create(
-        SessionDto                                        $dto,
-        \Symfony\Component\HttpFoundation\Session\Session $session
+        SessionDto $dto
     ): void
     {
-        $session->set('loggedIn', $dto->isLoggedIn());
-        $session->set('userId', $dto->getUserId());
-        $session->set('userName', $dto->getUserName());
-        $session->set('perms', $dto->getPerms());
-        $session->set('permsBuilder', $dto->getPermsBuilder());
-        $session->set('district', $dto->getDistrict());
-        $session->set('roles', $dto->getRoles());
-        $session->set('userIp', self::getUserIp());
-        $session->set('userAgent', self::getUserAgent());
+        $_SESSION['loggedIn']=$dto->isLoggedIn();
+        $_SESSION['userId'] =$dto->getUserId();
+        $_SESSION['userName']= $dto->getUserName();
+        $_SESSION['perms'] =$dto->getPerms();
+        $_SESSION['permsBuilder'] =$dto->getPermsBuilder();
+        $_SESSION['district'] =$dto->getDistrict();
+        $_SESSION['roles'] =$dto->getRoles();
+        $_SESSION['userIp'] =self::getUserIp();
+        $_SESSION['userAgent'] =self::getUserAgent();
+        $_SESSION['sid'] = session_id();
     }
 
-    static function destroy(\Symfony\Component\HttpFoundation\Session\Session $session): void
+    static function destroy(): void
     {
-        $session->clear();
+        session_destroy();
     }
 
     static public function getUserIp(): string
