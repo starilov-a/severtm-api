@@ -46,10 +46,8 @@ final class LoginController extends AbstractController
     #[Route('/logout', name: 'app_logout_post', methods: ['POST'], format: 'json')]
     public function logout(Request $request): JsonResponse
     {
-        $session = $request->getSession();
-        UserSessionService::logOut($session);
-        $res = ['User logout'];
-        return $this->json($res);
+        UserSessionService::logOut();
+        return $this->json('User logout');
     }
 
 }
