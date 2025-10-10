@@ -3,7 +3,6 @@
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\CustomController\Auth;
-use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
 use App\Modules\UserCabinet\Entity\WebUser;
 use App\Modules\UserCabinet\Service\Dto\Session\SessionDto;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use UserSession;
 
 final class LoginController extends AbstractController
 {
@@ -47,8 +47,6 @@ final class LoginController extends AbstractController
         } else {
             throw new \Exception('User not found', 403);
         }
-
-
     }
 
 
