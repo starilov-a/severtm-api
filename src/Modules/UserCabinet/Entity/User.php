@@ -14,6 +14,7 @@ class User
     #[ORM\OneToOne(targetEntity: WebUser::class, mappedBy: 'user')]
     private ?WebUser $webUser;
 
+
     /* ---------- PK ---------- */
 
     #[ORM\Id]
@@ -200,4 +201,122 @@ class User
     public function getCurrentTariff(): ?Tariff { return $this->currentTariff; }
 
     public function getNextTariff(): ?Tariff { return $this->nextTariff; }
+
+    public function getWebUser(): ?WebUser
+    {
+        return $this->webUser;
+    }
+
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getPassport(): ?string
+    {
+        return $this->passport;
+    }
+
+    public function getTaxNumber(): string
+    {
+        return $this->taxNumber;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function getPhoneExtra(): string
+    {
+        return $this->phoneExtra;
+    }
+
+    public function getFlat(): ?int
+    {
+        return $this->flat;
+    }
+
+    public function isJuridical(): bool
+    {
+        return $this->isJuridical;
+    }
+
+    public function getBill(): float
+    {
+        return $this->bill;
+    }
+
+    public function getBonus(): float
+    {
+        return $this->bonus;
+    }
+
+    public function getBillAbs(): float
+    {
+        return $this->billAbs;
+    }
+
+    public function isCredit(): bool
+    {
+        return $this->credit;
+    }
+
+    public function getCreditDeadline(): ?\DateTimeInterface
+    {
+        return $this->creditDeadline;
+    }
+
+    public function getBlockDate(): \DateTimeInterface
+    {
+        return $this->blockDate;
+    }
+
+    public function getBlockComments(): string
+    {
+        return $this->blockComments;
+    }
+
+    public function getRegDate(): int
+    {
+        return $this->regDate;
+    }
+
+    public function getAbPstart(): int
+    {
+        return $this->abPstart;
+    }
+
+    public function getAbPend(): int
+    {
+        return $this->abPend;
+    }
+
+    public function getAbLdiscount(): int
+    {
+        return $this->abLdiscount;
+    }
+
+    public function getPrivLevel(): int
+    {
+        return $this->privLevel;
+    }
+
+    public function getGroupId(): int
+    {
+        return $this->groupId;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function getComments(): string
+    {
+        return $this->comments;
+    }
+
+
 }
