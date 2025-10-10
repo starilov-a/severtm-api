@@ -2,11 +2,8 @@
 
 namespace App\Modules\Common\CustomController;
 
-use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
-use App\Modules\UserCabinet\Entity\WebUser;
+use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
 use App\Modules\UserCabinet\Service\Dto\Session\SessionDto;
-use JetBrains\PhpStorm\NoReturn;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 final class Auth
 {

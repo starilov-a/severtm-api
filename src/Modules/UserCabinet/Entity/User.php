@@ -52,9 +52,9 @@ class User
 
     /* ---------- Адрес ---------- */
 
-//    #[ORM\ManyToOne(targetEntity: Address::class)]
-//    #[ORM\JoinColumn(name: 'user_address', referencedColumnName: 'address_id', nullable: true)]
-//    private ?Address $address = null;
+    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn(name: 'user_address', referencedColumnName: 'address_id', nullable: true)]
+    private ?Address $address = null;
 
     #[ORM\Column(name: 'user_district', type: Types::INTEGER, nullable: true)]
     private ?int $district = null;
@@ -186,10 +186,17 @@ class User
         return $this;
     }
 
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
     public function getDistrict(): ?int
     {
         return $this->district;
     }
+
     public function getCurrentTariff(): ?Tariff { return $this->currentTariff; }
 
     public function getNextTariff(): ?Tariff { return $this->nextTariff; }

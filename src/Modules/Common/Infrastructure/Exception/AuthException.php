@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Service\Exception;
+namespace App\Modules\Common\Infrastructure\Exception;
 
 abstract class AuthException extends \DomainException{
     public function __construct(

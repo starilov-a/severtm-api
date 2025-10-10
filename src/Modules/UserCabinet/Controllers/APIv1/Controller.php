@@ -2,24 +2,25 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\UserCabinet\Controllers\BaseController;
-//use App\Modules\UserCabinet\Service\Dto\FilterDto;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\PaymentsService;
-use App\Modules\UserCabinet\Service\TariffService;
 use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use UserSession;
+
+//use App\Modules\UserCabinet\Service\Dto\FilterDto;
 
 class Controller extends AbstractController
 {
-    // Äàííûé ìåòîä íóæåí äëÿ òîãî, ÷òîáû ïîäâÿçàòü êîíêðåòíûé êîíòðîëëåð ê listener
-    // Â íàøåì ñëó÷àåì äàííûé ìåòîä ïðîñëóøèâàåòñÿ â AuthListener.php
-    // äàííûé ìåòîä ñòîèò ïðèñâàèâàòü êàæäîìó êîíòðîëëåðó,
-    // òê åñëè âûíåñòè ýòî â BaseController, òî áóäåò ïðîâåðÿòüñÿ àâòîðèçàöèÿ êàæäûé ðàç!
+    // Ð”Ð°Ð½Ð½Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´ Ð½ÑƒÐ¶ÐµÐ½ Ð´Ð»Ñ Ñ‚Ð¾Ð³Ð¾, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¿Ð¾Ð´Ð²ÑÐ·Ð°Ñ‚ÑŒ ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ñ‹Ð¹ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð»ÐµÑ€ Ðº listener
+    // Ð’ Ð½Ð°ÑˆÐµÐ¼ ÑÐ»ÑƒÑ‡Ð°ÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´ Ð¿Ñ€Ð¾ÑÐ»ÑƒÑˆÐ¸Ð²Ð°ÐµÑ‚ÑÑ Ð² AuthListener.php
+    // Ð´Ð°Ð½Ð½Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´ ÑÑ‚Ð¾Ð¸Ñ‚ Ð¿Ñ€Ð¸ÑÐ²Ð°Ð¸Ð²Ð°Ñ‚ÑŒ ÐºÐ°Ð¶Ð´Ð¾Ð¼Ñƒ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð»ÐµÑ€Ñƒ,
+    // Ñ‚Ðº ÐµÑÐ»Ð¸ Ð²Ñ‹Ð½ÐµÑÑ‚Ð¸ ÑÑ‚Ð¾ Ð² BaseController, Ñ‚Ð¾ Ð±ÑƒÐ´ÐµÑ‚ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÑ‚ÑŒÑÑ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ñ ÐºÐ°Ð¶Ð´Ñ‹Ð¹ Ñ€Ð°Ð·!
 
-    // Âàæíî!!! Âñå êîíòðîëëåðû ñòîèò íàñëåäîâàòü îò BaseController
+    // Ð’Ð°Ð¶Ð½Ð¾!!! Ð’ÑÐµ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ð»ÐµÑ€Ñ‹ ÑÑ‚Ð¾Ð¸Ñ‚ Ð½Ð°ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÑŒ Ð¾Ñ‚ BaseController
     public function authenticate(): bool
     {
         return true;
@@ -42,8 +43,9 @@ class Controller extends AbstractController
         methods: ['GET'],
         requirements: ['uid' => '\d{8}']
     )]
-    public function getShortUserInfo(int $uid, UserProfileService $userInfoService)
+    public function getShortUserInfo(UserProfileService $userInfoService, UserSessionService $userSessionService): JsonResponse
     {
+        $uid = $userSessionService->getUserId();
         $dtoResponse = $userInfoService->getShortUserInfo($uid);
         return $this->json($dtoResponse);
     }
@@ -95,18 +97,4 @@ class Controller extends AbstractController
     {
         return $this->json($paymentsService->getDebt($uid));
     }
-
-    #[Route(
-        '/get-current-tariff/{uid}',
-        name: 'getCurrentTariff',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getCurrentTariff(int $uid, TariffService $tariffService)
-    {
-        $responseDto = $tariffService->getCurrentTariff($uid);
-        return $this->json($responseDto->toArray());
-    }
-
-
 }

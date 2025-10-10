@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers\CustomController;
+namespace App\Modules\Common\Infrastructure\Service\Auth\Service;
 
-use App\Modules\Common\CustomController\Session;
+use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 
-class UserSession
+class UserSessionService
 {
     private RequestStack $requestStack;
 

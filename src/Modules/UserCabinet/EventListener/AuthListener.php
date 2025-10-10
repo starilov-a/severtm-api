@@ -2,12 +2,12 @@
 
 namespace App\Modules\UserCabinet\EventListener;
 
-use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use UserSession;
 
 #[AsEventListener(event: KernelEvents::CONTROLLER)]
 class AuthListener

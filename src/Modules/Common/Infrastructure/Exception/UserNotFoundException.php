@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Modules\UserCabinet\Service\Exception;
+namespace App\Modules\Common\Infrastructure\Exception;
 
-use App\Modules\UserCabinet\Service\Exception\BusinessException;
-
-class UserNotFoundException extends BusinessException
+class UserNotFoundException extends \App\Modules\Common\Infrastructure\Exception\BusinessException
 {
     public function __construct(int $uid)
     {
