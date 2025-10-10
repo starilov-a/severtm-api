@@ -11,6 +11,21 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+
+    # Сервис
+    App\Modules\Common\Infrastructure\Service\Logger\LoggerService: ~
+
+    # Адаптеры
+    App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
+    App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter: ~
+
+    # Привязка интерфейсов к конкретным адаптерам (заменишь — и логика переключится)
+    App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface:
+        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter
+
+    App\Modules\Common\Infrastructure\Service\Logger\ErrorLoggerInterface:
+        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

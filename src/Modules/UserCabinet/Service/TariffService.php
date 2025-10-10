@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Entity\Tariff;
 use App\Modules\UserCabinet\Entity\User;
@@ -86,7 +86,7 @@ class TariffService
             $this->userRepo->changeNextTariff($user->getId(), $newNextTariff->getId());
 
             // 9. запись в историю об успехе
-            $this->loggerService->log(new BusinessLog($user->getId(), $webAction->getId(), 'Пользователь ' . $user->getId() . ' успешно сменил тариф('. $newNextTariff->getId() .')' , true));
+            $this->loggerService->businessLog(new BusinessLogDto($user->getId(), $webAction->getId(), 'Пользователь ' . $user->getId() . ' успешно сменил тариф('. $newNextTariff->getId() .')' , true));
 
             return true;
         });

@@ -4,7 +4,7 @@ namespace App\Modules\Common\Infrastructure\Service\Logger\Dto;
 
 use App\Modules\UserCabinet\Entity\WebAction;
 
-class BusinessLog
+class BusinessLogDto
 {
     public function __construct(
         public int $userId,

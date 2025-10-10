@@ -2,8 +2,8 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Logger;
 
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLog;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLogDto;
 use Psr\Log\LoggerInterface;
 
 class LoggerService
@@ -13,14 +13,13 @@ class LoggerService
         private BusinessLoggerInterface $businessLogger
     ) {}
 
-    public function log(BusinessLog $log): void
+    public function businessLog(BusinessLogDto $log): void
     {
-        $this->businessLogger->log($log);
+        $this->businessLogger->businessLog($log);
     }
 
-    public function errorLog(ErrorLog $log): void
+    public function errorLog(ErrorLogDto $log): void
     {
-        //TODO: реализовать
         $this->errorLogger->logError($log);
     }
 }

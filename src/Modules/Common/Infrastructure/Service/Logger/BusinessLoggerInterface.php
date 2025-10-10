@@ -2,9 +2,9 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Logger;
 
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 
 interface BusinessLoggerInterface
 {
-    public function log(BusinessLog $log): void;
+    public function businessLog(BusinessLogDto $log): void;
 }

@@ -3,7 +3,7 @@
 namespace App\Modules\Common\Infrastructure\Service\Logger\Adapters;
 
 use App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface;
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Entity\WebAction;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +16,7 @@ class WebLogAdapter implements BusinessLoggerInterface
     /**
      * Используем запись в web_log
      */
-    public function log(BusinessLog $log): void
+    public function businessLog(BusinessLogDto $log): void
     {
         $this->em->getConnection()->executeStatement(
             'INSERT INTO web_log (uid, ip, act_id, act_time, act_message, act_result)
