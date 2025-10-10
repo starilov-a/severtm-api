@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class UserSessionService
 {
 
-    public function checkAuth(): bool
+    static public function checkAuth(): bool
     {
-        return $this->loggedIn();
+        return self::loggedIn();
     }
 
     // возможно после разлогирования будут производиться доп операции,

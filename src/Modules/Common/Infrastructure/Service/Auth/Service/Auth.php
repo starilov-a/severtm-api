@@ -10,6 +10,9 @@ final class Auth
          $dto
     ): void
     {
+        if(UserSessionService::loggedIn()){
+            throw new \Exception("Already logged in", 403);
+        }
         Session::create($dto);
     }
 }
