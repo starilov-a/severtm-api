@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Entity\Tariff;
 use App\Modules\UserCabinet\Entity\User;
 use App\Modules\UserCabinet\Repository\AddressRepository;
@@ -22,6 +24,7 @@ class TariffService
     protected $finPeriodRepo;
     protected $webActionRepo;
     private EntityManagerInterface $em;
+    private LoggerService $loggerService;
     public function __construct(
         TariffRepository $tariffRepository,
         UserRepository $userRepository,
@@ -30,6 +33,7 @@ class TariffService
         FinPeriodRepository $finPeriodRepository,
         WebActionRepository $webActionRepository,
         WebHistoryService $webHistoryService,
+        LoggerService $loggerService,
         EntityManagerInterface $em
     )
     {
@@ -41,6 +45,7 @@ class TariffService
         $this->webActionRepo = $webActionRepository;
         $this->em = $em;
         $this->webHistoryService = $webHistoryService;
+        $this->loggerService = $loggerService;
     }
 
     public function changeNextTariff(User $user, Tariff $newNextTariff): bool
@@ -81,7 +86,7 @@ class TariffService
             $this->userRepo->changeNextTariff($user->getId(), $newNextTariff->getId());
 
             // 9. запись в историю об успехе
-            $this->webHistoryService->writeWebLog($user->getId(), $webAction, 'Пользователь ' . $user->getId() . ' успешно сменил тариф('. $newNextTariff->getId() .')' , true);
+            $this->loggerService->log(new BusinessLog($user->getId(), $webAction->getId(), 'Пользователь ' . $user->getId() . ' успешно сменил тариф('. $newNextTariff->getId() .')' , true));
 
             return true;
         });

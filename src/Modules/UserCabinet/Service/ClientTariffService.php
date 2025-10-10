@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Repository\TariffRepository;
 use App\Modules\UserCabinet\Repository\UserRepository;
 use App\Modules\UserCabinet\Repository\WebActionRepository;
@@ -14,12 +16,14 @@ class ClientTariffService
     protected $tariffService;
     protected $webHistoryService;
     protected $webActionRepo;
+    protected $loggerService;
     public function __construct(
         TariffRepository $tariffRepository,
         UserRepository $userRepository,
         WebActionRepository $webActionRepository,
         TariffService $tariffService,
-        WebHistoryService $webHistoryService
+        WebHistoryService $webHistoryService,
+        LoggerService $loggerService
     )
     {
         $this->tariffRepo = $tariffRepository;
@@ -27,6 +31,7 @@ class ClientTariffService
         $this->webActionRepo = $webActionRepository;
         $this->tariffService = $tariffService;
         $this->webHistoryService = $webHistoryService;
+        $this->loggerService = $loggerService;
     }
     public function getCurrentTariff(int $uid): TariffDto
     {
@@ -61,7 +66,7 @@ class ClientTariffService
         $this->tariffService->changeNextTariff($client, $newNextTariff);
 
         // 2.3 Запись истории
-        $this->webHistoryService->writeWebLog($uid, $webAction, 'Пользователь ' . $uid . ' успешно сменил тариф('. $newTariffId .')' , true);
+        $this->loggerService->log(new BusinessLog($uid, $webAction->getId(), 'Пользователь ' . $uid . ' успешно сменил тариф('. $newTariffId .')' , true));
 
         return true;
     }
