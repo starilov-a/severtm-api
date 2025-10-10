@@ -3,12 +3,12 @@
 namespace App\Modules\UserCabinet\EventListener;
 
 use App\Modules\Common\Infrastructure\Exception\AuthException;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use UserSession;
 
 #[AsEventListener(event: KernelEvents::CONTROLLER)]
 class AuthListener
@@ -25,7 +25,7 @@ class AuthListener
 
             if (method_exists($controllerObject, 'authenticate')) {
                 $result = $controllerObject->authenticate();
-                if ($result && !UserSession::checkAuth()) {
+                if ($result && !UserSessionService::checkAuth()) {
                     throw new AuthException("User is not found");
                 }
             }
