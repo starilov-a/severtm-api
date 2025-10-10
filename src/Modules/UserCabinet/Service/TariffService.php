@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Entity\Tariff;
@@ -57,18 +59,18 @@ class TariffService
 
         // ЛОГИКА
         if (!$finPeriod)
-            throw new \Exception('Не найден следующий финансовый период');
+            throw new ImportantBusinessException('Не найден следующий финансовый период');
 
         if (!$this->tariffRepo->isAvailableForRegion($newNextTariff->getId(), $userRegion->getId()))
-            throw new \Exception('Тариф не соответствует адресу');
+            throw new ImportantBusinessException('Тариф не соответствует адресу');
 
         // 4. если имеется аренда - нельзя disconnected
         if ($this->serviceClientRepo->hasRentNow($user->getId()))
-            throw new \Exception('Присутствует услуга аренды');
+            throw new ImportantBusinessException('Присутствует услуга аренды');
 
         // 5 Тарифы одинаковые
         if ($newNextTariff->getId() == $currentNextTariff->getId())
-            throw new \Exception('Старый и новый тариф совпадают');
+            throw new ImportantBusinessException('Старый и новый тариф совпадают');
 
         // ДЕЙСТВИЯ
         return $this->em->getConnection()->transactional(function () use (

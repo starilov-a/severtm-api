@@ -2,8 +2,9 @@
 
 namespace App\Modules\UserCabinet\EventListener;
 
-use App\Modules\Common\Infrastructure\Exception\BusinessException;
-use App\Modules\Common\Infrastructure\Exception\RepositoryException;
+use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Service\WebHistoryService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,25 +16,39 @@ final class ExceptionListener
 {
     protected \Throwable $e;
     protected WebHistoryService $webHistoryService;
+    protected LoggerService $loggerService;
 
-    public function __construct(WebHistoryService $webHistoryService)
+    public function __construct(
+        WebHistoryService $webHistoryService,
+        LoggerService $loggerService,
+    )
     {
         $this->webHistoryService = $webHistoryService;
+        $this->loggerService = $loggerService;
     }
 
     public function __invoke(ExceptionEvent $event): void
     {
-        $exception = $event->getThrowable();
+        $e = $event->getThrowable();
 
         $status = match (true) {
-            $exception instanceof BusinessException     => 400,
-            $exception instanceof RepositoryException   => 500,
+            $e instanceof ImportantBusinessException    => 400,
             default                                     => 500,
         };
 
+        if ($e instanceof ImportantBusinessException) {
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $e->getUserId(),
+                $e->getActionId(),
+                $e->getMessage(),
+                $e->getStatus(),
+                $e->getIp()
+            ));
+        }
+
 
         $responseData = [
-            'message' => $exception->getMessage()
+            'message' => $e->getMessage()
         ];
         $response = new JsonResponse($responseData, 404);
         $event->setResponse($response);

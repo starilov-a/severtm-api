@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Repository\TariffRepository;
@@ -56,11 +57,11 @@ class ClientTariffService
 
         // 2.1.2 Является ли доступным тарифом на изменение самим клиентом
         if ($newNextTariff->canBeChangedByClient())
-            throw new \DomainException('Тариф не является доступным для смены клиентом');
+            throw new BusinessException('Тариф не является доступным для смены клиентом');
 
         // 2.3 Новый тариф не является "Отключен от сети"
         if ($newNextTariff->isDisconnected())
-            throw new \Exception('Невозможно выбрать тарифа "Отключён от сети"');
+            throw new BusinessException('Невозможно выбрать тарифа "Отключён от сети"');
 
         // 2.2 Подвязка нового тарифа
         $this->tariffService->changeNextTariff($client, $newNextTariff);
