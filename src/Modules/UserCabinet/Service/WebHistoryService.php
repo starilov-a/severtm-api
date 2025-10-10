@@ -3,7 +3,7 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Infrastructure\Service\UserSessionService;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Entity\WebAction;
 use App\Modules\UserCabinet\Repository\WebHistoryRepository;
 

@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\Common\Infrastructure\Service\UserSessionService;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\ClientTariffService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

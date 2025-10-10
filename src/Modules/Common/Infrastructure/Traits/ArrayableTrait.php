@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Infrastructure \Traits;
+namespace App\Modules\Common\Infrastructure\Traits;
 
 
 trait ArrayableTrait

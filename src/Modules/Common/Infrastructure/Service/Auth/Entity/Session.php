@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Infrastructure\Entity;
+namespace App\Modules\Common\Infrastructure\Service\Auth\Entity;
 
 use App\Modules\UserCabinet\Service\Dto\Session\SessionDto;
 use Symfony\Component\HttpFoundation\RequestStack;

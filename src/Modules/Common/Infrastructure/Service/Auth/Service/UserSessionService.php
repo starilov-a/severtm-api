@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Common\Infrastructure\Service;
+namespace App\Modules\Common\Infrastructure\Service\Auth\Service;
 
-use App\Modules\Common\Infrastructure\Entity\Session;
+use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 
