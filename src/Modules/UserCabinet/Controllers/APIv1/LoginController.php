@@ -2,15 +2,15 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\Common\CustomController\Auth;
+use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\Auth;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Entity\WebUser;
-use App\Modules\UserCabinet\Service\Dto\Session\SessionDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use UserSession;
 
 final class LoginController extends AbstractController
 {
@@ -25,12 +25,6 @@ final class LoginController extends AbstractController
     #[Route('/login', name: 'app_login_post', methods: ['POST'], format: 'json')]
     public function login(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $session = $request->getSession();
-
-        if ($session->has('loggedIn')) {
-            return $this->json('User already logged in');
-        }
-
 
         $data = $request->toArray();
         $user = $em->getRepository(WebUser::class)->findOneBy(
@@ -41,9 +35,8 @@ final class LoginController extends AbstractController
         );
         if ($user) {
             $userDto = new SessionDto(true, $user->getUid(), $user->getUser()->getFullName(), [], [], $user->getUser()->getDistrict(), []);
-            (new Auth)->login($userDto, $session);
-//            $res = [$user->getUser()->getFullName()];
-            return $this->json($session->getId());
+            (new Auth)->login($userDto);
+            return $this->json(UserSessionService::getSid());
         } else {
             throw new \Exception('User not found', 403);
         }
@@ -54,7 +47,7 @@ final class LoginController extends AbstractController
     public function logout(Request $request): JsonResponse
     {
         $session = $request->getSession();
-        UserSession::logOut($session);
+        UserSessionService::logOut($session);
         $res = ['User logout'];
         return $this->json($res);
     }

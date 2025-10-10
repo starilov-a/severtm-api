@@ -1,10 +1,7 @@
 <?php
+namespace App\Modules\Common\Infrastructure\Service\Auth\Dto;
 
-namespace App\Modules\UserCabinet\Service\Dto\Session;
-
-use App\Modules\UserCabinet\Service\Dto\Dto;
-
-class SessionDto extends Dto
+class SessionDto
 {
     private bool $loggedIn;
     private ?int $userId;

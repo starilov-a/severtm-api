@@ -7,21 +7,31 @@ services:
       context: ./..
       dockerfile: ./docker/php-fpm/Dockerfile
       args:
-        - PUID=${PUID}
-        - PGID=${PGID}
-        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+        PUID: ${PUID}
+        PGID: ${PGID}
+        INSTALL_XDEBUG: ${INSTALL_XDEBUG}
+        HTTP_PROXY: http://proxy.izet.ru:3128
+        HTTPS_PROXY: http://proxy.izet.ru:3128
+        NO_PROXY: localhost,127.0.0.1,::1,host.docker.internal,.izet.ru,mysql,redis,php,nginx,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
     volumes:
       - ./../:/var/www/
     environment:
       PHP_IDE_CONFIG: "serverName=docker-symfony"
-
+      HTTP_PROXY:  http://proxy.izet.ru:3128
+      HTTPS_PROXY: http://proxy.izet.ru:3128
+      NO_PROXY:    localhost,127.0.0.1,::1,host.docker.internal,.izet.ru,mysql,redis,php,nginx,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
   nginx:
     container_name: nginx-api
     build:
       context: ./nginx
+      args:
+        HTTP_PROXY:  http://proxy.izet.ru:3128
+        HTTPS_PROXY: http://proxy.izet.ru:3128
+        NO_PROXY:    localhost,127.0.0.1,::1,host.docker.internal,.izet.ru,mysql,php,redis,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
     ports:
       - ${NGINX_HOST_HTTP_PORT}:80
     volumes:
       - ..:/var/www:rw
     depends_on:
       - php-fpm
+    
