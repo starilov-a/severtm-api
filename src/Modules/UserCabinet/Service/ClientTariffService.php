@@ -56,7 +56,7 @@ class ClientTariffService
         $newNextTariff = $this->tariffRepo->find($newTariffId);
 
         // 2.1.2 Является ли доступным тарифом на изменение самим клиентом
-        if ($newNextTariff->canBeChangedByClient())
+        if (!$newNextTariff->canBeChangedByClient())
             throw new BusinessException('Тариф не является доступным для смены клиентом');
 
         // 2.3 Новый тариф не является "Отключен от сети"

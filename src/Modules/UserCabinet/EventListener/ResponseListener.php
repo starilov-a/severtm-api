@@ -19,9 +19,11 @@ class ResponseListener
         if (!$response instanceof JsonResponse || $response->getStatusCode() !== 200) {
             return;
         }
-        $data = [
-            'data' => json_decode($response->getContent(), true),
-        ];
+
+        $arrayResponse = json_decode($response->getContent(), true);
+        $data['data'] = !empty($arrayResponse['data']) ?  $arrayResponse['data'] : null;
+        $data['message'] = !empty($arrayResponse['message']) ?  $arrayResponse['data'] : null;
+
         $result = new JsonResponse(
             $data,
             $response->getStatusCode(),

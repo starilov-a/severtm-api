@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\EventListener;
 
+use App\Modules\Common\Infrastructure\Exception\AuthException;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class AuthListener
             if (method_exists($controllerObject, 'authenticate')) {
                 $result = $controllerObject->authenticate();
                 if ($result && !UserSession::checkAuth()) {
-                    throw new Exception("User is not found",Response::HTTP_UNAUTHORIZED);
+                    throw new AuthException("User is not found");
                 }
             }
         }

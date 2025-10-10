@@ -4,7 +4,7 @@
 namespace App\Modules\UserCabinet\Service;
 
 
-use App\Modules\Common\Infrastructure\Exception\UserNotFoundException;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Repository\UserRepository;
 
 class UserProfileService
@@ -22,7 +22,7 @@ class UserProfileService
         $user = $this->userRepo->find($uid);
 
         if (!$user)
-            throw new UserNotFoundException($uid);
+            throw new BusinessException($uid);
 
         return [
             'id' => $user->getId(),

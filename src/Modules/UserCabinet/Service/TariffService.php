@@ -59,18 +59,18 @@ class TariffService
 
         // ЛОГИКА
         if (!$finPeriod)
-            throw new ImportantBusinessException('Не найден следующий финансовый период');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Не найден следующий финансовый период');
 
         if (!$this->tariffRepo->isAvailableForRegion($newNextTariff->getId(), $userRegion->getId()))
-            throw new ImportantBusinessException('Тариф не соответствует адресу');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Тариф не соответствует адресу');
 
         // 4. если имеется аренда - нельзя disconnected
         if ($this->serviceClientRepo->hasRentNow($user->getId()))
-            throw new ImportantBusinessException('Присутствует услуга аренды');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Присутствует услуга аренды');
 
         // 5 Тарифы одинаковые
         if ($newNextTariff->getId() == $currentNextTariff->getId())
-            throw new ImportantBusinessException('Старый и новый тариф совпадают');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Старый и новый тариф совпадают');
 
         // ДЕЙСТВИЯ
         return $this->em->getConnection()->transactional(function () use (

@@ -24,7 +24,9 @@ class TariffController extends AbstractController {
     public function getCurrentTariff(int $uid, ClientTariffService $tariffService)
     {
         $responseDto = $tariffService->getCurrentTariff($uid);
-        return $this->json($responseDto->toArray());
+        return $this->json([
+            'data' => $responseDto->toArray()
+        ]);
     }
 
     #[Route(
@@ -40,6 +42,8 @@ class TariffController extends AbstractController {
 
         $tariffService->changeNextTariff($uid, $tariffId);
 
-        return $this->json();
+        return $this->json([
+            'message' => 'Тариф на следующий месяц успешно изменен'
+        ]);
     }
 }
