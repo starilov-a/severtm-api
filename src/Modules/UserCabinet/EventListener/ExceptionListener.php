@@ -31,17 +31,6 @@ final class ExceptionListener
             default                                     => 500,
         };
 
-        if ($exception instanceof BusinessException) {
-            $this->webHistoryService->writeWebLog(
-                $exception->getUserId(),
-                $exception->getWebAction(),
-                $exception->getWebLogMessage(),
-                false
-            );
-
-        }
-
-
 
         $responseData = [
             'message' => $exception->getMessage()
