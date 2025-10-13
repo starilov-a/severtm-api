@@ -13,15 +13,12 @@ class WebUserDto extends Dto
     private \DateTimeInterface $lastAtime;
     private string $lastAip;
     private string $login;
-    private string $passwdHash;
     private string $name;
     private string $patronymic;
     private string $surname;
     private string $email;
     private ?string $phone = null;
     private ?string $comment = null;
-    private string $hashType = 'crypt';
-    private ?string $passwdHashEncrypt = null;
     private ?string $activationCode = null;
     private int $status = 1;
     private ?\DateTimeInterface $dateActivation = null;
@@ -34,15 +31,12 @@ class WebUserDto extends Dto
      * @param \DateTimeInterface $lastAtime
      * @param string $lastAip
      * @param string $login
-     * @param string $passwdHash
      * @param string $name
      * @param string $patronymic
      * @param string $surname
      * @param string $email
      * @param string|null $phone
      * @param string|null $comment
-     * @param string $hashType
-     * @param string|null $passwdHashEncrypt
      * @param string|null $activationCode
      * @param int $status
      * @param \DateTimeInterface|null $dateActivation
@@ -56,15 +50,12 @@ class WebUserDto extends Dto
         $this->lastAtime = $webUser->getLastAtime();
         $this->lastAip = $webUser->getLastAip();
         $this->login = $webUser->getLogin();
-        $this->passwdHash = $webUser->getPasswdHash();
         $this->name = $webUser->getName();
         $this->patronymic = $webUser->getPatronymic();
         $this->surname = $webUser->getSurname();
         $this->email = $webUser->getEmail();
         $this->phone = $webUser->getPhone();
         $this->comment = $webUser->getComment();
-        $this->hashType = $webUser->getHashType();
-        $this->passwdHashEncrypt = $webUser->getPasswdHashEncrypt();
         $this->activationCode = $webUser->getActivationCode();
         $this->status = $webUser->getStatus();
         $this->dateActivation = $webUser->getDateActivation();
@@ -102,10 +93,6 @@ class WebUserDto extends Dto
         return $this->login;
     }
 
-    public function getPasswdHash(): string
-    {
-        return $this->passwdHash;
-    }
 
     public function getName(): string
     {
@@ -137,16 +124,6 @@ class WebUserDto extends Dto
         return $this->comment;
     }
 
-    public function getHashType(): string
-    {
-        return $this->hashType;
-    }
-
-    public function getPasswdHashEncrypt(): ?string
-    {
-        return $this->passwdHashEncrypt;
-    }
-
     public function getActivationCode(): ?string
     {
         return $this->activationCode;
@@ -167,8 +144,4 @@ class WebUserDto extends Dto
         return $this->isSendActivation;
     }
 
-    public function getUser(): ?UserDto
-    {
-        return $this->user;
-    }
 }

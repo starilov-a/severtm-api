@@ -72,7 +72,7 @@ class UserProfileDto extends Dto
     {
         $this->id = $user->getId();
         $this->login = $user->getLogin();
-        $this->password = $user->get;
+        $this->password = $user->getPassword();
         $this->fullName = $user->getFullName();
         $this->passport = $user->getPassport();
         $this->taxNumber = $user->getTaxNumber();

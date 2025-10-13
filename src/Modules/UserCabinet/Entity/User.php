@@ -57,6 +57,7 @@ class User
     #[ORM\JoinColumn(name: 'user_address', referencedColumnName: 'address_id', nullable: true)]
     private ?Address $address = null;
 
+
     #[ORM\Column(name: 'user_district', type: Types::INTEGER, nullable: true)]
     private ?int $district = null;
 
@@ -198,9 +199,15 @@ class User
         return $this->district;
     }
 
-    public function getCurrentTariff(): ?Tariff { return $this->currentTariff; }
+    public function getCurrentTariff(): ?Tariff
+    {
+        return $this->currentTariff;
+    }
 
-    public function getNextTariff(): ?Tariff { return $this->nextTariff; }
+    public function getNextTariff(): ?Tariff
+    {
+        return $this->nextTariff;
+    }
 
     public function getWebUser(): ?WebUser
     {
@@ -318,5 +325,19 @@ class User
         return $this->comments;
     }
 
+    public function setAddress(?Address $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function setCurrentTariff(?Tariff $currentTariff): void
+    {
+        $this->currentTariff = $currentTariff;
+    }
+
+    public function setNextTariff(?Tariff $nextTariff): void
+    {
+        $this->nextTariff = $nextTariff;
+    }
 
 }
