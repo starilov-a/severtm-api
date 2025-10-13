@@ -11,6 +11,7 @@ use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Service\WebHistoryService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -31,7 +32,7 @@ final class ExceptionListener
         $this->loggerService = $loggerService;
     }
 
-    public function __invoke(ExceptionEvent $event): void
+    public function __invoke(ExceptionEvent $event, Request $request): void
     {
         $e = $event->getThrowable();
 
@@ -41,6 +42,8 @@ final class ExceptionListener
             $e instanceof AuthException                 => Response::HTTP_UNAUTHORIZED,
             default                                     => Response::HTTP_INTERNAL_SERVER_ERROR,
         };
+
+        $message = $e->getMessage();
 
         if ($e instanceof ImportantBusinessException) {
             $this->loggerService->businessLog(new BusinessLogDto(
@@ -55,16 +58,19 @@ final class ExceptionListener
             $this->loggerService->errorLog(new ErrorLogDto(
                 $e->getMessage(),
                 array_filter([
-//                    'route'     => $this->request?->attributes->get('_route'),
-//                    'method'    => $this->request?->getMethod(),
-//                    'path'      => $this->request?->getPathInfo(),
-//                    'query'     => $this->request?->query->all() ?: null
+                    'route'     => $request->attributes->get('_route'),
+                    'method'    => $request->getMethod(),
+                    'path'      => $request->getPathInfo(),
+                    'query'     => $request->query->all() ?: null
                 ], fn($v) => $v !== null && $v !== [])
             ));
+
+            if (false) //debug
+                $message = 'Ошибка сервера';
         }
 
         $responseData = [
-            'message' => $e->getMessage(),
+            'message' => $message,
         ];
 
         $response = new JsonResponse($responseData, $status);

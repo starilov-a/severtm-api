@@ -37,7 +37,7 @@ class TariffController extends AbstractController {
     )]
     public function changeNextTariff(Request $request, ClientTariffService $tariffService)
     {
-        $uid = UserSessionService::getUserId();
+        $uid = 20000031;//UserSessionService::getUserId();
         $tariffId = $request->get('tariff_id');
 
         $tariffService->changeNextTariff($uid, $tariffId);
