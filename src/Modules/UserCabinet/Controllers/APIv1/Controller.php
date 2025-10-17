@@ -15,6 +15,27 @@ use UserSession;
 
 class Controller extends AbstractController
 {
+
+    public function responseMessage(string $message): JsonResponse
+    {
+        return $this->json(['message' => $message]);
+    }
+
+    public function responseData(mixed $data): JsonResponse
+    {
+        return $this->json(['data' => $data]);
+    }
+
+    public function response(mixed $data, string $message): JsonResponse
+    {
+        return $this->json(
+            [
+                'data' => $data,
+                'message' => $message
+            ]
+        );
+    }
+
     // Данный метод нужен для того, чтобы подвязать конкретный контроллер к listener
     // В нашем случаем данный метод прослушивается в AuthListener.php
     // данный метод стоит присваивать каждому контроллеру,
@@ -33,7 +54,7 @@ class Controller extends AbstractController
     )]
     public function index(): JsonResponse
     {
-        return $this->json([1,2,3,4]);
+        return $this->json([1, 2, 3, 4]);
     }
 
 

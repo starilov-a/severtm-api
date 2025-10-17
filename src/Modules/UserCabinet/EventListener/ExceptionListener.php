@@ -65,7 +65,7 @@ final class ExceptionListener
                 ], fn($v) => $v !== null && $v !== [])
             ));
 
-            $message = 'Ошибка сервера';
+            $message = $e->getMessage() . '/' . $e->getFile() . ':' . $e->getLine();
         }
 
         $responseData = [

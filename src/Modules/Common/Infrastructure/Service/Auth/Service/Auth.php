@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Auth\Service;
 
+use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
 
 final class Auth
