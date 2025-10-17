@@ -4,28 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
 services:
     # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
-
-    # Сервис
-    App\Modules\Common\Infrastructure\Service\Logger\LoggerService: ~
-
-    # Адаптеры
-    App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
-    App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter: ~
-
-    # Привязка интерфейсов к конкретным адаптерам (заменишь — и логика переключится)
-    App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface:
-        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter
-
-    App\Modules\Common\Infrastructure\Service\Logger\ErrorLoggerInterface:
-        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter
-
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -34,6 +14,24 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    # Сервис
+
+    App\Modules\Common\Infrastructure\Service\Logger\LoggerService: ~
+    # Адаптеры
+    App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
+
+    App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter: ~
+    # Привязка интерфейсов к конкретным адаптерам
+
+    App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface:
+        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter
+
+    App\Modules\Common\Infrastructure\Service\Logger\ErrorLoggerInterface:
+        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

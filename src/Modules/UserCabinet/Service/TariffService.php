@@ -53,7 +53,7 @@ class TariffService
     public function changeNextTariff(User $user, Tariff $newNextTariff): bool
     {
         $currentNextTariff = $user->getNextTariff();
-        $userRegion = $this->addressRepo->getRegionForAddressId($user->getAddress()->getId());
+        $userRegion = $user->getRegion();
         $finPeriod = $this->finPeriodRepo->getNext();
         $webAction = $this->webActionRepo->findIdByCid('SET_NEXT_INET');
 
@@ -62,7 +62,7 @@ class TariffService
             throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Не найден следующий финансовый период');
 
         if (!$this->tariffRepo->isAvailableForRegion($newNextTariff->getId(), $userRegion->getId()))
-            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Тариф не соответствует адресу');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(), 'Тариф не соответствует адресу');
 
         // 4. если имеется аренда - нельзя disconnected
         if ($this->serviceClientRepo->hasRentNow($user->getId()))
@@ -88,7 +88,12 @@ class TariffService
             $this->userRepo->changeNextTariff($user->getId(), $newNextTariff->getId());
 
             // 9. запись в историю об успехе
-            $this->loggerService->businessLog(new BusinessLogDto($user->getId(), $webAction->getId(), 'Пользователь ' . $user->getId() . ' успешно сменил тариф('. $newNextTariff->getId() .')' , true));
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $user->getId(),
+                $webAction->getId(),
+                'Тариф на следующий месяц для пользователя ' . $user->getId() . ' успешно изменен тариф - ' . $newNextTariff->getName(). '(' . $newNextTariff->getId() .')' ,
+                true
+            ));
 
             return true;
         });

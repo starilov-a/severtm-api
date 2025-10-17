@@ -5,13 +5,12 @@ namespace App\Modules\UserCabinet\EventListener;
 use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
-use App\Modules\UserCabinet\Service\WebHistoryService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -20,21 +19,19 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class ExceptionListener
 {
     protected \Throwable $e;
-    protected WebHistoryService $webHistoryService;
     protected LoggerService $loggerService;
 
     public function __construct(
-        WebHistoryService $webHistoryService,
-        LoggerService $loggerService,
+        LoggerService $loggerService
     )
     {
-        $this->webHistoryService = $webHistoryService;
         $this->loggerService = $loggerService;
     }
 
-    public function __invoke(ExceptionEvent $event, Request $request): void
+    public function __invoke(ExceptionEvent $event): void
     {
         $e = $event->getThrowable();
+        $request = $event->getRequest();
 
         $status = match (true) {
             $e instanceof ImportantBusinessException    => Response::HTTP_BAD_REQUEST,
@@ -54,19 +51,21 @@ final class ExceptionListener
                 $e->getIp()
             ));
         } elseif ($status >= 500) {
-            //TODO: добавить необходимые данные из запроса
             $this->loggerService->errorLog(new ErrorLogDto(
                 $e->getMessage(),
                 array_filter([
+                    'file'      => $e->getFile(),
+                    'line'      => $e->getLine(),
                     'route'     => $request->attributes->get('_route'),
                     'method'    => $request->getMethod(),
                     'path'      => $request->getPathInfo(),
-                    'query'     => $request->query->all() ?: null
+                    'userId'    => UserSessionService::getUserId(),
+                    'query'     => $request->query->all() ? json_encode($request->query->all()) : null,
+                    'request'   => $request->request->all() ? json_encode($request->request->all()) : null,
                 ], fn($v) => $v !== null && $v !== [])
             ));
 
-            if (false) //debug
-                $message = 'Ошибка сервера';
+            $message = 'Ошибка сервера';
         }
 
         $responseData = [

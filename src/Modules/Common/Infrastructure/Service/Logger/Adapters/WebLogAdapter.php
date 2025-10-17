@@ -18,7 +18,7 @@ class WebLogAdapter implements BusinessLoggerInterface
      */
     public function businessLog(BusinessLogDto $log): void
     {
-        $this->em->getConnection()->executeStatement(
+        $res = $this->em->getConnection()->executeStatement(
             'INSERT INTO web_log (uid, ip, act_id, act_time, act_message, act_result)
              VALUES (:uid, :ip, :act, :time, :msg, :res)',
             [
@@ -27,7 +27,7 @@ class WebLogAdapter implements BusinessLoggerInterface
                 'act'  => $log->actionId,
                 'time' => $log->when->format('Y-m-d H:i:s'),
                 'msg'  => $log->message,
-                'res'  => $log->ok,
+                'res'  => (int)$log->ok,
             ],
             [
                 'uid'  => ParameterType::INTEGER,

@@ -3,7 +3,9 @@
 namespace App\Modules\UserCabinet\Repository;
 
 use App\Modules\UserCabinet\Entity\Tariff;
+use App\Modules\UserCabinet\Entity\TariffGroup;
 use App\Modules\UserCabinet\Entity\User;
+use App\Modules\UserCabinet\Service\Dto\Request\TariffFilterDto\TariffFilterDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
@@ -16,6 +18,35 @@ class TariffRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tariff::class);
+    }
+
+    public function getTariffs(\App\Modules\UserCabinet\Service\Dto\Request\TariffFilterDto $dto)
+    {
+        $qb = $this->createQueryBuilder('t');
+
+//        if ($dto->getActiveStatus()) {
+//            $qb->leftJoin('')
+//        }
+
+        $minPrice = $dto->getMinPrice();
+        if ($minPrice) {
+            $qb->andWhere('t.price > :minPrice')
+                ->setParameter('minPrice', $minPrice);;
+        }
+
+        $codes = $dto->getGroupCodes();
+        if (!empty($codes)) {
+            $qb->join('t.groups', 'tg');
+            foreach ($codes as $key => $code)
+                $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
+        }
+
+        // Сортировка:
+        $allowedOrder = ['t.price', 't.name'];
+        $orderBy = in_array($dto->getOrderBy(), $allowedOrder, true) ? $dto->getOrderBy() : 't.price';
+        $qb->orderBy($orderBy, $dto->getOrderDir());
+
+        return $qb->getQuery()->getResult();
     }
 
     public function getCurrentForUser(int $uid): ?Tariff
@@ -67,8 +98,8 @@ class TariffRepository extends ServiceEntityRepository
 
         $sql = <<<SQL
         SELECT 1 FROM tariffs_belong_groups tbg
-        JOIN tariffs_groups tg ON tg.tariffs_group_id = tbg.id
-        WHERE tbg.tc_id = :tid AND tbg.tariffs_group_code = :tgc
+        JOIN tariffs_groups tg ON tg.tariffs_group_id = tbg.tariffs_group_id
+        WHERE tbg.tc_id = :tid AND tg.tariffs_grp_code = :tgc
             LIMIT 1
         SQL;
 
@@ -84,6 +115,7 @@ class TariffRepository extends ServiceEntityRepository
     public function clearAssignedTariffs(int $uid, int $fid): bool
     {
         $sql = <<<SQL
+            DELETE um
             FROM user_serv_modes um
             JOIN prod_serv_modes m ON m.id = um.srvmode_id
             JOIN products_services s ON s.id = m.srv_id

@@ -23,8 +23,9 @@ class UserProfileService
     public function getShortUserInfo(int $uid): array
     {
         $user = $this->userRepo->find($uid);
+
         if (!$user)
-            throw new BusinessException($uid);
+            throw new BusinessException('Пользователь не найден');
 
 
         $dtoUser = new UserProfileDto($user);

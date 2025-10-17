@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 
 #[AsEventListener(event: KernelEvents::RESPONSE)]
-class ResponseListener
+final class ResponseListener
 {
     public function __invoke(ResponseEvent $event): void
     {
