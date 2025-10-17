@@ -26,7 +26,7 @@ class AddressDto extends Dto
     {
         $this->id = $address->getId();
         $this->name = $address->getName();
-        $this->districtId = $address->getDistrictId();
+        $this->districtId = $address->getDistrict()->getId();
         $this->networks = $address->getNetworks();
         $this->unitId = $address->getUnitId();
         $this->postalIndex = $address->getPostalIndex();

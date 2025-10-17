@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-class UserProfileController extends AbstractController
+class UserProfileController extends Controller
 {
     public function authenticate(): bool
     {
@@ -23,6 +23,6 @@ class UserProfileController extends AbstractController
     public function getShortUserInfo(UserProfileService $userInfoService): JsonResponse
     {
         $dtoResponse = $userInfoService->getShortUserInfo(UserSessionService::getUserId());
-        return $this->json($dtoResponse);
+        return $this->responseData($dtoResponse);
     }
 }

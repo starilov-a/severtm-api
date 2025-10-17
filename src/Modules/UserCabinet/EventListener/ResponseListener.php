@@ -21,15 +21,9 @@ final class ResponseListener
         }
 
         $arrayResponse = json_decode($response->getContent(), true);
-        $data = [];
-
-        if (!empty($arrayResponse['data']))
-            $data['data'] = $arrayResponse['data'];
-        if (!empty($arrayResponse['message']))
-            $data['message'] = $arrayResponse['message'];
 
         $result = new JsonResponse(
-            $data,
+            $arrayResponse,
             $response->getStatusCode(),
             $response->headers->all()
         );

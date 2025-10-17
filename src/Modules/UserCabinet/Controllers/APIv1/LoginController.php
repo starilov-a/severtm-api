@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
+use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\Auth;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Modules\Common\Infrastructure\Exception;
 
-final class LoginController extends AbstractController
+final class LoginController extends Controller
 {
     public function authenticate(): bool
     {
@@ -37,7 +38,7 @@ final class LoginController extends AbstractController
         if ($user) {
             $userDto = new SessionDto(true, $user->getUid(), $user->getUser()->getFullName(), [], [], $user->getUser()->getDistrict(), []);
             (new Auth)->login($userDto);
-            return $this->json(UserSessionService::getSid());
+            return $this->responseData("UserSessionService::getSid()");
         } else {
             throw new AuthException('User not found', 403);
         }
