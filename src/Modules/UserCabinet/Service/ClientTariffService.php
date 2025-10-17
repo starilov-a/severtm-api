@@ -2,7 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Repository\TariffRepository;
 use App\Modules\UserCabinet\Repository\UserRepository;
@@ -45,29 +46,73 @@ class ClientTariffService
     }
 
     // Изменение тарифа на след месяц
-    public function changeNextTariff(int $uid, int $newTariffId): Bool
+    public function changeNextTariff(int $uid, int $newTariffId): bool
     {
         // 1. Получаем клиента
         $client = $this->userRepo->find($uid);
+
+        //TODO: сделать собственный экшен "Изменение тарифа самим клиентом"
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_CHANGE_TARIFFS');
         // 2. Логика для клиента
         // 2.1. получаем новый тариф
         $newNextTariff = $this->tariffRepo->find($newTariffId);
 
         // 2.1.2 Является ли доступным тарифом на изменение самим клиентом
-        if ($newNextTariff->canBeChangedByClient())
-            throw new \DomainException('Тариф не является доступным для смены клиентом');
+        if (!$newNextTariff->canBeChangedByClient())
+            throw new BusinessException('Тариф не является доступным для смены клиентом');
 
         // 2.3 Новый тариф не является "Отключен от сети"
         if ($newNextTariff->isDisconnected())
-            throw new \Exception('Невозможно выбрать тарифа "Отключён от сети"');
+            throw new BusinessException('Невозможно выбрать тарифа "Отключён от сети"');
 
         // 2.2 Подвязка нового тарифа
         $this->tariffService->changeNextTariff($client, $newNextTariff);
 
         // 2.3 Запись истории
-        $this->loggerService->log(new BusinessLog($uid, $webAction->getId(), 'Пользователь ' . $uid . ' успешно сменил тариф('. $newTariffId .')' , true));
+        $this->loggerService->businessLog(new BusinessLogDto(
+            $uid,
+            $webAction->getId(),
+            'Пользователь ' . $uid . ' успешно сменил тариф - ' . $newNextTariff->getName() . '('. $newTariffId .')' ,
+            true)
+        );
 
         return true;
+    }
+
+
+    public function getAvailableTariffs(int $uid): array
+    {
+        $user = $this->userRepo->find($uid);
+        $userRegion = $user->getRegion();
+        $dto = new Dto\Request\TariffFilterDto();
+
+        //1. Тарифы активные
+        $dto->setActiveStatus(true);
+
+        //2. Тарифы стоят больше чем текущий
+        $currentTariff = $user->getCurrentTariff();
+        $dto->setMinPrice($currentTariff->getPrice());
+
+        //3. Тариф имеет группу, обозначающая необходимый регион
+//        $groupsAndRegionIds = [
+//            1 => 'velikij_novgorod_tariffs',
+//            2 => 'cherepevets_tariffs',
+//            3 => 'chelyzbinsk_tariffs',
+//            4 => 'yaroslavl_tariffs'
+//        ];
+//        $dto->addGroupCodes($groupsAndRegionIds[$userRegion->getId()]);
+
+        //4. Тариф доступен для изменения:
+        $dto->addGroupCodes('canBeChangeByClient');
+
+        $tariffs = $this->tariffRepo->getTariffs($dto);
+
+        return array_map(function ($tariff) {
+            return [
+                'id' => $tariff->getId(),
+                'name' => $tariff->getName(),
+                'price' => $tariff->getPrice()
+            ];
+        }, $tariffs);
     }
 }

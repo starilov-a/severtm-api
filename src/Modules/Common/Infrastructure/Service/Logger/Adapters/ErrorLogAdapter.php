@@ -2,14 +2,21 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Logger\Adapters;
 
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLog;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\ErrorLoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class ErrorLogAdapter implements ErrorLoggerInterface
 {
-
-    public function logError(ErrorLog $log): void
+    protected LoggerInterface $logger;
+    public function __construct(LoggerInterface $logger)
     {
-        // TODO: Нужно что нибудь придумать
+        $this->logger = $logger;
+    }
+
+    public function logError(ErrorLogDto $log): void
+    {
+        dd($log->message, $log->context);
+        $this->logger->error($log->message, $log->context);
     }
 }

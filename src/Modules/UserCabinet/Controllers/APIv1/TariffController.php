@@ -12,19 +12,22 @@ class TariffController extends AbstractController {
 
     public function authenticate(): bool
     {
-        return false;
+        return true;
     }
 
     #[Route(
-        '/get-current-tariff/{uid}',
+        '/get-current-tariff',
         name: 'getCurrentTariff',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
+        methods: ['GET']
     )]
-    public function getCurrentTariff(int $uid, ClientTariffService $tariffService)
+    public function getCurrentTariff(ClientTariffService $tariffService)
     {
+        $uid = UserSessionService::getUserId();
         $responseDto = $tariffService->getCurrentTariff($uid);
-        return $this->json($responseDto->toArray());
+
+        return $this->json([
+            'data' => $responseDto->toArray()
+        ]);
     }
 
     #[Route(
@@ -40,6 +43,23 @@ class TariffController extends AbstractController {
 
         $tariffService->changeNextTariff($uid, $tariffId);
 
-        return $this->json();
+        return $this->json([
+            'message' => 'Тариф на следующий месяц успешно изменен'
+        ]);
+    }
+
+    #[Route(
+        '/get-available-tariffs',
+        name: 'getAvailableTariffs',
+        methods: ['GET']
+    )]
+    public function getAvailableTariffs(ClientTariffService $tariffService)
+    {
+        $uid = UserSessionService::getUserId();
+
+        return $this->json([
+            'data' => $tariffService->getAvailableTariffs($uid),
+            'message' => 'Список доступных тарифов'
+        ]);
     }
 }

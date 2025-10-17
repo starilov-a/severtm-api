@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Entity;
 
+use App\Modules\UserCabinet\Repository\AddressRepository;
 use App\Modules\UserCabinet\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -192,6 +193,11 @@ class User
     public function getAddress(): Address
     {
         return $this->address;
+    }
+
+    public function getRegion(): ?Region
+    {
+        return $this->getAddress()->getDistrict()->getRegion();
     }
 
     public function getDistrict(): ?int

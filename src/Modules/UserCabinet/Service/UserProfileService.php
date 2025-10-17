@@ -4,13 +4,11 @@
 namespace App\Modules\UserCabinet\Service;
 
 
-use App\Modules\Common\Infrastructure\Exception\UserNotFoundException;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Repository\UserRepository;
 use App\Modules\UserCabinet\Service\Dto\Response\AddressDto;
 use App\Modules\UserCabinet\Service\Dto\Response\UserProfileDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WebUserDto;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserProfileService
 {
@@ -26,9 +24,11 @@ class UserProfileService
     public function getShortUserInfo(int $uid)
     {
         $user = $this->userRepo->find($uid);
-        if (!$user) {
-            throw new Exception("User is not found", Response::HTTP_UNAUTHORIZED);
-        }
+
+        if (!$user)
+            throw new BusinessException('Пользователь не найден');
+
+        $dtoUser = new UserProfileDto($user);
         $dtoWebUser = new WebUserDto($user->getWebUser());
         $dtoAddress = new AddressDto($user->getAddress());
 

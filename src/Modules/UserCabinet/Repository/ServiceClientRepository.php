@@ -2,12 +2,21 @@
 
 namespace App\Modules\UserCabinet\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\LazyServiceEntityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\ParameterType;
 
-final class ServiceClientRepository extends ServiceEntityRepository
+class ServiceClientRepository // extends ServiceEntityRepository
 {
+    protected EntityManagerInterface $entityManager;
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
+    {
+        //parent::__construct($registry, Region::class);
+        $this->entityManager = $entityManager;
+    }
+
     /** Есть активная аренда в текущем финпериоде */
     public function hasRentNow(int $userId): bool
     {
@@ -25,7 +34,7 @@ final class ServiceClientRepository extends ServiceEntityRepository
             LIMIT 1
         SQL;
 
-        $conn = $this->getEntityManager()->getConnection();
+        $conn = $this->entityManager->getConnection();
         $val = $conn->fetchOne($sql, [
             'uid'       => $userId,
             'rent'      => 'rent',

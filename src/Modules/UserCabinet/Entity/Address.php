@@ -21,9 +21,9 @@ class Address
     #[ORM\Column(name: 'address_name', type: Types::STRING, length: 255)]
     private string $name;
 
-    // Нет явного FK в DDL — оставляю как scalar. Если есть сущность District — легко заменим на ManyToOne.
-    #[ORM\Column(name: 'address_district', type: Types::INTEGER)]
-    private int $districtId;
+    #[ORM\ManyToOne(targetEntity: District::class)]
+    #[ORM\JoinColumn(name: 'address_district', referencedColumnName: 'district_id', nullable: false, onDelete: 'CASCADE')]
+    private District $district;
 
     /**
      * Судя по названию, тут может быть список/строка подсетей.
@@ -41,14 +41,14 @@ class Address
     public function __construct(
         int $id,
         string $name,
-        int $districtId,
+        District $district,
         string $networks,
         ?int $unitId = 1,
         ?string $postalIndex = null
     ) {
         $this->id          = $id;
         $this->name        = $name;
-        $this->districtId  = $districtId;
+        $this->district    = $district;
         $this->networks    = $networks;
         $this->unitId      = $unitId;
         $this->postalIndex = $postalIndex;
@@ -59,9 +59,15 @@ class Address
     public function getName(): string { return $this->name; }
     public function setName(string $name): self { $this->name = $name; return $this; }
 
-    public function getDistrictId(): int { return $this->districtId; }
-    public function setDistrictId(int $id): self { $this->districtId = $id; return $this; }
+    public function getDistrict(): District { return $this->district; }
 
+    public function setDistrict(District $district): self { $this->district = $district; return $this; }
+
+    public function getRegion(): Region
+    {
+        // shortcut для удобства
+        return $this->district->getRegion();
+    }
     public function getNetworks(): string { return $this->networks; }
     public function setNetworks(string $networks): self { $this->networks = $networks; return $this; }
 

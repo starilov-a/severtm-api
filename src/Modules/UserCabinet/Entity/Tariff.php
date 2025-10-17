@@ -91,7 +91,6 @@ class Tariff
     public function getPrice(): string { return $this->price; }
     public function getServiceModeId(): int { return $this->serviceModeId; }
 
-    // Тарифы с id = 1 - отключен от сети
     // TODO: сделать через группу "Отключен от сети"(?)
     public function isDisconnected(): bool
     {
@@ -103,13 +102,12 @@ class Tariff
         $this->groups = new ArrayCollection();
     }
 
-    /** Быстрая проверка, если у вас уже есть объект группы */
     public function isInGroup(TariffGroup $group): bool
     {
         return $this->groups->contains($group); // EXTRA_LAZY → SELECT 1 … LIMIT 1
     }
 
-    public function canBeChangedByClient(): bool
+    public function canBeChangedByClient(): bool // использую для теста - 12922
     {
         return $this->hasGroupCode('canBeChangeByClient');
     }

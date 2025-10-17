@@ -2,7 +2,9 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLog;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Entity\Tariff;
 use App\Modules\UserCabinet\Entity\User;
@@ -51,24 +53,24 @@ class TariffService
     public function changeNextTariff(User $user, Tariff $newNextTariff): bool
     {
         $currentNextTariff = $user->getNextTariff();
-        $userRegion = $this->addressRepo->getRegionForAddressId($user->getAddress()->getId());
+        $userRegion = $user->getRegion();
         $finPeriod = $this->finPeriodRepo->getNext();
         $webAction = $this->webActionRepo->findIdByCid('SET_NEXT_INET');
 
         // ЛОГИКА
         if (!$finPeriod)
-            throw new \Exception('Не найден следующий финансовый период');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Не найден следующий финансовый период');
 
         if (!$this->tariffRepo->isAvailableForRegion($newNextTariff->getId(), $userRegion->getId()))
-            throw new \Exception('Тариф не соответствует адресу');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(), 'Тариф не соответствует адресу');
 
         // 4. если имеется аренда - нельзя disconnected
         if ($this->serviceClientRepo->hasRentNow($user->getId()))
-            throw new \Exception('Присутствует услуга аренды');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Присутствует услуга аренды');
 
         // 5 Тарифы одинаковые
         if ($newNextTariff->getId() == $currentNextTariff->getId())
-            throw new \Exception('Старый и новый тариф совпадают');
+            throw new ImportantBusinessException($user->getId(), $webAction->getId(),'Старый и новый тариф совпадают');
 
         // ДЕЙСТВИЯ
         return $this->em->getConnection()->transactional(function () use (
@@ -86,7 +88,12 @@ class TariffService
             $this->userRepo->changeNextTariff($user->getId(), $newNextTariff->getId());
 
             // 9. запись в историю об успехе
-            $this->loggerService->log(new BusinessLog($user->getId(), $webAction->getId(), 'Пользователь ' . $user->getId() . ' успешно сменил тариф('. $newNextTariff->getId() .')' , true));
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $user->getId(),
+                $webAction->getId(),
+                'Тариф на следующий месяц для пользователя ' . $user->getId() . ' успешно изменен тариф - ' . $newNextTariff->getName(). '(' . $newNextTariff->getId() .')' ,
+                true
+            ));
 
             return true;
         });

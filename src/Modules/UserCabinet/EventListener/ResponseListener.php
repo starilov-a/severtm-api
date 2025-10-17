@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 
 #[AsEventListener(event: KernelEvents::RESPONSE)]
-class ResponseListener
+final class ResponseListener
 {
     public function __invoke(ResponseEvent $event): void
     {
@@ -19,9 +19,15 @@ class ResponseListener
         if (!$response instanceof JsonResponse || $response->getStatusCode() !== 200) {
             return;
         }
-        $data = [
-            'data' => json_decode($response->getContent(), true),
-        ];
+
+        $arrayResponse = json_decode($response->getContent(), true);
+        $data = [];
+
+        if (!empty($arrayResponse['data']))
+            $data['data'] = $arrayResponse['data'];
+        if (!empty($arrayResponse['message']))
+            $data['message'] = $arrayResponse['message'];
+
         $result = new JsonResponse(
             $data,
             $response->getStatusCode(),

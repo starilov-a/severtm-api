@@ -2,11 +2,16 @@
 
 namespace App\Modules\UserCabinet\EventListener;
 
+use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
-use App\Modules\Common\Infrastructure\Exception\RepositoryException;
-use App\Modules\UserCabinet\Service\WebHistoryService;
+use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -14,28 +19,60 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class ExceptionListener
 {
     protected \Throwable $e;
-    protected WebHistoryService $webHistoryService;
+    protected LoggerService $loggerService;
 
-    public function __construct(WebHistoryService $webHistoryService)
+    public function __construct(
+        LoggerService $loggerService
+    )
     {
-        $this->webHistoryService = $webHistoryService;
+        $this->loggerService = $loggerService;
     }
 
     public function __invoke(ExceptionEvent $event): void
     {
-        $exception = $event->getThrowable();
+        $e = $event->getThrowable();
+        $request = $event->getRequest();
 
         $status = match (true) {
-            $exception instanceof BusinessException     => 400,
-            $exception instanceof RepositoryException   => 500,
-            default                                     => 500,
+            $e instanceof ImportantBusinessException    => Response::HTTP_BAD_REQUEST,
+            $e instanceof BusinessException             => Response::HTTP_BAD_REQUEST,
+            $e instanceof AuthException                 => Response::HTTP_UNAUTHORIZED,
+            default                                     => Response::HTTP_INTERNAL_SERVER_ERROR,
         };
 
+        $message = $e->getMessage();
+
+        if ($e instanceof ImportantBusinessException) {
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $e->getUserId(),
+                $e->getActionId(),
+                $e->getMessage(),
+                $e->getStatus(),
+                $e->getIp()
+            ));
+        } elseif ($status >= 500) {
+            $this->loggerService->errorLog(new ErrorLogDto(
+                $e->getMessage(),
+                array_filter([
+                    'file'      => $e->getFile(),
+                    'line'      => $e->getLine(),
+                    'route'     => $request->attributes->get('_route'),
+                    'method'    => $request->getMethod(),
+                    'path'      => $request->getPathInfo(),
+                    'userId'    => UserSessionService::getUserId(),
+                    'query'     => $request->query->all() ? json_encode($request->query->all()) : null,
+                    'request'   => $request->request->all() ? json_encode($request->request->all()) : null,
+                ], fn($v) => $v !== null && $v !== [])
+            ));
+
+            $message = 'Ошибка сервера';
+        }
 
         $responseData = [
-            'message' => $exception->getMessage()
+            'message' => $message,
         ];
-        $response = new JsonResponse($responseData, 404);
+
+        $response = new JsonResponse($responseData, $status);
         $event->setResponse($response);
     }
 

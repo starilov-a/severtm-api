@@ -16,9 +16,5 @@ class WebHistoryService
     {
         $this->webHistoryRepo = $webHistoryRepo;
     }
-    public function writeWebLog(int $uid, WebAction $action, string $message, bool $success)
-    {
-        $ip = UserSessionService::getUserIp();
-        $this->webHistoryRepo->log($uid, $action->getId(), $message, $success, $ip);
-    }
+
 }
