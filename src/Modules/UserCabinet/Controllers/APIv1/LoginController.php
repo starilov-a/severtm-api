@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Modules\Common\Infrastructure\Exception;
 
 final class LoginController extends AbstractController
 {
@@ -38,7 +39,7 @@ final class LoginController extends AbstractController
             (new Auth)->login($userDto);
             return $this->json(UserSessionService::getSid());
         } else {
-            throw new \Exception('User not found', 403);
+            throw new AuthException('User not found', 403);
         }
     }
 
