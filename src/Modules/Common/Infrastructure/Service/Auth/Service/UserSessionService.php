@@ -15,7 +15,7 @@ class UserSessionService
 
     static public function getUserId(): int
     {
-        return $_SESSION['userId'] ?? 20025745;
+        return $_SESSION['userId'] ?? false;
     }
 
     static public function getUserIp(): bool

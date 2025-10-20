@@ -16,6 +16,7 @@ class ErrorLogAdapter implements ErrorLoggerInterface
 
     public function logError(ErrorLogDto $log): void
     {
+        dd($log);
         $this->logger->error($log->message, $log->context);
     }
 }

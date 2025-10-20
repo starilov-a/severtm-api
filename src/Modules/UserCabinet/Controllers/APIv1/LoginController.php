@@ -2,17 +2,12 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\Common\Infrastructure\Exception\AuthException;
-use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\Auth;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Entity\WebUser;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Modules\Common\Infrastructure\Exception;
 
 final class LoginController extends Controller
 {
@@ -24,11 +19,20 @@ final class LoginController extends Controller
     /**
      * @throws \Exception
      */
-    #[Route('/login', name: 'app_login_post', methods: ['POST'], format: 'json')]
+    #[Route(
+        '/login',
+        name: 'app_login_post',
+        methods: ['POST'],
+        format: 'json'
+    )]
     public function login(Request $request, Auth $auth): JsonResponse
     {
-        $auth->login($request->get('login'), $request->get('pass'));
-        return $this->responseMessage('User login');
+        $data = $request->toArray();
+        if (empty($data['login']) || empty($data['password']))
+            throw new BusinessException('Не указан логин или пароль');
+
+        $auth->login($data['login'], $data['password']);
+        return $this->responseMessage('User login' );
     }
 
 

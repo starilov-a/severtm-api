@@ -3,16 +3,10 @@
 namespace App\Modules\Common\Infrastructure\Service\Auth\Entity;
 
 use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 final class Session
 {
-    // ��������� SingleTone ���� �������� ���������� �������� ������,
-    // � ���� �������� ���� �������.
-    // ����� ������� ��������, ��� ���� ����� ����� ���������������,
-    // ����� ���������������� ������ ��� ��������
-    // private static ?Session $instance = null;
-
-
     private bool $loggedIn;
     private ?int $userId;
     private ?string $userIp;
@@ -50,6 +44,9 @@ final class Session
 
     static function destroy(): void
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         session_destroy();
     }
 
