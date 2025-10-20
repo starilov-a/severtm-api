@@ -7,6 +7,7 @@ use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
 use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
 use App\Modules\UserCabinet\Entity\WebUser;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class Auth
 {
@@ -17,9 +18,10 @@ final class Auth
     }
     public function login(string $login, string $pass): void
     {
+        session_start();
 
         if(UserSessionService::loggedIn())
-            throw new AuthException("Already logged in", 403);
+            throw new AuthException("Уже авторизован", 403);
 
         $user = $this->em->getRepository(WebUser::class)->findOneBy(
             [
@@ -29,7 +31,7 @@ final class Auth
         );
 
         if (!$user)
-            throw new AuthException('User not found', 403);
+            throw new AuthException('Пользователь не найден', 403);
 
         Session::create(new SessionDto(
             true,

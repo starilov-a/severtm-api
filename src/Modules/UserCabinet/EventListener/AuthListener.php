@@ -11,11 +11,17 @@ use Symfony\Component\HttpKernel\KernelEvents;
 #[AsEventListener(event: KernelEvents::CONTROLLER)]
 final class AuthListener
 {
-    protected \Throwable $e;
-    public function onKernelController(ControllerEvent $event, Auth $auth): void
-    {
-        session_start();
 
+    protected Auth $auth;
+
+    public function __construct(Auth $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    protected \Throwable $e;
+    public function onKernelController(ControllerEvent $event): void
+    {
         $controller = $event->getController();
         if (!is_array($controller)) {
            return;
@@ -27,10 +33,8 @@ final class AuthListener
             return;
         }
 
-        if (!$controllerObject->authenticate() || !$auth->checkAuth()) {
-            return;
+        if ($controllerObject->authenticate() && !$this->auth->checkAuth()) {
+            throw new AuthException("Необходима авторизация");
         }
-
-        throw new AuthException("Необходима ");
     }
 }
