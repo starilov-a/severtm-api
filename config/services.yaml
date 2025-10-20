@@ -21,6 +21,7 @@ services:
     # Сервис
 
     App\Modules\Common\Infrastructure\Service\Logger\LoggerService: ~
+    App\Modules\Common\Infrastructure\Service\Auth\Service\Auth: ~
     # Адаптеры
     App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
 

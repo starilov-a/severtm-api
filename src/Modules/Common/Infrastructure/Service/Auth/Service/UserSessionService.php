@@ -8,23 +8,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class UserSessionService
 {
-
-    static public function checkAuth(): bool
-    {
-        return self::loggedIn();
-    }
-
-    // возможно после разлогирования будут производиться доп операции,
-    // к примеру отметка времени, когда пользователь был в сети последний раз.
-    // но пока это метод просто уничтожает сессию
-    static public function logOut(): void
-    {
-        Session::destroy();
-    }
-
     static public function loggedIn(): bool
     {
-        return $_SESSION['loggedIn'] ?? true;
+        return $_SESSION['loggedIn'] ?? false;
     }
 
     static public function getUserId(): int

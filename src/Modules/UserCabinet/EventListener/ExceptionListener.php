@@ -65,7 +65,7 @@ final class ExceptionListener
                 ], fn($v) => $v !== null && $v !== [])
             ));
 
-            $message = $e->getMessage() . '/' . $e->getFile() . ':' . $e->getLine();
+            $message = $e->getMessage() . '|' . $e->getFile() . ':' . $e->getLine();
         }
 
         $responseData = [

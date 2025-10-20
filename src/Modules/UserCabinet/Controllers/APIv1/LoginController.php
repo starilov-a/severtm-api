@@ -25,31 +25,17 @@ final class LoginController extends Controller
      * @throws \Exception
      */
     #[Route('/login', name: 'app_login_post', methods: ['POST'], format: 'json')]
-    public function login(Request $request, EntityManagerInterface $em): JsonResponse
+    public function login(Request $request, Auth $auth): JsonResponse
     {
-
-        $data = $request->toArray();
-        $user = $em->getRepository(WebUser::class)->findOneBy(
-            [
-                'login' => $data['login'],
-                'passwd_hash' => md5($data['password'])
-            ]
-        );
-        if ($user) {
-            $userDto = new SessionDto(true, $user->getUid(), $user->getUser()->getFullName(), [], [], $user->getUser()->getDistrict(), []);
-            (new Auth)->login($userDto);
-            return $this->responseData("UserSessionService::getSid()");
-        } else {
-            throw new AuthException('User not found', 403);
-        }
+        $auth->login($request->get('login'), $request->get('pass'));
+        return $this->responseMessage('User login');
     }
 
 
     #[Route('/logout', name: 'app_logout_post', methods: ['POST'], format: 'json')]
-    public function logout(Request $request): JsonResponse
+    public function logout(Request $request, Auth $auth): JsonResponse
     {
-        UserSessionService::logOut();
-        return $this->json('User logout');
+        $auth->logOut();
+        return $this->responseMessage('User logout');
     }
-
 }
