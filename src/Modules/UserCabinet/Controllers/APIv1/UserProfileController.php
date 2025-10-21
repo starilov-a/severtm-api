@@ -18,7 +18,7 @@ class UserProfileController extends Controller
     #[Route(
         '/get-short-user-info',
         name: 'getShortUserInfo',
-        methods: ['GET']
+        methods: ['GET', 'POST']
     )]
     public function getShortUserInfo(UserProfileService $userInfoService): JsonResponse
     {

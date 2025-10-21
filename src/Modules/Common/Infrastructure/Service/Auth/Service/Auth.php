@@ -18,7 +18,7 @@ final class Auth
     }
     public function login(string $login, string $pass): void
     {
-        session_start();
+
 
         if(UserSessionService::loggedIn())
             throw new AuthException("Уже авторизован", 403);

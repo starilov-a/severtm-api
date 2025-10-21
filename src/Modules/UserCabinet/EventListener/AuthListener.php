@@ -22,6 +22,7 @@ final class AuthListener
     protected \Throwable $e;
     public function onKernelController(ControllerEvent $event): void
     {
+        session_start();
         $controller = $event->getController();
         if (!is_array($controller)) {
            return;
