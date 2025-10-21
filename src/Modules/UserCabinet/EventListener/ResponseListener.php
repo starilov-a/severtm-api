@@ -10,20 +10,20 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 
 #[AsEventListener(event: KernelEvents::RESPONSE)]
-class ResponseListener
+final class ResponseListener
 {
     public function __invoke(ResponseEvent $event): void
     {
         $response = $event->getResponse();
-        // проверка, на то что не используется в контроллере view/twig
+        // РїСЂРѕРІРµСЂРєР°, РЅР° С‚Рѕ С‡С‚Рѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ view/twig
         if (!$response instanceof JsonResponse || $response->getStatusCode() !== 200) {
             return;
         }
-        $data = [
-            'data' => json_decode($response->getContent(), true),
-        ];
+
+        $arrayResponse = json_decode($response->getContent(), true);
+
         $result = new JsonResponse(
-            $data,
+            $arrayResponse,
             $response->getStatusCode(),
             $response->headers->all()
         );

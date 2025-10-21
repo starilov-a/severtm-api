@@ -1,5 +1,13 @@
 FROM nginx:alpine
 
+
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG NO_PROXY
+ENV http_proxy=${HTTP_PROXY} \
+    https_proxy=${HTTPS_PROXY} \
+    no_proxy=${NO_PROXY}
+
 COPY nginx.conf /etc/nginx/
 COPY default.conf /etc/nginx/conf.d/
 

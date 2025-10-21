@@ -2,9 +2,7 @@
 
 namespace App\Modules\UserCabinet\Controllers;
 
-use App\Modules\UserCabinet\Controllers\CustomController\UserSession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BaseController extends AbstractController
 {
