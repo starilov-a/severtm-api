@@ -21,7 +21,7 @@ class UserProfileService
         $this->userRepo = $userRepo;
     }
 
-    public function getShortUserInfo(int $uid)
+    public function getShortUserInfo(int $uid): array
     {
         $user = $this->userRepo->find($uid);
 
@@ -36,5 +36,10 @@ class UserProfileService
             'webUser' => [...$dtoWebUser->toArray()],
             'address' => [...$dtoAddress->toArray()],
         ];
+    }
+
+    public function getFullInfo(int $uid): array
+    {
+        return [];
     }
 }

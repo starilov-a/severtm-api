@@ -26,11 +26,18 @@ class PaymentsService
         $this->replenishmentRepo = $replenishmentRepo;
         $this->debtRepo = $debtRepo;
     }
-    public function pay($uid, $cost): array
-    {
 
+    /*
+     * Оплата услуг
+     * */
+    public function pay($uid, $cost): bool
+    {
+        return false;
     }
 
+    /*
+     * Получение баланса
+     * */
     public function getBalance(int $uid): array
     {
         $balance = $this->balanceRepo->find($uid);
@@ -40,6 +47,9 @@ class PaymentsService
         ];
     }
 
+    /*
+     * Получение задолжности
+     * */
     public function getDebt($uid): array
     {
         $debt = $this->debtRepo->sumByUser($uid);
@@ -49,6 +59,9 @@ class PaymentsService
         ];
     }
 
+    /*
+     * Получение списаний
+     * */
     public function getWriteOffs(FilterDto $filter, int $uid): array
     {
         $writeOffs = $this->writeOffRepo->findByUser($filter, $uid);
@@ -62,6 +75,9 @@ class PaymentsService
         }, $writeOffs);
     }
 
+    /*
+     * Пополнения пользователя
+     * */
     public function getReplenishments(FilterDto $filter, int $uid): array
     {
         $replenishments = $this->replenishmentRepo->findByUser($filter, $uid);
@@ -79,13 +95,19 @@ class PaymentsService
         }, $replenishments);
     }
 
-    public function enableAutopayment(int $uid): array
+    /*
+     * Активация автоплатежа
+     * */
+    public function enableAutopayment(int $uid): bool
     {
-        return [];
+        return false;
     }
 
-    public function disableAutopayment(int $uid): array
+    /*
+     * Отключение автоплатежа
+     * */
+    public function disableAutopayment(int $uid): bool
     {
-        return [];
+        return false;
     }
 }

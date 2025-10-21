@@ -34,10 +34,18 @@ class TariffRepository extends ServiceEntityRepository
                 ->setParameter('minPrice', $minPrice);;
         }
 
+        $qb->leftJoin('t.groups', 'tg');
+
         $codes = $dto->getGroupCodes();
         if (!empty($codes)) {
-            $qb->join('t.groups', 'tg');
             foreach ($codes as $key => $code)
+                $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
+        }
+
+        // может быть стоит убрать join я хз
+        $regionCodes = $dto->getRegionGroupCodes();
+        if (!empty($regionCodes)) {
+            foreach ($regionCodes as $key => $code)
                 $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
         }
 
