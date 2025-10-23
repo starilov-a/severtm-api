@@ -114,4 +114,17 @@ class UserProfileController extends Controller
         return $this->response($userProfileService->updateUserInfo($webUseDto), 'Пользовательская информация обновлена');
 
     }
+
+    #[Route(
+        '/update-user-password',
+        name: 'updateUserPassword',
+        methods: ['POST']
+    )]
+    public function updateUserPassword(Request $request, UserProfileService $userProfileService, ValidatorInterface $validator): JsonResponse
+    {
+        $data = $request->toArray();
+        $allowFields = ['old_password', 'password', 'password_confirmation'];
+        return $this->responseMessage( 'Пароль обновлен');
+
+    }
 }
