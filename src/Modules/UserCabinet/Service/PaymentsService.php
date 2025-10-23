@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Repository\BalanceRepository;
 use App\Modules\UserCabinet\Repository\DebtRepository;
 use App\Modules\UserCabinet\Repository\ReplenishmentRepository;
@@ -34,6 +35,9 @@ class PaymentsService
     public function getBalance(int $uid): array
     {
         $balance = $this->balanceRepo->find($uid);
+        if(!$balance){
+                throw new BusinessException('Баланс пользователя не обнаружен');
+        }
 
         return [
             'balance' => $balance->get()
