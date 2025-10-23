@@ -8,6 +8,10 @@ use App\Modules\UserCabinet\Repository\DebtRepository;
 use App\Modules\UserCabinet\Repository\ReplenishmentRepository;
 use App\Modules\UserCabinet\Repository\WriteOffRepository;
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
+use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
+use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
+use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollection;
+use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
 
 class PaymentsService
 {
@@ -53,34 +57,27 @@ class PaymentsService
         ];
     }
 
-    public function getWriteOffs(FilterDto $filter, int $uid): array
+    public function getWriteOffs(FilterDto $filter, int $uid): WriteOffCollection
     {
         $writeOffs = $this->writeOffRepo->findByUser($filter, $uid);
 
-        return array_map(function ($writeOff) {
-            return [
-                'id' => $writeOff->getId(),
-                'payableId' =>$writeOff->getPayableId(),
-                'date' => $writeOff->getChargedAt()->format('Y-m-d H:i:s')
-            ];
-        }, $writeOffs);
+        $dtoCollection = new WriteOffCollection();
+
+        foreach ($writeOffs as $writeOff) {
+            $dtoCollection->add(new WriteOffDto($writeOff));
+        }
+        return $dtoCollection;
     }
 
-    public function getReplenishments(FilterDto $filter, int $uid): array
+    public function getReplenishments(FilterDto $filter, int $uid): ReplenishmentsCollectionDto
     {
         $replenishments = $this->replenishmentRepo->findByUser($filter, $uid);
+          $dtoCollection = new ReplenishmentsCollectionDto();
 
-        return array_map(function ($replenishment) {
-            return [
-                'id' => $replenishment->getId(),
-                'login' =>$replenishment->getLogin(),
-                'additionalInformation' => $replenishment->getWho(),
-                'paymentType' => $replenishment->getWho(),
-                'comment' => $replenishment->getComments(),
-                'amount' => $replenishment->getAmount(),
-                'date' => date("Y-m-d H:i:s", $replenishment->getDateTs())
-            ];
-        }, $replenishments);
+          foreach ($replenishments as $replenishment) {
+                $dtoCollection->add(new ReplenishmentDto($replenishment));
+          }
+          return $dtoCollection;
     }
 
     public function enableAutopayment(int $uid): array

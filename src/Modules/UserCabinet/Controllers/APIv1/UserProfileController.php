@@ -6,6 +6,7 @@ use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\UserProfileService;
+use mysql_xdevapi\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +62,10 @@ class UserProfileController extends Controller
     {
         $filterDto = new FilterDto($request->query->get('limit'), $request->query->get('offset'));
 
-        return $this->responseData($paymentsService->getWriteOffs($filterDto, UserSessionService::getUserId()));
+        $collection = $paymentsService->getWriteOffs($filterDto, UserSessionService::getUserId());
+
+        return $this->responseData($collection->toArray());
+
     }
 
     #[Route(
@@ -73,6 +77,7 @@ class UserProfileController extends Controller
     {
         $filterDto = new FilterDto($request->query->get('limit'), $request->query->get('offset'));
 
-        return $this->responseData($paymentsService->getReplenishments($filterDto, UserSessionService::getUserId()));
+        $collection = $paymentsService->getReplenishments($filterDto, UserSessionService::getUserId());
+        return $this->responseData($collection->toArray());
     }
 }
