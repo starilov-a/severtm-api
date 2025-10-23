@@ -5,7 +5,7 @@ namespace App\Modules\UserCabinet\Controllers\APIv1;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Service\Dto\Request\WebUserDto as WebUserRequestDto;
-use App\Modules\UserCabinet\Service\Dto\Validator\WebUser as webUserValidator;
+use App\Modules\UserCabinet\Service\Dto\Validator\WebUser as webUserValidatorDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -87,17 +87,16 @@ class UserProfileController extends Controller
         name: 'updateUserInfo',
         methods: ['POST']
     )]
-    public function updateUserInfo(Request $request, UserProfileService $userProfileService, ValidatorInterface $validator)
+    public function updateUserInfo(Request $request, UserProfileService $userProfileService, ValidatorInterface $validator): JsonResponse
     {
         $data = $request->toArray();
         $allowFields = ['comment', 'phone', 'email'];
 
-        $webUser = new webUserValidator();
+        $webUser = new webUserValidatorDto();
         foreach ($allowFields as $field) {
-            if (isset($data[$field])) {
-                $webUser->{$field} = $data[$field];
-            }
+            $webUser->{$field} = $data[$field];
         }
+
         if (count($errors = $validator->validate($webUser)) > 1) {
             $errorsString = [];
             foreach ($errors as $error) {
@@ -112,7 +111,7 @@ class UserProfileController extends Controller
         $data['id'] = UserSessionService::getUserId();
 
         $webUseDto = new WebUserRequestDto(...$data);
-//        dd($webUseDto);
+        return $this->response($userProfileService->updateUserInfo($webUseDto), 'Пользовательская информация обновлена');
 
     }
 }

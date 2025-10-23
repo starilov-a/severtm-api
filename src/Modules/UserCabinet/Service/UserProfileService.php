@@ -7,6 +7,7 @@ namespace App\Modules\UserCabinet\Service;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Entity\WebUser;
 use App\Modules\UserCabinet\Repository\UserRepository;
+use App\Modules\UserCabinet\Repository\WebUserRepository;
 use App\Modules\UserCabinet\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Service\Dto\Response\AddressDto;
 use App\Modules\UserCabinet\Service\Dto\Response\UserDto;
@@ -17,12 +18,19 @@ use Doctrine\ORM\EntityManagerInterface;
 class UserProfileService
 {
     protected UserRepository $userRepo;
+    protected WebUserRepository $webUserRepo;
+    protected EntityManagerInterface $em;
+
 
     public function __construct(
-        UserRepository $userRepo
+        UserRepository         $userRepo,
+        WebUserRepository      $webUserRepo,
+        EntityManagerInterface $em
     )
     {
         $this->userRepo = $userRepo;
+        $this->webUserRepo = $webUserRepo;
+        $this->em = $em;
     }
 
     public function getShortUserInfo(int $uid): array
@@ -57,9 +65,23 @@ class UserProfileService
     }
 
 
-    public function updateUserInfo(WebUserRequestDto $dto, EntityManagerInterface $em, WebUser $webUser ){
-        $allowFields = ['comment', 'phone', 'email'];
+    public function updateUserInfo(
+        WebUserRequestDto $dto
+    ): int
+    {
+        $webUser = $this->webUserRepo->find($dto->getUid());
+        if (!$webUser)
+            throw new BusinessException('Пользователь не найден');
 
+        $webUser->setComment($dto->getComment());
+        $webUser->setPhone($dto->getPhone());
+        $webUser->setEmail($dto->getEmail());
+        try {
+            $this->em->flush();
+            return $dto->getUid();
+        } catch (BusinessException $e) {
+            throw new BusinessException($e->getMessage());
+        }
     }
 
 }
