@@ -4,13 +4,14 @@ namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
+use App\Modules\UserCabinet\Service\Dto\Request\WebUserDto as WebUserRequestDto;
+use App\Modules\UserCabinet\Service\Dto\Validator\WebUser as webUserValidator;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\UserProfileService;
-use mysql_xdevapi\Collection;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserProfileController extends Controller
 {
@@ -41,13 +42,12 @@ class UserProfileController extends Controller
         return $this->responseData($dtoResponse);
     }
 
-
     #[Route(
         '/get-balance',
         name: 'getBalance',
         methods: ['GET', 'POST'],
     )]
-    public function getBalance( PaymentsService $paymentsService): JsonResponse
+    public function getBalance(PaymentsService $paymentsService): JsonResponse
     {
         return $this->responseData($paymentsService->getBalance(UserSessionService::getUserId()));
     }
@@ -79,5 +79,40 @@ class UserProfileController extends Controller
 
         $collection = $paymentsService->getReplenishments($filterDto, UserSessionService::getUserId());
         return $this->responseData($collection->toArray());
+    }
+
+
+    #[Route(
+        '/update-user-info',
+        name: 'updateUserInfo',
+        methods: ['POST']
+    )]
+    public function updateUserInfo(Request $request, UserProfileService $userProfileService, ValidatorInterface $validator)
+    {
+        $data = $request->toArray();
+        $allowFields = ['comment', 'phone', 'email'];
+
+        $webUser = new webUserValidator();
+        foreach ($allowFields as $field) {
+            if (isset($data[$field])) {
+                $webUser->{$field} = $data[$field];
+            }
+        }
+        if (count($errors = $validator->validate($webUser)) > 1) {
+            $errorsString = [];
+            foreach ($errors as $error) {
+                $errorsString[] = $error->getMessage();
+            }
+            return $this->response(
+                $errorsString,
+                implode(", ", $errorsString),
+                400
+            );
+        }
+        $data['id'] = UserSessionService::getUserId();
+
+        $webUseDto = new WebUserRequestDto(...$data);
+//        dd($webUseDto);
+
     }
 }

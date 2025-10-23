@@ -16,23 +16,23 @@ use UserSession;
 class Controller extends AbstractController
 {
 
-    public function responseMessage(string $message): JsonResponse
+    public function responseMessage(string $message, $status = 200): JsonResponse
     {
-        return $this->json(['message' => $message]);
+        return $this->json(['message' => $message], $status);
     }
 
-    public function responseData(mixed $data): JsonResponse
+    public function responseData(mixed $data, $status = 200): JsonResponse
     {
-        return $this->json(['data' => $data]);
+        return $this->json(['data' => $data], $status);
     }
 
-    public function response(mixed $data, string $message): JsonResponse
+    public function response(mixed $data, string $message, $status = 200): JsonResponse
     {
         return $this->json(
             [
                 'data' => $data,
                 'message' => $message
-            ]
+            ], $status
         );
     }
 
