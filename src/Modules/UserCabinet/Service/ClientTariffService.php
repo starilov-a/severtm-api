@@ -12,18 +12,16 @@ use App\Modules\UserCabinet\Service\Dto\Response\TariffDto;
 
 class ClientTariffService
 {
-    protected $tariffRepo;
-    protected $userRepo;
-    protected $tariffService;
-    protected $webHistoryService;
-    protected $webActionRepo;
-    protected $loggerService;
+    protected TariffRepository $tariffRepo;
+    protected UserRepository $userRepo;
+    protected TariffService $tariffService;
+    protected WebActionRepository $webActionRepo;
+    protected LoggerService $loggerService;
     public function __construct(
         TariffRepository $tariffRepository,
         UserRepository $userRepository,
         WebActionRepository $webActionRepository,
         TariffService $tariffService,
-        WebHistoryService $webHistoryService,
         LoggerService $loggerService
     )
     {
@@ -31,7 +29,6 @@ class ClientTariffService
         $this->userRepo = $userRepository;
         $this->webActionRepo = $webActionRepository;
         $this->tariffService = $tariffService;
-        $this->webHistoryService = $webHistoryService;
         $this->loggerService = $loggerService;
     }
     public function getCurrentTariff(int $uid): TariffDto
@@ -94,13 +91,14 @@ class ClientTariffService
         $dto->setMinPrice($currentTariff->getPrice());
 
         //3. Тариф имеет группу, обозначающая необходимый регион
-//        $groupsAndRegionIds = [
-//            1 => 'velikij_novgorod_tariffs',
-//            2 => 'cherepevets_tariffs',
-//            3 => 'chelyzbinsk_tariffs',
-//            4 => 'yaroslavl_tariffs'
-//        ];
-//        $dto->addGroupCodes($groupsAndRegionIds[$userRegion->getId()]);
+        array_map(function ($region) use ($dto) {
+            $dto->addRegionGroupCodes($region);
+        }, [
+            1 => 'velikij_novgorod_tariffs',
+            2 => 'cherepevets_tariffs',
+            3 => 'chelyzbinsk_tariffs',
+            4 => 'yaroslavl_tariffs'
+        ]);
 
         //4. Тариф доступен для изменения:
         $dto->addGroupCodes('canBeChangeByClient');

@@ -32,7 +32,7 @@ final class LoginController extends Controller
             throw new BusinessException('Не указан логин или пароль');
 
         $auth->login($data['login'], $data['password']);
-        return $this->responseMessage('UserDto login' );
+        return $this->responseMessage('User login' );
     }
 
 
@@ -40,6 +40,6 @@ final class LoginController extends Controller
     public function logout(Request $request, Auth $auth): JsonResponse
     {
         $auth->logOut();
-        return $this->responseMessage('UserDto logout');
+        return $this->responseMessage('User logout');
     }
 }
