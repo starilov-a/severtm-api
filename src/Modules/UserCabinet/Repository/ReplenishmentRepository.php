@@ -15,7 +15,7 @@ class ReplenishmentRepository extends ServiceEntityRepository
     }
 
     /** История пополнений по пользователю (Entity) */
-    public function findByUser(FilterDto $filterDto, int $uid): array
+    public function findByUser(int $uid, FilterDto $filterDto): array
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.userId = :uid')->setParameter('uid', $uid)

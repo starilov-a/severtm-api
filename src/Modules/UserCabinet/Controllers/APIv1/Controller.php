@@ -3,6 +3,7 @@
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,7 +78,10 @@ class Controller extends AbstractController
     )]
     public function getWriteOffs(Request $request, int $uid, PaymentsService $paymentsService)
     {
-        $filterDto = new FilterDto($request->query->get('limit'), $request->query->get('offset'));
+        $filterDto = new FilterDto();
+        $filterDto->setLimit($request->query->get('limit'));
+        $filterDto->setOffset($request->query->get('offset'));
+
 
         return $this->json($paymentsService->getWriteOffs($filterDto, $uid));
     }
@@ -90,9 +94,11 @@ class Controller extends AbstractController
     )]
     public function getReplenishments(Request $request, int $uid, PaymentsService $paymentsService)
     {
-        $filterDto = new FilterDto($request->query->get('limit'), $request->query->get('offset'));
+        $filterDto = new FilterDto();
+        $filterDto->setLimit($request->query->get('limit'));
+        $filterDto->setOffset($request->query->get('offset'));
 
-        return $this->json($paymentsService->getReplenishments($filterDto, $uid));
+        return $this->json($paymentsService->getReplenishments($uid, $filterDto));
     }
 
     #[Route(

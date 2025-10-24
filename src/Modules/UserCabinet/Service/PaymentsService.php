@@ -78,9 +78,9 @@ class PaymentsService
     /*
      * Пополнения пользователя
      * */
-    public function getReplenishments(FilterDto $filter, int $uid): array
+    public function getReplenishments(int $uid, FilterDto $filter): array
     {
-        $replenishments = $this->replenishmentRepo->findByUser($filter, $uid);
+        $replenishments = $this->replenishmentRepo->findByUser($uid, $filter);
 
         return array_map(function ($replenishment) {
             return [

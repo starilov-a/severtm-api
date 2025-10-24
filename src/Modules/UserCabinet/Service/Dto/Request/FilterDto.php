@@ -6,14 +6,25 @@ use App\Modules\UserCabinet\Service\Dto\Dto;
 
 class FilterDto extends Dto
 {
-    private $limit ;
-    private $offset;
+    private int $limit ;
+    private int $offset;
 
-    public function __construct(int|null $limit, int|null $offset)
+    /**
+     * @param mixed $limit
+     */
+    public function setLimit(int $limit): void
     {
-        $this->limit = $limit ?? 30;
-        $this->offset = $offset ?? 0;
+        $this->limit = $limit;
     }
+
+    /**
+     * @param mixed $offset
+     */
+    public function setOffset(int $offset): void
+    {
+        $this->offset = $offset;
+    }
+
     public function getLimit(): int
     {
         return $this->limit;

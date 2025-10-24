@@ -4,11 +4,11 @@ namespace App\Modules\UserCabinet\Service\Dto\Request;
 
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 
-class TariffFilterDto
+class TariffFilterDto extends FilterDto
 {
     private ?bool $activeStatus = null;        // true → только активные сегодня
     private ?float $minPrice = null;            // > minPrice
-    private array $groupCodes = [];             // [] → без фильтра по группам
+    private array $groupCodes = [];
     private array $regionGroupCodes = [];
     private bool $excludeDisconnected = true;   // скипать тариф "отключен от сети"
     private string $orderBy = 't.price';        // поле сортировки
