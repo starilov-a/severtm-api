@@ -5,7 +5,8 @@ namespace App\Modules\UserCabinet\Controllers\APIv1;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Service\Dto\Request\WebUserDto as WebUserRequestDto;
-use App\Modules\UserCabinet\Service\Dto\Validator\WebUser as webUserValidatorDto;
+use App\Modules\UserCabinet\Service\Dto\Validator\PasswordValidatorDto;
+use App\Modules\UserCabinet\Service\Dto\Validator\WebUserValidatorDto;
 use App\Modules\UserCabinet\Service\PaymentsService;
 use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -124,7 +125,31 @@ class UserProfileController extends Controller
     {
         $data = $request->toArray();
         $allowFields = ['old_password', 'password', 'password_confirmation'];
-        return $this->responseMessage( 'Пароль обновлен');
+
+        // Валидируем данные
+        $webUser = new PasswordValidatorDto();
+        foreach ($allowFields as $field) {
+            $webUser->{$field} = $data[$field] ?? null;
+        }
+
+        if (count($errors = $validator->validate($webUser)) > 1) {
+            $errorsString = [];
+            foreach ($errors as $error) {
+                $errorsString[] = $error->getMessage();
+            }
+            return $this->response(
+                $errorsString,
+                implode(".\n", $errorsString),
+                400
+            );
+        }
+        // проверка, что пользователь ввел актуальный пароль
+        $userProfileService->checkPassword($data['old_password'] ?? false);
+
+        // создаем Dto
+        $webUseDto = new WebUserRequestDto(id: UserSessionService::getUserId(), passwd_hash:$data['password']);
+
+        return $this->response($userProfileService->updateUserPassword($webUseDto), 'Пользовательский пароль обновлен');
 
     }
 }

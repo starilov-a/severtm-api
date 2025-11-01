@@ -5,6 +5,7 @@ namespace App\Modules\UserCabinet\Service;
 
 
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Entity\WebUser;
 use App\Modules\UserCabinet\Repository\UserRepository;
 use App\Modules\UserCabinet\Repository\WebUserRepository;
@@ -76,12 +77,44 @@ class UserProfileService
         $webUser->setComment($dto->getComment());
         $webUser->setPhone($dto->getPhone());
         $webUser->setEmail($dto->getEmail());
+
         try {
             $this->em->flush();
             return $dto->getUid();
         } catch (BusinessException $e) {
             throw new BusinessException($e->getMessage());
         }
+    }
+
+    public function updateUserPassword(WebUserRequestDto $dto): int
+    {
+        $webUser = $this->webUserRepo->find($dto->getUid());
+        if (!$webUser)
+            throw new BusinessException('Пользователь не найден');
+
+        $pass = $this->encryptPass($dto->getPasswdHash());
+        $webUser->setPasswdHash($pass);
+
+        try {
+            $this->em->flush();
+            return $dto->getUid();
+        } catch (BusinessException $e) {
+            throw new BusinessException($e->getMessage());
+        }
+
+    }
+
+
+    public function checkPassword(string $pass): void
+    {
+        $webUser = $this->webUserRepo->find(UserSessionService::getUserId());
+        if($webUser->getPasswdHash() !== $this->encryptPass($pass)){
+            throw new BusinessException("Старый пароль введен не верно!");
+        }
+    }
+
+    protected function encryptPass(string $pass): string {
+        return  md5($pass);
     }
 
 }
