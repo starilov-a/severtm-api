@@ -67,6 +67,9 @@ class PaymentsService
         ];
     }
 
+    /*
+     * Получение списаний
+     * */
     public function getWriteOffs(FilterDto $filter, int $uid): WriteOffCollection
     {
         $writeOffs = $this->writeOffRepo->findByUser($filter, $uid);
