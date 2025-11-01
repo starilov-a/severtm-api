@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TariffService
 {
-    protected $webHistoryService;
+//    protected $webHistoryService;
     protected $tariffRepo;
     protected $userRepo;
     protected $addressRepo;
@@ -34,7 +34,7 @@ class TariffService
         ServiceClientRepository $serviceClientRepository,
         FinPeriodRepository $finPeriodRepository,
         WebActionRepository $webActionRepository,
-        WebHistoryService $webHistoryService,
+//        WebHistoryService $webHistoryService,
         LoggerService $loggerService,
         EntityManagerInterface $em
     )
@@ -46,7 +46,7 @@ class TariffService
         $this->finPeriodRepo = $finPeriodRepository;
         $this->webActionRepo = $webActionRepository;
         $this->em = $em;
-        $this->webHistoryService = $webHistoryService;
+//        $this->webHistoryService = $webHistoryService;
         $this->loggerService = $loggerService;
     }
 

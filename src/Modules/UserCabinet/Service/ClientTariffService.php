@@ -8,6 +8,7 @@ use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Repository\TariffRepository;
 use App\Modules\UserCabinet\Repository\UserRepository;
 use App\Modules\UserCabinet\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Service\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Service\Dto\Response\TariffDto;
 
 class ClientTariffService
@@ -80,8 +81,8 @@ class ClientTariffService
     public function getAvailableTariffs(int $uid): array
     {
         $user = $this->userRepo->find($uid);
-        $userRegion = $user->getRegion();
-        $dto = new Dto\Request\TariffFilterDto();
+        $userRegion = $user->getAddress()->getRegion();
+        $dto = new TariffFilterDto();
 
         //1. Тарифы активные
         $dto->setActiveStatus(true);
