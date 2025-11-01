@@ -39,7 +39,8 @@ class ClientTariffService
 
         return new TariffDto(
             $currentTariff->getName(),
-            $currentTariff->getPrice()
+            $currentTariff->getPrice(),
+            !($currentTariff->getId() === 1)
         );
     }
 
