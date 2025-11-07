@@ -63,3 +63,8 @@ docker/php-fpm/xdebug.ini
 
 # docker
 docker/.env
+
+
+#dashboard
+public/data/dashboard.json
+public/dashboard.php
