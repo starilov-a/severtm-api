@@ -2,12 +2,11 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Auth\Service;
 
+use App\Modules\Common\Domain\Entity\WebUser;
 use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Service\Auth\Dto\SessionDto;
 use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
-use App\Modules\UserCabinet\Entity\WebUser;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class Auth
 {

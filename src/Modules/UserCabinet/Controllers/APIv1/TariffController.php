@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Service\ClientTariffService;
+use App\Modules\UserCabinet\Service\LkClientTariffService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,7 +20,7 @@ class TariffController extends AbstractController {
         name: 'getCurrentTariff',
         methods: ['GET']
     )]
-    public function getCurrentTariff(ClientTariffService $tariffService)
+    public function getCurrentTariff(LkClientTariffService $tariffService)
     {
         $uid = UserSessionService::getUserId();
         $responseDto = $tariffService->getCurrentTariff($uid);
@@ -36,7 +36,7 @@ class TariffController extends AbstractController {
         methods: ['POST'],
         requirements: ['tariff_id' => '\d{5}']
     )]
-    public function changeNextTariff(Request $request, ClientTariffService $tariffService)
+    public function changeNextTariff(Request $request, LkClientTariffService $tariffService)
     {
         $uid = UserSessionService::getUserId();
         $tariffId = $request->get('tariff_id');
@@ -53,7 +53,7 @@ class TariffController extends AbstractController {
         name: 'getAvailableTariffs',
         methods: ['GET']
     )]
-    public function getAvailableTariffs(ClientTariffService $tariffService)
+    public function getAvailableTariffs(LkClientTariffService $tariffService)
     {
         $uid = UserSessionService::getUserId();
 

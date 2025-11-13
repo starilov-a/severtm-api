@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service\Dto\Response;
 
-use App\Modules\UserCabinet\Entity\User;
-use App\Modules\UserCabinet\Service\Dto\Dto;
+use App\Modules\Common\Domain\Entity\User;
+use App\Modules\Common\Domain\Service\Dto\Dto;
 
 class UserProfileDto extends Dto
 {
@@ -407,6 +407,6 @@ class UserProfileDto extends Dto
     public function setWebUser(?WebUserDto $webUser): void
     {
         $this->webUser = $webUser;
-    } // DTO для связанной сущности WebUser
+    } // DTO пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ WebUser
 
 }

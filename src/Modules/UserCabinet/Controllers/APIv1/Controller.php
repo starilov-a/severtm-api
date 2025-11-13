@@ -2,13 +2,8 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Service\Dto\Request\FilterDto;
-use App\Modules\UserCabinet\Service\PaymentsService;
-use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use UserSession;
 
@@ -56,59 +51,5 @@ class Controller extends AbstractController
     public function index(): JsonResponse
     {
         return $this->json([1, 2, 3, 4]);
-    }
-
-
-    #[Route(
-        '/get-balance/{uid}',
-        name: 'getBalance',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getBalance(int $uid, PaymentsService $paymentsService)
-    {
-        return $this->json($paymentsService->getBalance($uid));
-    }
-
-    #[Route(
-        '/get-write-offs/{uid}',
-        name: 'getWriteOffs',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getWriteOffs(Request $request, int $uid, PaymentsService $paymentsService)
-    {
-        $filterDto = new FilterDto();
-        $filterDto->setLimit($request->query->get('limit'));
-        $filterDto->setOffset($request->query->get('offset'));
-
-
-        return $this->json($paymentsService->getWriteOffs($filterDto, $uid));
-    }
-
-    #[Route(
-        '/get-replenishments/{uid}',
-        name: 'getReplenishments',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getReplenishments(Request $request, int $uid, PaymentsService $paymentsService)
-    {
-        $filterDto = new FilterDto();
-        $filterDto->setLimit($request->query->get('limit'));
-        $filterDto->setOffset($request->query->get('offset'));
-
-        return $this->json($paymentsService->getReplenishments($uid, $filterDto));
-    }
-
-    #[Route(
-        '/get-debt/{uid}',
-        name: 'getDebt',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getDebt(int $uid, PaymentsService $paymentsService)
-    {
-        return $this->json($paymentsService->getDebt($uid));
     }
 }
