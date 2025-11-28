@@ -2,9 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service\Dto\Response;
 
-use App\Modules\Common\Domain\Service\Dto\Dto;
 
-class WriteOffCollectionDto extends Dto
+class WriteOffCollectionDto
 {
 
     /**
