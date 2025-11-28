@@ -2,8 +2,12 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\UserCabinet\Service\PaymentsService;
+use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use UserSession;
 

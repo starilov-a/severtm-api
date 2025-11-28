@@ -87,8 +87,22 @@ class LkClientTariffService
         $currentTariff = $client->getCurrentTariff();
         $dto->setMinPrice($currentTariff->getPrice());
 
+
         //2. Тариф доступен для изменения:
         $dto->addGroupCodes('canBeChangeByClient');
+        //3. Тариф имеет группу, обозначающая необходимый регион
+        array_map(function ($region) use ($dto) {
+            $dto->addRegionGroupCodes($region);
+        }, [
+            1 => 'velikij_novgorod_tariffs',
+            2 => 'cherepevets_tariffs',
+            3 => 'chelyzbinsk_tariffs',
+            4 => 'yaroslavl_tariffs'
+        ]);
+
+        //4. Тариф доступен для изменения:
+
+
 
         $tariffs = $this->tariffService->getTariffsForClient($client, $dto);
 
