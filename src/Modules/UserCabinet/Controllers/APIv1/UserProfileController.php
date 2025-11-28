@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\Common\Domain\UserProfileService;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\UserCabinet\Service\LkUserProfileService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -19,7 +19,7 @@ class UserProfileController extends Controller
         name: 'getShortUserInfo',
         methods: ['GET', 'POST']
     )]
-    public function getShortUserInfo(UserProfileService $userInfoService): JsonResponse
+    public function getShortUserInfo(LkUserProfileService $userInfoService): JsonResponse
     {
         $dtoResponse = $userInfoService->getShortUserInfo(UserSessionService::getUserId());
         return $this->responseData($dtoResponse);

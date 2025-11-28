@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
-use App\Modules\Common\Domain\Service\UserPaymentsService;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\UserCabinet\Service\LkPaymentsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,7 +18,7 @@ class PaymentsController extends Controller
         methods: ['GET'],
         requirements: ['uid' => '\d{8}']
     )]
-    public function getBalance(UserPaymentsService $paymentsService)
+    public function getBalance(LkPaymentsService $paymentsService)
     {
         $uid = UserSessionService::getUserId();
         return $this->responseData($paymentsService->getBalance($uid));
@@ -30,7 +30,7 @@ class PaymentsController extends Controller
         methods: ['GET'],
         requirements: ['uid' => '\d{8}']
     )]
-    public function getWriteOffs(Request $request, UserPaymentsService $paymentsService)
+    public function getWriteOffs(Request $request, LkPaymentsService $paymentsService)
     {
         $filterDto = new FilterDto();
         $filterDto->setLimit($request->query->get('limit'));
@@ -46,7 +46,7 @@ class PaymentsController extends Controller
         methods: ['GET'],
         requirements: ['uid' => '\d{8}']
     )]
-    public function getReplenishments(Request $request, UserPaymentsService $paymentsService)
+    public function getReplenishments(Request $request, LkPaymentsService $paymentsService)
     {
         $filterDto = new FilterDto();
         $filterDto->setLimit($request->query->get('limit'));
@@ -63,7 +63,7 @@ class PaymentsController extends Controller
         methods: ['GET'],
         requirements: ['uid' => '\d{8}']
     )]
-    public function getDebt(UserPaymentsService $paymentsService)
+    public function getDebt(LkPaymentsService $paymentsService)
     {
         $uid = UserSessionService::getUserId();
         return $this->responseData($paymentsService->getDebt($uid));

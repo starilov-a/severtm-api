@@ -2,22 +2,22 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Domain\Repository\BalanceRepository;
-use App\Modules\Common\Domain\Repository\DebtRepository;
-use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WriteOffRepository;
+use App\Modules\Common\Domain\Service\BalanceService;
+use App\Modules\Common\Domain\Service\DebtService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
+use App\Modules\Common\Domain\Service\ReplenishmentService;
 use App\Modules\Common\Domain\Service\UserPaymentsService;
+use App\Modules\Common\Domain\Service\WriteOffService;
 
 class LkPaymentsService
 {
 
     public function __construct(
-        protected BalanceRepository $balanceRepo,
-        protected WriteOffRepository $writeOffRepo,
-        protected ReplenishmentRepository $replenishmentRepo,
-        protected DebtRepository $debtRepo,
+        protected BalanceService $balanceSerivce,
+        protected WriteOffService $writeOffService,
+        protected ReplenishmentService $replenishmentService,
+        protected DebtService $debtService,
         protected UserPaymentsService $userPaymentsService,
         protected UserRepository $userRepo
     ){}
@@ -36,7 +36,7 @@ class LkPaymentsService
     public function getBalance(int $uid): array
     {
         $user = $this->userRepo->find($uid);
-        $balance = $this->userPaymentsService->getUserBalance($user);
+        $balance = $this->balanceSerivce->getUserBalance($user);
 
         return [
             'balance' => $balance->get()
@@ -49,7 +49,7 @@ class LkPaymentsService
     public function getDebt($uid): array
     {
         $user = $this->userRepo->find($uid);
-        $debt = $this->userPaymentsService->getUserDebt($user);
+        $debt = $this->debtService->getUserDebt($user);
 
         return [
             'debt' => $debt
@@ -63,7 +63,7 @@ class LkPaymentsService
     {
         $user = $this->userRepo->find($uid);
 
-        $writeOffs = $this->userPaymentsService->getUserWriteOffs($user, $filter);
+        $writeOffs = $this->writeOffService->getUserWriteOffs($user, $filter);
 
         return array_map(function ($writeOff) {
             return [
@@ -81,7 +81,7 @@ class LkPaymentsService
     {
         $user = $this->userRepo->find($uid);
 
-        $replenishments = $this->userPaymentsService->getUserReplenishments($user, $filter);
+        $replenishments = $this->replenishmentService->getUserReplenishments($user, $filter);
 
         return array_map(function ($replenishment) {
             return [

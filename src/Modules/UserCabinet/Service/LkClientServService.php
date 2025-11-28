@@ -2,7 +2,10 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
+use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
+use App\Modules\Common\Domain\Service\UserServModeService;
 use App\Modules\Common\Domain\Service\UserServService;
 
 class LkClientServService
@@ -10,7 +13,9 @@ class LkClientServService
 
     public function __construct(
         protected UserServService $clientServService,
-        protected UserRepository  $userRepo
+        protected UserRepository  $userRepo,
+        protected ProdServModeRepository  $prodServModeRepo,
+        protected UserServModeService $userServModeService
     ){}
 
     public function listAvailableServices(): array
@@ -36,7 +41,7 @@ class LkClientServService
     public function getCurrentServices(int $uid): array
     {
         $user = $this->userRepo->find($uid);
-        $services = $this->clientServService->getCurrentServicesWithModes($user);
+        $currentServs = $this->userServModeService->getCurrentServiceWithModes($user);
 
         return array_map(function ($serv) {
             return [
@@ -51,20 +56,24 @@ class LkClientServService
                     ];
                 },  $serv->getModes()),
             ];
-        }, $services);
+        }, $currentServs);
     }
 
     /*
- * Активация услуги клиентом
- * */
+    * Активация услуги клиентом
+    * */
     public function enableService(int $uid, int $modeId): bool
     {
         $user = $this->userRepo->find($uid);
-        //$prodServMode = $this->
+        $prodServMode = $this->prodServModeRepo->find($modeId);
+        $options = new OptionsUserServModeDto();
 
-        // $this->userServModeService->enableService($prodServMode);
+        //Добавим комментарий, что пользователь сам активировал услугу
+        $options->setComment('Активация услуги через личный кабинет');
 
-        return false;
+        $this->userServModeService->addCurrentServiceMode($user, $prodServMode, $options);
+
+        return true;
     }
 
     /*

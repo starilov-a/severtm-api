@@ -5,8 +5,12 @@ namespace App\Modules\Common\Domain\Repository;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
+use App\Modules\Common\Domain\Service\Dto\Request\CreateUserServModeDto;
+use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
+use App\Modules\Common\Domain\Service\Dto\Request\UserServModeDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 final class UserServModeRepository extends ServiceEntityRepository
 {
@@ -57,6 +61,7 @@ final class UserServModeRepository extends ServiceEntityRepository
         ]);
     }
 
+    // Активные режимы пользователя (без интернета)
     public function findCurrentModesWithService(User $user): array
     {
         return $this->getEntityManager()->createQueryBuilder()
@@ -68,9 +73,15 @@ final class UserServModeRepository extends ServiceEntityRepository
             ->andWhere('usm.user = :user')->setParameter('user', $user)
             ->andWhere('usm.isActive = 1')
             ->andWhere('f.isCurrent = 1')
+            ->andWhere('s.strCode != internet')
             ->orderBy('s.priority', 'ASC')
             ->addOrderBy('m.priority', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function createUserServMode(User $user, OptionsUserServModeDto $dto): UserServMode
+    {
+
     }
 }

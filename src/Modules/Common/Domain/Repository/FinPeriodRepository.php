@@ -4,6 +4,7 @@ namespace App\Modules\Common\Domain\Repository;
 
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,20 +19,30 @@ class FinPeriodRepository extends ServiceEntityRepository
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        return $qb->select('n')
+        $finPeriod=  $qb->select('n')
             ->from(FinPeriod::class, 'n')
             ->andWhere('n.startDate > (SELECT c.startDate FROM ' . FinPeriod::class . ' c WHERE c.isCurrent = true)')
             ->orderBy('n.startDate', 'ASC')
             ->setMaxResults(1)
             ->getQuery()->getOneOrNullResult();
+
+        if (!$finPeriod)
+            throw new \InvalidArgumentException('NULL при получении следующего фин. периода');
+
+        return $finPeriod;
     }
 
     public function getCurrent(): ?FinPeriod
     {
-        return $this->createQueryBuilder('fp')
+        $finPeriod = $this->createQueryBuilder('fp')
             ->andWhere('fp.isCurrent = :cur')->setParameter('cur', true)
             ->setMaxResults(1)
             ->getQuery()->getOneOrNullResult();
+
+        if (!$finPeriod)
+            throw new \InvalidArgumentException('NULL при получении текущего фин. периода');
+
+        return $finPeriod;
     }
 
     /**
