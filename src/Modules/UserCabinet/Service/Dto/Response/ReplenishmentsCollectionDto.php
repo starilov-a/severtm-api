@@ -3,7 +3,9 @@
 namespace App\Modules\UserCabinet\Service\Dto\Response;
 
 
-class ReplenishmentsCollectionDto
+use App\Modules\Common\Domain\Service\Dto\Dto;
+
+class ReplenishmentsCollectionDto extends Dto
 {
 
     /**

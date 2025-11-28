@@ -16,11 +16,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LkUserProfileService
 {
-
     protected UserRepository $userRepo;
     protected WebUserRepository $webUserRepo;
     protected EntityManagerInterface $em;
-
 
     public function __construct(
         UserRepository         $userRepo,
