@@ -25,20 +25,20 @@ doctrine:
             User:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity'
-                prefix: 'App\Modules\UserCabinet\Entity'
+                dir: '%kernel.project_dir%/src/Modules/Common/Domain/Entity'
+                prefix: 'App\Modules\Common\Domain\Entity'
                 alias: User
             Balance:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity'
-                prefix: 'App\Modules\UserCabinet\Entity'
+                dir: '%kernel.project_dir%/src/Modules/Common/Domain/Entity'
+                prefix: 'App\Modules\Common\Domain\Entity'
                 alias: Balance
             WriteOff:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Entity'
-                prefix: 'App\Modules\UserCabinet\Entity'
+                dir: '%kernel.project_dir%/src/Modules/Common/Domain/Entity'
+                prefix: 'App\Modules\Common\Domain\Entity'
                 alias: WriteOff
         controller_resolver:
             auto_mapping: false

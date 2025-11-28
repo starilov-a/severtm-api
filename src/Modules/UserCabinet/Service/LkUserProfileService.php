@@ -45,10 +45,6 @@ class LkUserProfileService
     {
         $user = $this->userRepo->find($uid);
 
-        if (!$user)
-            throw new BusinessException('Пользователь не найден');
-
-
         $dtoUser = new UserDto($user);
         $dtoWebUser = new WebUserDto($user->getWebUser());
         $dtoAddress = new AddressDto($user->getAddress());
@@ -59,13 +55,9 @@ class LkUserProfileService
     }
 
 
-    public function updateUserInfo(
-        WebUserDtoRequest $dto
-    ): int
+    public function updateUserInfo(WebUserDtoRequest $dto): int
     {
         $webUser = $this->webUserRepo->find($dto->getUid());
-        if (!$webUser)
-            throw new BusinessException('Пользователь не найден');
 
         $webUser->setComment($dto->getComment());
         $webUser->setPhone($dto->getPhone());

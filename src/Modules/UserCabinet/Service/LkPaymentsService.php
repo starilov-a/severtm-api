@@ -70,7 +70,6 @@ class LkPaymentsService
         $writeOffs = $this->writeOffService->getUserWriteOffs($user, $filter);
 
         $dtoCollection = new WriteOffCollectionDto();
-
         foreach ($writeOffs as $writeOff) {
             $dtoCollection->add(new WriteOffDto($writeOff));
         }
@@ -78,7 +77,6 @@ class LkPaymentsService
     }
 
     /*
-<<<<<<< HEAD:src/Modules/UserCabinet/Service/LkPaymentsService.php
      * Пополнения пользователя
      * */
     public function getReplenishments(int $uid, FilterDto $filter): ReplenishmentsCollectionDto
@@ -86,8 +84,8 @@ class LkPaymentsService
         $user = $this->userRepo->find($uid);
 
         $replenishments = $this->replenishmentService->getUserReplenishments($user, $filter);
-        $dtoCollection = new ReplenishmentsCollectionDto();
 
+        $dtoCollection = new ReplenishmentsCollectionDto();
         foreach ($replenishments as $replenishment) {
             $dtoCollection->add(new ReplenishmentDto($replenishment));
         }
