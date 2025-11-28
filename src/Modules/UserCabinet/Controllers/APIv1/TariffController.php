@@ -4,11 +4,12 @@ namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\LkClientTariffService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-class TariffController extends AbstractController {
+class TariffController extends Controller
+{
 
     public function authenticate(): bool
     {
@@ -20,14 +21,11 @@ class TariffController extends AbstractController {
         name: 'getCurrentTariff',
         methods: ['GET']
     )]
-    public function getCurrentTariff(LkClientTariffService $tariffService)
+    public function getCurrentTariff(Request $request, LkClientTariffService $tariffService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         $responseDto = $tariffService->getCurrentTariff($uid);
-
-        return $this->json([
-            'data' => $responseDto->toArray()
-        ]);
+        return $this->responseData($responseDto->toArray());
     }
 
     #[Route(

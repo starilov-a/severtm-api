@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Modules\UserCabinet\Service\Dto\Response;
+
+use App\Modules\Common\Domain\Service\Dto\Dto;
+
+class WriteOffCollectionDto extends Dto
+{
+
+    /**
+     * @var WriteOffDto[]
+     */
+    private array $items = [];
+
+    public function add(WriteOffDto $writeOff): void
+    {
+        $this->items[] = $writeOff;
+    }
+
+    /**
+     * @return WriteOffDto[]
+     */
+    public function getAll(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function toArray(): array
+    {
+        return array_map(
+            fn(WriteOffDto $item) => $item->toArray(),
+            $this->items
+        );
+    }
+}

@@ -5,7 +5,7 @@ namespace App\Modules\UserCabinet\Service\Dto\Response;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Service\Dto\Dto;
 
-class UserProfileDto extends Dto
+class UserDto extends Dto
 {
     private ?int $id = null;
     private string $login = '';
@@ -74,7 +74,7 @@ class UserProfileDto extends Dto
         $this->login = $user->getLogin();
         $this->password = $user->getPassword();
         $this->fullName = $user->getFullName();
-        $this->passport = $user->getPassport();
+//        $this->passport = $user->getPassport();
         $this->taxNumber = $user->getTaxNumber();
         $this->birthdate = $user->getBirthdate();
         $this->email = $user->getEmail();

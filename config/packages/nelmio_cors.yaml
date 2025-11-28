@@ -8,5 +8,10 @@ nelmio_cors:
         expose_headers: ['Link']
         max_age: 3600
     paths:
-        '^/': null
+        '^/api/':
+            allow_origin: [ '%env(CORS_ALLOW_ORIGIN)%' ]
+            allow_credentials: true
+        '^/user-cabinet/':
+            allow_origin: [ '%env(CORS_ALLOW_ORIGIN)%' ]
+            allow_credentials: true
 

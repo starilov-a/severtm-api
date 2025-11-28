@@ -9,6 +9,7 @@ use App\Modules\Common\Domain\Service\TariffService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
+use App\Modules\UserCabinet\Service\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Service\Dto\Response\TariffDto;
 
 class LkClientTariffService
@@ -39,7 +40,8 @@ class LkClientTariffService
 
         return new TariffDto(
             $currentTariff->getName(),
-            $currentTariff->getPrice()
+            $currentTariff->getPrice(),
+            !($currentTariff->getId() === 1)
         );
     }
 
@@ -99,8 +101,6 @@ class LkClientTariffService
             3 => 'chelyzbinsk_tariffs',
             4 => 'yaroslavl_tariffs'
         ]);
-
-        //4. Тариф доступен для изменения:
 
 
 

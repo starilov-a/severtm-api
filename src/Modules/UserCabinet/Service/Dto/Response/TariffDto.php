@@ -7,13 +7,16 @@ use App\Modules\Common\Domain\Service\Dto\Dto;
 
 class TariffDto extends Dto
 {
-    private $name ;
-    private $price;
+    private ?string $name ;
+    private ?float $price;
+    private ?bool $isActive;
 
-    public function __construct(string|null $name, float|null $price)
+
+    public function __construct(string|null $name, float|null $price, bool $isActive)
     {
         $this->name = $name ?? '';
         $this->price = $price ?? 0;
+        $this->isActive = $isActive ?? false;
     }
     public function getName(): string
     {
@@ -23,5 +26,10 @@ class TariffDto extends Dto
     public function getPrice(): float
     {
         return $this->price;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 }

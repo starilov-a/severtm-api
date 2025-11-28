@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TariffService
 {
-    protected $webHistoryService;
+//    protected $webHistoryService;
     protected $tariffRepo;
     protected $userRepo;
     protected $addressRepo;

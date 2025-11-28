@@ -9,6 +9,10 @@ use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
 use App\Modules\Common\Domain\Service\ReplenishmentService;
 use App\Modules\Common\Domain\Service\UserPaymentsService;
 use App\Modules\Common\Domain\Service\WriteOffService;
+use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
+use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
+use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;
+use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
 
 class LkPaymentsService
 {
@@ -59,41 +63,36 @@ class LkPaymentsService
     /*
      * Получение списаний
      * */
-    public function getWriteOffs(int $uid, FilterDto $filter): array
+    public function getWriteOffs(int $uid, FilterDto $filter): WriteOffCollectionDto
     {
         $user = $this->userRepo->find($uid);
 
         $writeOffs = $this->writeOffService->getUserWriteOffs($user, $filter);
 
-        return array_map(function ($writeOff) {
-            return [
-                'id' => $writeOff->getId(),
-                'payableId' =>$writeOff->getPayableId(),
-                'date' => $writeOff->getChargedAt()->format('Y-m-d H:i:s')
-            ];
-        }, $writeOffs);
+        $dtoCollection = new WriteOffCollectionDto();
+
+        foreach ($writeOffs as $writeOff) {
+            $dtoCollection->add(new WriteOffDto($writeOff));
+        }
+        return $dtoCollection;
     }
 
     /*
+<<<<<<< HEAD:src/Modules/UserCabinet/Service/LkPaymentsService.php
      * Пополнения пользователя
      * */
-    public function getReplenishments(int $uid, FilterDto $filter): array
+    public function getReplenishments(int $uid, FilterDto $filter): ReplenishmentsCollectionDto
     {
         $user = $this->userRepo->find($uid);
 
         $replenishments = $this->replenishmentService->getUserReplenishments($user, $filter);
+        $dtoCollection = new ReplenishmentsCollectionDto();
 
-        return array_map(function ($replenishment) {
-            return [
-                'id' => $replenishment->getId(),
-                'login' =>$replenishment->getLogin(),
-                'additionalInformation' => $replenishment->getWho(),
-                'paymentType' => $replenishment->getWho(),
-                'comment' => $replenishment->getComments(),
-                'amount' => $replenishment->getAmount(),
-                'date' => date("Y-m-d H:i:s", $replenishment->getDateTs())
-            ];
-        }, $replenishments);
+        foreach ($replenishments as $replenishment) {
+            $dtoCollection->add(new ReplenishmentDto($replenishment));
+        }
+
+        return $dtoCollection;
     }
 
     /*
