@@ -4,7 +4,6 @@ namespace App\Modules\Common\Infrastructure\Service\Logger\Adapters;
 
 use App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
-use App\Modules\UserCabinet\Entity\WebAction;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 

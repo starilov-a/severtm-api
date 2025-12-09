@@ -2,8 +2,6 @@
 
 namespace App\Modules\Common\Infrastructure\Service\Logger\Dto;
 
-use App\Modules\UserCabinet\Entity\WebAction;
-
 class BusinessLogDto
 {
     public function __construct(
