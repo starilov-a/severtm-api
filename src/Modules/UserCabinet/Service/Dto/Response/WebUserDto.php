@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service\Dto\Response;
 
-use App\Modules\UserCabinet\Entity\WebUser;
-use App\Modules\UserCabinet\Service\Dto\Dto;
+use App\Modules\Common\Domain\Entity\WebUser;
+use App\Modules\Common\Domain\Service\Dto\Dto;
 
 class WebUserDto extends Dto
 {

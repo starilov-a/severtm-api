@@ -2,8 +2,10 @@
 
 namespace App\Modules\UserCabinet\Service\Dto\Response;
 
-use App\Modules\UserCabinet\Entity\WriteOff;
-use App\Modules\UserCabinet\Service\Dto\Dto;
+
+
+use App\Modules\Common\Domain\Entity\WriteOff;
+use App\Modules\Common\Domain\Service\Dto\Dto;
 
 class WriteOffDto extends Dto
 {

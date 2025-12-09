@@ -2,14 +2,9 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
-use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Service\PaymentsService;
-use App\Modules\UserCabinet\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use UserSession;
 
 //use App\Modules\UserCabinet\Service\Dto\FilterDto;
 
@@ -55,22 +50,5 @@ class Controller extends AbstractController
     public function index(): JsonResponse
     {
         return $this->json([1, 2, 3, 4]);
-    }
-
-
-
-
-
-
-
-    #[Route(
-        '/get-debt/{uid}',
-        name: 'getDebt',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
-    )]
-    public function getDebt(int $uid, PaymentsService $paymentsService)
-    {
-        return $this->json($paymentsService->getDebt($uid));
     }
 }

@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <select class="form-control" id="userName">
                         <option value="Alex" selected>Alex</option>
                         <option value="Anton S.">Anton S.</option>
-                        <option value="Anton V.">Anton V.</option>
+                        <option value="Viktor">Viktor</option>
                         <option value="Max">Max</option>
                     </select>
                 </div>
