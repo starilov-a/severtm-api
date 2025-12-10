@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
+use App\Modules\Common\Infrastructure\Exception\ValidationException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 
 use App\Modules\UserCabinet\Service\LkUserProfileService;
@@ -59,11 +60,12 @@ class UserProfileController extends Controller
                 400
             );
         }
-        $data['id'] = UserSessionService::getUserId();
+
+        $uid = UserSessionService::getUserId();
+        $data['id'] = $uid;
 
         $webUseDto = new WebUserRequestDto(...$data);
-        return $this->response($userProfileService->updateUserInfo($webUseDto), 'Пользовательская информация обновлена');
-
+        return $this->response($userProfileService->updateUserInfo($uid, $webUseDto), 'Пользовательская информация обновлена');
     }
 
     #[Route(
@@ -82,24 +84,23 @@ class UserProfileController extends Controller
             $webUser->{$field} = $data[$field] ?? null;
         }
 
-        if (count($errors = $validator->validate($webUser)) > 1) {
-            $errorsString = [];
-            foreach ($errors as $error) {
-                $errorsString[] = $error->getMessage();
-            }
-            return $this->response(
-                $errorsString,
-                implode(".\n", $errorsString),
-                400
-            );
+        $errors = $validator->validate($webUser);
+        if ($errors->count()) {
+            $errorsArr = [];
+            foreach ($errors as $error)
+                $errorsArr[] = $error->getMessage();
+
+            throw new ValidationException($errorsArr, implode(".\n", $errorsArr));
         }
-        // проверка, что пользователь ввел актуальный пароль
+
+        // проверка, нужно внести в сервис
         $userProfileService->checkPassword($data['old_password'] ?? false);
 
-        // создаем Dto
         $webUseDto = new WebUserRequestDto(id: UserSessionService::getUserId(), passwd_hash:$data['password']);
 
-        return $this->response($userProfileService->updateUserPassword($webUseDto), 'Пользовательский пароль обновлен');
+        $uid = UserSessionService::getUserId();
+
+        return $this->response($userProfileService->updateUserPassword($uid, $webUseDto), 'Пользовательский пароль обновлен');
 
     }
 }

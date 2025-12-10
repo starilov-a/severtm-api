@@ -79,9 +79,4 @@ final class UserServModeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    public function createUserServMode(User $user, OptionsUserServModeDto $dto): UserServMode
-    {
-
-    }
 }

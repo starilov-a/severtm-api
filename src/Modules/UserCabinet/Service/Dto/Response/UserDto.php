@@ -18,7 +18,7 @@ class UserDto extends Dto
     private string $phoneExtra;
     private ?int $district = null;
     private ?int $flat = null;
-    private bool $isJuridical = false;
+    private int $isJuridical = 0;
     private float $bill = 0.0;
     private float $bonus = 0.0;
     private float $billAbs = 0.0;
@@ -48,7 +48,7 @@ class UserDto extends Dto
      * @param AddressDto|null $address
      * @param int|null $district
      * @param int|null $flat
-     * @param bool $isJuridical
+     * @param int $isJuridical
      * @param float $bill
      * @param float $bonus
      * @param float $billAbs
@@ -219,12 +219,12 @@ class UserDto extends Dto
         $this->flat = $flat;
     }
 
-    public function isJuridical(): bool
+    public function isJuridical(): int
     {
         return $this->isJuridical;
     }
 
-    public function setIsJuridical(bool $isJuridical): void
+    public function setIsJuridical(int $isJuridical): void
     {
         $this->isJuridical = $isJuridical;
     }

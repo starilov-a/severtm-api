@@ -9,7 +9,6 @@ use App\Modules\Common\Domain\Service\TariffService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
-use App\Modules\UserCabinet\Service\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Service\Dto\Response\TariffDto;
 
 class LkClientTariffService

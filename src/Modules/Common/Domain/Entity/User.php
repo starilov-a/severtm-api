@@ -67,8 +67,8 @@ class User
 
     /* ---------- Финансы ---------- */
 
-    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
-    private bool $isJuridical = false;
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
+    private int $isJuridical = 0;
 
     #[ORM\Column(type: Types::FLOAT, precision: 16, scale: 4, options: ['default' => 0])]
     private float $bill = 0.0;
@@ -250,7 +250,7 @@ class User
         return $this->flat;
     }
 
-    public function isJuridical(): bool
+    public function isJuridical(): int
     {
         return $this->isJuridical;
     }

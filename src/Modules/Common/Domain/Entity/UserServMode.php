@@ -48,8 +48,15 @@ class UserServMode
     #[ORM\Column(name: 'use_cost', type: Types::INTEGER, options: ['default' => 1])]
     private int $useCost = 1;
 
-    #[ORM\Column(name: 'device_id', type: Types::INTEGER, nullable: true)]
-    private ?int $deviceId = null;
+    #[ORM\ManyToOne(targetEntity: Device::class)]
+    #[ORM\JoinColumn(name: 'device_id', referencedColumnName: 'device_id', nullable: true)]
+    private ?Device $device = null;
+
+    /**
+     * Ассоциированная запись user_own_devices (не мэппится напрямую,
+     * может устанавливаться доменным сервисом после выборки).
+     */
+    private ?UserOwnDevice $userOwnDevice = null;
 
     #[ORM\Column(name: 'edit_date', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $editedAt = null;
@@ -62,4 +69,76 @@ class UserServMode
     public function getServiceCostId(): int { return $this->serviceCostId; }
     public function isActive(): bool { return (bool)$this->isActive; }
     public function usesCost(): bool { return (bool)$this->useCost; }
+
+    public function getDevice(): ?Device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?Device $device): self
+    {
+        $this->device = $device;
+        return $this;
+    }
+
+    public function getUserOwnDevice(): ?UserOwnDevice
+    {
+        return $this->userOwnDevice;
+    }
+
+    public function setUserOwnDevice(?UserOwnDevice $userOwnDevice): self
+    {
+        $this->userOwnDevice = $userOwnDevice;
+        return $this;
+    }
+
+    public function setEditedAt(?\DateTimeInterface $editedAt): void
+    {
+        $this->editedAt = $editedAt;
+    }
+
+    public function setUseCost(int $useCost): void
+    {
+        $this->useCost = $useCost;
+    }
+
+    public function setIsActive(int $isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+    public function setUnits(int $units): void
+    {
+        $this->units = $units;
+    }
+
+    public function setExt(?int $ext): void
+    {
+        $this->ext = $ext;
+    }
+
+    public function setServiceCostId(int $serviceCostId): void
+    {
+        $this->serviceCostId = $serviceCostId;
+    }
+
+    public function setMode(ProdServMode $mode): void
+    {
+        $this->mode = $mode;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function setFinPeriod(FinPeriod $finPeriod): void
+    {
+        $this->finPeriod = $finPeriod;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 }

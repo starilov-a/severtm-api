@@ -9,7 +9,7 @@ use App\Modules\Common\Domain\Service\Dto\Dto;
 class OptionsUserServModeDto extends Dto
 {
     // Устройство, если есть
-    protected ?Device $device = null;
+    protected ?DeviceDto $deviceDto = null;
 
     //Кол-вол услуг
     protected int $countUnits = 1;
@@ -19,14 +19,14 @@ class OptionsUserServModeDto extends Dto
 
     protected ?string $comment = null;
 
-    public function getDevice(): ?Device
+    public function getDeviceDto(): ?DeviceDto
     {
-        return $this->device;
+        return $this->deviceDto;
     }
 
-    public function setDevice(?Device $device): void
+    public function setDevice(?DeviceDto $deviceDto): void
     {
-        $this->device = $device;
+        $this->deviceDto = $deviceDto;
     }
 
     public function getCountUnits(): int

@@ -68,8 +68,9 @@ class Tariff
     #[ORM\Column(name: 'deptype', type: Types::INTEGER)]
     private int $depType;
 
-    #[ORM\Column(name: 'srvmode_id', type: Types::INTEGER)]
-    private int $serviceModeId;
+    #[ORM\OneToOne(targetEntity: ProdServMode::class, inversedBy: 'tariff')]
+    #[ORM\JoinColumn(name: 'srvmode_id', referencedColumnName: 'id', nullable: false)]
+    private ProdServMode $serviceMode;
 
     #[ORM\Column(name: 'maxbw', type: Types::BIGINT, options: ['unsigned' => true])]
     private string $maxBandwidth;
@@ -89,7 +90,8 @@ class Tariff
     public function getTid(): int { return $this->tid; }
     public function getName(): ?string { return $this->name; }
     public function getPrice(): string { return $this->price; }
-    public function getServiceModeId(): int { return $this->serviceModeId; }
+    public function getServiceModeId(): int { return $this->serviceMode->getId(); }
+    public function getProdServMode(): ProdServMode{ return $this->serviceMode;}
 
     // TODO: сделать через группу "Отключен от сети"(?)
     public function isDisconnected(): bool

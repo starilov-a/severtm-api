@@ -2,25 +2,23 @@
 
 namespace App\Modules\Common\Domain\Service;
 
+use App\Modules\Common\Domain\Entity\Device;
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
+use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Repository\FinPeriodRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Service\Dto\Request\AddServiceOptionsDto;
-use App\Modules\Common\Domain\Service\Dto\Request\CreateUserServModeDto;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
-use App\Modules\Common\Domain\Service\Dto\Request\UserServModeDto;
-use App\Modules\Common\Domain\Service\Rules\ProdServModes\FinPeriodMustBeIssetContext;
-use App\Modules\Common\Domain\Service\Rules\ProdServModes\FinPeriodMustBeIssetRule;
-use App\Modules\Common\Domain\Service\Rules\ProdServModes\UnitsMustBePositiveContext;
-use App\Modules\Common\Domain\Service\Rules\ProdServModes\UnitsMustBePositiveRule;
-use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Domain\Service\Dto\Request\TypedWriteOffDto;
+use App\Modules\Common\Domain\Service\Rules\Chains\AddServiceModeContext;
+use App\Modules\Common\Domain\Service\Rules\Chains\AddServiceModeRuleChain;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
+use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserServModeService
@@ -35,8 +33,7 @@ class UserServModeService
         protected UserRepository $userRepo,
         protected FinPeriodRepository $finPeriodRepo,
 
-        protected UnitsMustBePositiveRule $unitsMustBePositiveRule,
-        protected FinPeriodMustBeIssetRule $finPeriodMustBeIssetRule,
+        protected AddServiceModeRuleChain $addServiceModeRuleChain,
     ){}
 
     /*
@@ -71,6 +68,28 @@ class UserServModeService
         return $this->userServModeRepo->findCurrentModesWithService($user);
     }
 
+    // Использовать для добавления услуги в текущем месяце
+    public function addCurrentServiceMode(
+        User $user,
+        ProdServMode $mode,
+        OptionsUserServModeDto $optionsUserServModeDto = new OptionsUserServModeDto
+    ): void
+    {
+        $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getCurrent());
+        $this->addServiceMode($user, $mode, $optionsUserServModeDto);
+    }
+
+    // Использовать для добавления услуги в следующем месяце
+    public function addNextServiceMode(
+        User $user,
+        ProdServMode $mode,
+        OptionsUserServModeDto $optionsUserServModeDto = new OptionsUserServModeDto
+    ): void
+    {
+        $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getNext());
+        $this->addServiceMode($user, $mode, $optionsUserServModeDto);
+    }
+
     /*
      * Добавление нового режима услуги клиенту
      * */
@@ -79,32 +98,16 @@ class UserServModeService
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_ADD_SERVICES');
         $master = $this->userRepo->find(UserSessionService::getUserId());
 
-        // Логика:
-        // 1. TODO: Есть ли права на добавление услуги
-        // 2. Кол-во услуг больше 1 (по умолчанию в $options)
-        $this->unitsMustBePositiveRule->check(
-            new UnitsMustBePositiveContext(
-                $master->getId(),
-                $webAction->getId(),
-                $optionsUserServModeDto->getCountUnits()
-            )
-        );
-
-        // 3. Проверка пользователя - сложная логика
-
-        // 3.1 Регион услуги и регион пользователя совпадает
-        // 3.2 Совпадает юр признак пользователя и услуги
-
-        // 4. режим не относится к комплексным
-        $this->finPeriodMustBeIssetRule->check(new FinPeriodMustBeIssetContext(
-            $master->getId(),
-            $webAction->getId(),
-            $optionsUserServModeDto->getCountUnits()
+        // Цепочка проверок
+        $this->addServiceModeRuleChain->checkAll(new AddServiceModeContext(
+            userId: $master->getId(),
+            actionId: $webAction->getId(),
+            finPeriod: $optionsUserServModeDto->getFinPeriod(),
+            mode: $mode,
+            jurStatus: $user->isJuridical(),
+            region: $user->getRegion(),
+            modeUnitCount: $optionsUserServModeDto->getCountUnits(),
         ));
-
-        //TODO: Комплексные тарифы не актуальны. Возможно стоит убрать эту проверку
-        if ($mode->isComplex() || true)
-            throw new ImportantBusinessException($master->getId(), $webAction->getId(),'Режим не должен относится к комплексным');
 
         // Добавление услуги в транзакции
         return $this->em->getConnection()->transactional(function () use (
@@ -114,19 +117,25 @@ class UserServModeService
             $webAction,
             $optionsUserServModeDto
         ) {
-            // 1. Добавление устройства если есть
-            if (!empty($optionsUserServModeDto->getDevice))
-                $this->deviceService->addForUser($user, $optionsUserServModeDto->getDevice());
+            // 1. Добавление usm
+            $userServMode = $this->createUserServMode($user, $mode, $optionsUserServModeDto);
 
-            // 2. Добавление usm
-            $userServMode = $this->userServModeRepo->createUserServMode($user, $optionsUserServModeDto);
+            // 2. Добавление устройства и привязка к текущей услуге
+            if (!empty($optionsUserServModeDto->getDeviceDto())) {
+                $device = $this->deviceService->addOrCreateForUser($user, $optionsUserServModeDto->getDeviceDto());
+                $this->deviceService->attachDeviceToServiceMode($userServMode, $device);
+            }
 
-            // 3. Списание деняг
-            $this->writeOffService->makeWriteOffForMode(
-                $user,
-                $userServMode,
-                $optionsUserServModeDto->getFinPeriod()
-            );
+            // 3.1 Подготовка объекта для создания списания
+            $writeOffDto = new TypedWriteOffDto();
+            $writeOffDto->setServMode($userServMode);
+            $writeOffDto->setFinPeriod($optionsUserServModeDto->getFinPeriod());
+            $writeOffDto->setPayableType('no_packet');
+            $writeOffDto->setComment('Добавление услуги ' . $userServMode->getMode()->getName());
+            $writeOffDto->setUser($user);
+            // 3.2 Списание деняг
+            $this->writeOffService->makeWriteOffForAddingMode($writeOffDto);
+
             // 4. Логирование
             $comment = $optionsUserServModeDto->getComment();
             $this->loggerService->businessLog(new BusinessLogDto(
@@ -139,25 +148,29 @@ class UserServModeService
         });
     }
 
-    // Использовать для добавления услуги в текущем месяце
-    public function addCurrentServiceMode(
-        User $user,
-        ProdServMode $mode,
-        OptionsUserServModeDto $optionsUserServModeDto = new OptionsUserServModeDto
-    ): void
+    protected function createUserServMode(User $user, ProdServMode $prodServMode, OptionsUserServModeDto $optionsUserServModeDto): UserServMode
     {
-        $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getCurrent());
-        $this->addServiceMode($user, $mode, $optionsUserServModeDto);
+        $userServMode = new UserServMode();
+
+        $userServMode->setFinPeriod($optionsUserServModeDto->getFinPeriod());
+        $userServMode->setUser($user);
+        $userServMode->setMode($prodServMode);
+        $userServMode->setServiceCostId(1); //старый параметр не используется, но обязательный
+        $userServMode->setUnits($optionsUserServModeDto->getCountUnits());
+        $userServMode->setIsActive(true);
+        $userServMode->setUseCost(true);
+
+        $this->save($userServMode);
+
+        return $userServMode;
     }
 
-    // Использовать для добавления услуги в след. месяце
-    public function addNextServiceMode(
-        User $user,
-        ProdServMode $mode,
-        OptionsUserServModeDto $optionsUserServModeDto = new OptionsUserServModeDto
-    ): void
+    // Конечное применение userServMode
+    public function save(UserServMode $userServMode): UserServMode
     {
-        $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getNext());
-        $this->addServiceMode($user, $mode, $optionsUserServModeDto);
+        $this->em->persist($userServMode);
+        $this->em->flush();
+
+        return $userServMode;
     }
 }

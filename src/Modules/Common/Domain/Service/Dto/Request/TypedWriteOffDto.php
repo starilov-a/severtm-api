@@ -1,0 +1,111 @@
+<?php
+
+namespace App\Modules\Common\Domain\Service\Dto\Request;
+
+use App\Modules\Common\Domain\Entity\FinPeriod;
+use App\Modules\Common\Domain\Entity\User;
+use App\Modules\Common\Domain\Entity\UserPayableType;
+use App\Modules\Common\Domain\Entity\UserServMode;
+use App\Modules\Common\Domain\Service\Dto\Dto;
+
+class TypedWriteOffDto extends Dto
+{
+    protected User $user;
+    protected FinPeriod $finPeriod; // фин период
+    protected UserServMode $servMode; // активная услугу
+    protected string $payableType; // тип платежа
+    protected ?FinPeriod $refundFinPeriod = null;
+    protected int $discount = 0; // скидка
+    protected bool $isReal = true; // фиктивная или настоящая (?)
+    protected bool $isApplied = true; // приминяется ли (?)
+    protected ?string $comment; // приминяется ли (?)
+
+    public function getFinPeriod(): FinPeriod
+    {
+        return $this->finPeriod;
+    }
+
+    public function setFinPeriod(FinPeriod $finPeriod): void
+    {
+        $this->finPeriod = $finPeriod;
+    }
+
+    public function getServMode(): UserServMode
+    {
+        return $this->servMode;
+    }
+
+    public function setServMode(UserServMode $servMode): void
+    {
+        $this->servMode = $servMode;
+    }
+
+    public function getPayableType(): string
+    {
+        return $this->payableType;
+    }
+
+    public function setPayableType(string $payableType): void
+    {
+        $this->payableType = $payableType;
+    }
+
+    public function getRefundFinPeriod(): ?FinPeriod
+    {
+        return $this->refundFinPeriod;
+    }
+
+    public function setRefundFinPeriod(?FinPeriod $refundFinPeriod): void
+    {
+        $this->refundFinPeriod = $refundFinPeriod;
+    }
+    public function getDiscount(): int
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(int $discount): void
+    {
+        $this->discount = $discount;
+    }
+
+    public function isReal(): bool
+    {
+        return $this->isReal;
+    }
+
+    public function setIsReal(bool $isReal): void
+    {
+        $this->isReal = $isReal;
+    }
+
+    public function isApplied(): bool
+    {
+        return $this->isApplied;
+    }
+
+    public function setIsApplied(bool $isApplied): void
+    {
+        $this->isApplied = $isApplied;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): void
+    {
+        $this->comment = $comment;
+    } // за какой месяц перерасчет или null
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+}

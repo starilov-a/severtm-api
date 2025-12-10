@@ -7,7 +7,7 @@ use App\Modules\Common\Domain\Service\Dto\Request\ServModeFilterDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-final class ProdServModeRepository extends ServiceEntityRepository
+class ProdServModeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -53,5 +53,38 @@ final class ProdServModeRepository extends ServiceEntityRepository
             ->andWhere('m.strCode = :c')->setParameter('c', $modeCode)
             ->setMaxResults(1)
             ->getQuery()->getOneOrNullResult();
+    }
+
+    public function hasGroup(int $prodServModeId, string $groupString): bool
+    {
+        // Определяем jur status по наличию группы
+        $sql = <<<SQL
+        SELECT * FROM psm_belong_groups pbg
+            JOIN psm_groups pg ON pg.psm_group_id = pbg.psm_group_id AND pg.psm_grp_code = :grpstr
+            WHERE pbg.srvmode_id = :psmid
+            LIMIT 1;
+        SQL;
+
+        return false !== $this->getEntityManager()->getConnection()->fetchOne($sql, [
+                'grpstr' => $groupString,
+                'psmid' => $prodServModeId
+            ]);
+    }
+
+    public function isAvailableForRegionByCode(int $prodServModeId, string $regionCode): bool
+    {
+        // TODO: сделать связь между группой и городом - в БД
+
+        $sql = <<<SQL
+        SELECT * FROM psm_belong_groups pbg
+        JOIN psm_groups pg ON pg.psm_group_id = pbg.psm_group_id
+        WHERE pbg.srvmode_id = :psmi AND pg.psm_grp_code = :grpstr 
+        LIMIT 1;
+        SQL;
+
+        return false !== $this->getEntityManager()->getConnection()->fetchOne($sql, [
+                'psmi' => $prodServModeId,
+                'grpstr' => $regionCode,
+            ]);
     }
 }

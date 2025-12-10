@@ -11,6 +11,8 @@ use App\Modules\Common\Domain\Repository\TariffRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\TariffFilterDto;
+use App\Modules\Common\Domain\Service\Rules\ProdServModes\ModeAllowedForRegionRule;
+use App\Modules\Common\Domain\Service\Rules\Tariff\TariffAllowedForRegionContext;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
@@ -19,40 +21,23 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TariffService
 {
-//    protected $webHistoryService;
-    protected $tariffRepo;
-    protected $userRepo;
-    protected $addressRepo;
-    protected $serviceClientRepo;
-    protected $finPeriodRepo;
-    protected $webActionRepo;
-    private EntityManagerInterface $em;
-    private LoggerService $loggerService;
     public function __construct(
-        TariffRepository $tariffRepository,
-        UserRepository $userRepository,
-        AddressRepository $addressRepository,
-        ServiceClientRepository $serviceClientRepository,
-        FinPeriodRepository $finPeriodRepository,
-        WebActionRepository $webActionRepository,
-        LoggerService $loggerService,
-        EntityManagerInterface $em
-    )
-    {
-        $this->tariffRepo = $tariffRepository;
-        $this->userRepo = $userRepository;
-        $this->addressRepo = $addressRepository;
-        $this->serviceClientRepo = $serviceClientRepository;
-        $this->finPeriodRepo = $finPeriodRepository;
-        $this->webActionRepo = $webActionRepository;
-        $this->em = $em;
-        $this->loggerService = $loggerService;
-    }
+        protected TariffRepository $tariffRepo,
+        protected UserRepository $userRepo,
+        protected AddressRepository $addressRepo,
+        protected ServiceClientRepository $serviceClientRepo,
+        protected FinPeriodRepository $finPeriodRepo,
+        protected WebActionRepository $webActionRepo,
+        private LoggerService $loggerService,
+
+        protected ModeAllowedForRegionRule $modeAllowedForRegionRule,
+
+        private EntityManagerInterface $em
+    ){}
 
     public function changeNextTariff(User $user, Tariff $newNextTariff): bool
     {
         $currentNextTariff = $user->getNextTariff();
-        $userRegion = $user->getRegion();
         $finPeriod = $this->finPeriodRepo->getNext();
         $webAction = $this->webActionRepo->findIdByCid('SET_NEXT_INET');
         $master = $this->userRepo->find(UserSessionService::getUserId());
@@ -61,9 +46,14 @@ class TariffService
         if (!$finPeriod)
             throw new ImportantBusinessException($master->getId(), $webAction->getId(),'Не найден следующий финансовый период');
 
-        if (!$this->tariffRepo->isAvailableForRegion($newNextTariff->getId(), $userRegion->getId()))
-            throw new ImportantBusinessException($master->getId(), $webAction->getId(), 'Тариф не соответствует адресу');
-
+        $this->modeAllowedForRegionRule->check(
+            new TariffAllowedForRegionContext(
+                $master->getId(),
+                $webAction->getId(),
+                $newNextTariff,
+                $user->getRegion()
+            )
+        );
         // 4. если имеется аренда - нельзя disconnected
         if ($this->serviceClientRepo->hasRentNow($user->getId()))
             throw new ImportantBusinessException($master->getId(), $webAction->getId(),'Присутствует услуга аренды');

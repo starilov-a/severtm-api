@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'prod_serv_modes')]
 class ProdServMode
 {
+
+    public function __construct(protected ProdServModeRepository $repo){}
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
@@ -49,6 +52,9 @@ class ProdServMode
     #[ORM\Column(name: 'description', type: Types::STRING, length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\OneToOne(mappedBy: 'serviceMode', targetEntity: Tariff::class)]
+    private ?Tariff $tariff = null;
+
     // --- getters / helpers ---
     public function getId(): int { return $this->id; }
     public function getService(): ProductService { return $this->service; }
@@ -58,4 +64,14 @@ class ProdServMode
     public function isSpecial(): bool { return (bool)$this->isSpecial; }
     public function isSingleton(): bool { return (bool)$this->isSingleton; }
     public function getPeriods(): int { return $this->periods; }
+
+    public function getTariff(): ?Tariff
+    {
+        return $this->tariff;
+    }
+
+    public function isJuridical(): bool
+    {
+        return $this->repo->hasGroup($this->id, 'customer_business');
+    }
 }

@@ -5,24 +5,18 @@ namespace App\Modules\Common\Domain\Service\Rules\ProdServModes;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasActionId;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasMasterId;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasModeUnitCount;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasUserId;
 
-class UnitsMustBePositiveContext implements HasMasterId, HasActionId, HasModeUnitCount
+class UnitsMustBePositiveContext implements HasActionId, HasModeUnitCount, HasUserId
 {
-    protected int $masterId;
-    protected int $actionId;
-    protected int $modeUnitCount;
 
-    public function __construct(int $masterId, int $actionId, int $modeUnitCount)
-    {
-        $this->masterId = $masterId;
-        $this->actionId = $actionId;
-        $this->modeUnitCount = $modeUnitCount;
-    }
 
-    public function getMasterId(): int
-    {
-        return $this->masterId;
-    }
+    public function __construct(
+        protected int $userId,
+        protected int $actionId,
+        protected int $modeUnitCount
+    ) {}
+
     public function getActionId(): int
     {
         return $this->actionId;
@@ -31,5 +25,11 @@ class UnitsMustBePositiveContext implements HasMasterId, HasActionId, HasModeUni
     public function getModeUnitCount(): int
     {
         return $this->modeUnitCount;
+    }
+
+
+    public function getUserId(): int
+    {
+        return $this->userId;
     }
 }

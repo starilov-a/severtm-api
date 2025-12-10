@@ -5,6 +5,7 @@ namespace App\Modules\UserCabinet\EventListener;
 use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Infrastructure\Exception\ValidationException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLogDto;
@@ -37,6 +38,7 @@ final class ExceptionListener
             $e instanceof ImportantBusinessException    => Response::HTTP_BAD_REQUEST,
             $e instanceof BusinessException             => Response::HTTP_BAD_REQUEST,
             $e instanceof AuthException                 => Response::HTTP_UNAUTHORIZED,
+            $e instanceof ValidationException           => Response::HTTP_BAD_REQUEST,
             default                                     => Response::HTTP_INTERNAL_SERVER_ERROR,
         };
 
@@ -50,6 +52,14 @@ final class ExceptionListener
                 $e->getStatus(),
                 $e->getIp()
             ));
+        } elseif ($e instanceof ValidationException) {
+            $response = new JsonResponse([
+                'message' => $e->getMessage(),
+                'data' => $e->getErrors()
+            ], $status);
+            $event->setResponse($response);
+
+            return;
         } elseif ($status >= 500) {
             $this->loggerService->errorLog(new ErrorLogDto(
                 $e->getMessage(),

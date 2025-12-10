@@ -7,7 +7,7 @@ use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Domain\Repository\WebUserRepository;
-use App\Modules\Common\Domain\Service\Dto\Request\WebUserDto as WebUserDtoRequest;
+use App\Modules\Common\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Service\Dto\Response\AddressDto;
 use App\Modules\UserCabinet\Service\Dto\Response\UserDto;
 use App\Modules\UserCabinet\Service\Dto\Response\UserFullInfoDto;
@@ -55,37 +55,29 @@ class LkUserProfileService
     }
 
 
-    public function updateUserInfo(WebUserDtoRequest $dto): int
+    public function updateUserInfo(int $uid, WebUserRequestDto $dto): int
     {
-        $webUser = $this->webUserRepo->find($dto->getUid());
+        $user = $this->userRepo->find($uid);
+
+        $webUser = $this->webUserRepo->find($user->getId());
 
         $webUser->setComment($dto->getComment());
         $webUser->setPhone($dto->getPhone());
         $webUser->setEmail($dto->getEmail());
 
-        try {
-            $this->em->flush();
-            return $dto->getUid();
-        } catch (BusinessException $e) {
-            throw new BusinessException($e->getMessage());
-        }
+        $this->em->flush();
+        return $dto->getUid();
     }
 
-    public function updateUserPassword(WebUserDtoRequest $dto): int
+    public function updateUserPassword($uid, WebUserRequestDto $dto): int
     {
-        $webUser = $this->webUserRepo->find($dto->getUid());
-        if (!$webUser)
-            throw new BusinessException('Пользователь не найден');
+        $webUser = $this->webUserRepo->find($uid);
 
-        $pass = $this->encryptPass($dto->getPasswdHash());
+        $pass = md5($dto->getPasswdHash());
         $webUser->setPasswdHash($pass);
 
-        try {
-            $this->em->flush();
-            return $dto->getUid();
-        } catch (BusinessException $e) {
-            throw new BusinessException($e->getMessage());
-        }
+        $this->em->flush();
+        return $dto->getUid();
 
     }
 
@@ -93,13 +85,9 @@ class LkUserProfileService
     public function checkPassword(string $pass): void
     {
         $webUser = $this->webUserRepo->find(UserSessionService::getUserId());
-        if($webUser->getPasswdHash() !== $this->encryptPass($pass)){
+        if($webUser->getPasswdHash() !== md5($pass)){
             throw new BusinessException("Старый пароль введен не верно!");
         }
-    }
-
-    protected function encryptPass(string $pass): string {
-        return  md5($pass);
     }
 
 }

@@ -20,22 +20,59 @@ class LkClientServService
 
     public function listAvailableServices(): array
     {
-        $services = $this->clientServService->listAvailableServicesWithModes();
+//        $services = $this->clientServService->listAvailableServicesWithModes();
+//
+//        return array_map(function ($serv) {
+//            return [
+//                'servId' => $serv->getId(),
+//                'name' => $serv->getName(),
+//                'code' =>$serv->getStrCode(),
+//                'modes' => array_map(function ($mode) {
+//                    return [
+//                        'modeId' => $mode->getId(),
+//                        'name' => $mode->getName(),
+//                        'code' =>$mode->getStrCode()
+//                    ];
+//                },  $serv->getModes()),
+//            ];
+//        }, $services);
 
-        return array_map(function ($serv) {
-            return [
-                'servId' => $serv->getId(),
-                'name' => $serv->getName(),
-                'code' =>$serv->getStrCode(),
-                'modes' => array_map(function ($mode) {
-                    return [
-                        'modeId' => $mode->getId(),
-                        'name' => $mode->getName(),
-                        'code' =>$mode->getStrCode()
-                    ];
-                },  $serv->getModes()),
-            ];
-        }, $services);
+        return [
+            [
+                'servId' => 1,
+                'name' => 'Интернет',
+                'code' => 'internet',
+                'modes' => [
+                    [
+                        'modeId' => 101,
+                        'name' => 'Базовый',
+                        'code' => 'basic',
+                    ],
+                    [
+                        'modeId' => 102,
+                        'name' => 'Премиум',
+                        'code' => 'premium',
+                    ],
+                ],
+            ],
+            [
+                'servId' => 2,
+                'name' => 'Телевидение',
+                'code' => 'tv',
+                'modes' => [
+                    [
+                        'modeId' => 201,
+                        'name' => 'Стандартный пакет',
+                        'code' => 'standard',
+                    ],
+                    [
+                        'modeId' => 202,
+                        'name' => 'Расширенный пакет',
+                        'code' => 'extended',
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function getCurrentServices(int $uid): array
@@ -43,6 +80,42 @@ class LkClientServService
         $user = $this->userRepo->find($uid);
         $currentServs = $this->userServModeService->getCurrentServiceWithModes($user);
 
+        return [
+            [
+                'servId' => 1,
+                'name' => 'Интернет',
+                'code' => 'internet',
+                'modes' => [
+                    [
+                        'modeId' => 101,
+                        'name' => 'Базовый',
+                        'code' => 'basic',
+                    ],
+                    [
+                        'modeId' => 102,
+                        'name' => 'Премиум',
+                        'code' => 'premium',
+                    ],
+                ],
+            ],
+            [
+                'servId' => 2,
+                'name' => 'Телевидение',
+                'code' => 'tv',
+                'modes' => [
+                    [
+                        'modeId' => 201,
+                        'name' => 'Стандартный пакет',
+                        'code' => 'standard',
+                    ],
+                    [
+                        'modeId' => 202,
+                        'name' => 'Расширенный пакет',
+                        'code' => 'extended',
+                    ],
+                ],
+            ],
+        ];
         return array_map(function ($serv) {
             return [
                 'servId' => $serv->getId(),

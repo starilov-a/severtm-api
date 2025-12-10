@@ -4,12 +4,10 @@ namespace App\Modules\Common\Domain\Repository;
 
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\User;
-use App\Modules\UserCabinet\Service\Dto\Request\TariffFilterDto\TariffFilterDto;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
-class TariffRepository extends ServiceEntityRepository
+class TariffRepository extends ProdServModeRepository
 
 {
     public const INTERNET_PRODUCT_SERVICE_CODE = 'internet';
@@ -88,29 +86,6 @@ class TariffRepository extends ServiceEntityRepository
             ->setMaxResults(1);
 
         return (bool) $qb->getQuery()->getOneOrNullResult();
-    }
-
-    public function isAvailableForRegion(int $tariffId, int $regionId): bool
-    {
-        // TODO: сделать связь между группой и городом - в БД
-        $groupsAndRegionIds = [
-            1 => 'velikij_novgorod_tariffs',
-            2 => 'cherepevets_tariffs',
-            3 => 'chelyzbinsk_tariffs',
-            4 => 'yaroslavl_tariffs'
-        ];
-
-        $sql = <<<SQL
-        SELECT 1 FROM tariffs_belong_groups tbg
-        JOIN tariffs_groups tg ON tg.tariffs_group_id = tbg.tariffs_group_id
-        WHERE tbg.tc_id = :tid AND tg.tariffs_grp_code = :tgc
-            LIMIT 1
-        SQL;
-
-        return false !== $this->getEntityManager()->getConnection()->fetchOne($sql, [
-                'tid' => $tariffId,
-                'tgc' => $groupsAndRegionIds[$regionId],
-            ]);
     }
 
     /*
