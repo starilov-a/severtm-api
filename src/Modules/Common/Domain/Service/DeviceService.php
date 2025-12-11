@@ -6,15 +6,13 @@ use App\Modules\Common\Domain\Entity\Device;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Repository\DeviceRepository;
-use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\DeviceDto;
 
 class DeviceService
 {
     public function __construct(
         protected DeviceRepository $repo,
-        protected UserOwnDeviceService $userOwnDeviceService,
-        protected UserServModeService $userServModeService,
+        protected UserOwnDeviceService $userOwnDeviceService
     ){}
 
     /**
@@ -27,7 +25,6 @@ class DeviceService
     {
         // привязываем устройство к режиму услуги
         $userServMode->setDevice($device);
-        $this->userServModeService->save($userServMode);
 
         return $userServMode;
     }

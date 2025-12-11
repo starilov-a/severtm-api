@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\ProdServModes;
 
+use App\Modules\Common\Domain\Service\ProdServModeService;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasActionId;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasBoolVar;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasProdServMode;
@@ -11,6 +12,9 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 
 class JurStatusIsCorrectRule extends Rule
 {
+    public function __construct(
+        protected ProdServModeService $prodServModeService,
+    ){}
 
     public function check(object $context): bool
     {
@@ -19,7 +23,9 @@ class JurStatusIsCorrectRule extends Rule
             throw new \LogicException('Wrong context passed to JurStatusIsCorrectRule');
         }
 
-        if ($context->getBoolVar() !== (bool) $context->getMode()->isJuridical()) {
+        $modeIsJuridical = $this->prodServModeService->isJuridical($context->getMode());
+
+        if ($context->getBoolVar() !== $modeIsJuridical) {
             throw new ImportantBusinessException(
                 $context->getUserId(),
                 $context->getActionId(),

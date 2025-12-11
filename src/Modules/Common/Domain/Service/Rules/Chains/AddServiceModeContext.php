@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\Chains;
 
+use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\Region;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasActionId;
@@ -17,7 +18,7 @@ class AddServiceModeContext implements HasUserId, HasActionId, HasProdServMode, 
     public function __construct(
         protected int $userId,
         protected int $actionId,
-        protected ?int $finPeriod,
+        protected ?FinPeriod $finPeriod,
         protected ProdServMode $mode,
         protected int $jurStatus,
         protected Region $region,

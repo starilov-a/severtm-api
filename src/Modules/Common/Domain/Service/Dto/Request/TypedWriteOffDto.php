@@ -4,6 +4,7 @@ namespace App\Modules\Common\Domain\Service\Dto\Request;
 
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\User;
+use App\Modules\Common\Domain\Entity\UserPayable;
 use App\Modules\Common\Domain\Entity\UserPayableType;
 use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Service\Dto\Dto;
@@ -11,7 +12,6 @@ use App\Modules\Common\Domain\Service\Dto\Dto;
 class TypedWriteOffDto extends Dto
 {
     protected User $user;
-    protected FinPeriod $finPeriod; // фин период
     protected UserServMode $servMode; // активная услугу
     protected string $payableType; // тип платежа
     protected ?FinPeriod $refundFinPeriod = null;
@@ -19,16 +19,6 @@ class TypedWriteOffDto extends Dto
     protected bool $isReal = true; // фиктивная или настоящая (?)
     protected bool $isApplied = true; // приминяется ли (?)
     protected ?string $comment; // приминяется ли (?)
-
-    public function getFinPeriod(): FinPeriod
-    {
-        return $this->finPeriod;
-    }
-
-    public function setFinPeriod(FinPeriod $finPeriod): void
-    {
-        $this->finPeriod = $finPeriod;
-    }
 
     public function getServMode(): UserServMode
     {

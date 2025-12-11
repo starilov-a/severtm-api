@@ -18,7 +18,7 @@ class ProdServModeRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m');
 
-        $serv = $filter->getServService();
+        $serv = $filter->getProductService();
         if (isset($serv))
             $qb->andWhere('m.service = :service')->setParameter('service', $serv);
 

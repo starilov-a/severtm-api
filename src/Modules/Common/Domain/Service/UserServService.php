@@ -34,7 +34,6 @@ class UserServService
     public function listAvailableServicesWithModes(): array
     {
         $clientGroup = 'canBeChangeByClient';
-
         #1. Получение данных услуг
         $serviceFilterDto = new ServiceFilterDto();
         //2. Услуги имею группы "canBeChangeByClient"
@@ -50,7 +49,7 @@ class UserServService
 
         // Наполнение serv и modes
         foreach ($servs as $serv) {
-            $servModeFilterDto->setServService($serv);
+            $servModeFilterDto->setProductService($serv);
             $modes = $this->servModeService->getActiveModes($servModeFilterDto);
             foreach ($modes as $mode)
                 $serv->addMode($mode);

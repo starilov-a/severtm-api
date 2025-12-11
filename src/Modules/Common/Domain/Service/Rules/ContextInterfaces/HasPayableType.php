@@ -6,5 +6,5 @@ use App\Modules\Common\Domain\Entity\UserPayableType;
 
 interface HasPayableType
 {
-    public function getWriteOffType(): UserPayableType;
+    public function getWriteOffType(): string;
 }

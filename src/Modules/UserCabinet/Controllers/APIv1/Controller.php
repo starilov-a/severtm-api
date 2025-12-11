@@ -39,7 +39,7 @@ class Controller extends AbstractController
     // Важно!!! Все контроллеры стоит наследовать от BaseController
     public function authenticate(): bool
     {
-        return true;
+        return false;
     }
 
     #[Route(

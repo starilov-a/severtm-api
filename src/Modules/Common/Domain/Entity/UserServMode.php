@@ -31,9 +31,9 @@ class UserServMode
     #[ORM\JoinColumn(name: 'srvmode_id', referencedColumnName: 'id', nullable: false, onDelete: 'RESTRICT')]
     private ProdServMode $mode;
 
-    // внешняя сущность стоимости — у вас её нет, оставим как scalar
+    //не испольщзуется
     #[ORM\Column(name: 'srvcost_id', type: Types::INTEGER)]
-    private int $serviceCostId;
+    private int $servCostId = 1;
 
     // прочие ссылки оставим как scalar, чтобы не плодить entity
     #[ORM\Column(name: 'ext', type: Types::INTEGER, nullable: true)]
@@ -66,7 +66,7 @@ class UserServMode
     public function getFinPeriod(): FinPeriod { return $this->finPeriod; }
     public function getUser(): User { return $this->user; }
     public function getMode(): ProdServMode { return $this->mode; }
-    public function getServiceCostId(): int { return $this->serviceCostId; }
+    public function getServCostId(): int { return $this->servCostId; }
     public function isActive(): bool { return (bool)$this->isActive; }
     public function usesCost(): bool { return (bool)$this->useCost; }
 
@@ -112,16 +112,20 @@ class UserServMode
         $this->units = $units;
     }
 
+    public function getUnits()
+    {
+        return $this->units;
+    }
+
     public function setExt(?int $ext): void
     {
         $this->ext = $ext;
     }
 
-    public function setServiceCostId(int $serviceCostId): void
+    public function setServCost(int $servCostId): void
     {
-        $this->serviceCostId = $serviceCostId;
+        $this->servCostId = $servCostId;
     }
-
     public function setMode(ProdServMode $mode): void
     {
         $this->mode = $mode;

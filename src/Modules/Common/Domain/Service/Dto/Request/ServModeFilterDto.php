@@ -2,12 +2,13 @@
 
 namespace App\Modules\Common\Domain\Service\Dto\Request;
 
+use App\Modules\Common\Domain\Entity\ProductService;
 use App\Modules\Common\Domain\Service\ServService;
 
 class ServModeFilterDto extends FilterDto
 {
     private array $groupCodes = [];
-    private ?ServService $servService = null;
+    private ?ProductService $prodService = null;
     public function getGroupCodes(): array
     {
         return $this->groupCodes;
@@ -16,13 +17,13 @@ class ServModeFilterDto extends FilterDto
     {
         $this->groupCodes[] = $groupCode;
     }
-    public function getServService(): ?ServService
+    public function getProductService(): ?ProductService
     {
-        return $this->servService;
+        return $this->prodService;
     }
 
-    public function setServService(ServService $servService): void
+    public function setProductService(ProductService $prodService): void
     {
-        $this->servService = $servService;
+        $this->prodService = $prodService;
     }
 }

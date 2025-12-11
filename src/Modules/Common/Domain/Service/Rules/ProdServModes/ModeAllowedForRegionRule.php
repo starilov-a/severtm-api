@@ -32,7 +32,7 @@ class ModeAllowedForRegionRule extends Rule
         $mode = $context->getMode();
         $region = $context->getRegion();
 
-        $isAvailable = $this->prodServModeRepository->isAvailableForRegionByCode($mode, $groupsAndRegionIds[$region->getId()]);
+        $isAvailable = $this->prodServModeRepository->isAvailableForRegionByCode($mode->getId(), $groupsAndRegionIds[$region->getId()]);
 
         if (!$isAvailable) {
             throw new ImportantBusinessException(

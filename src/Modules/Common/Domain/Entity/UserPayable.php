@@ -15,21 +15,28 @@ class UserPayable
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(name: 'fid', type: Types::INTEGER)]
-    protected int $fid;
+    /** Финансовый период (fin_periods.id) */
+    #[ORM\ManyToOne(targetEntity: FinPeriod::class)]
+    #[ORM\JoinColumn(name: 'fid', referencedColumnName: 'id', nullable: false)]
+    protected FinPeriod $finPeriod;
 
-    /** users.id */
-    #[ORM\Column(name: 'uid', type: Types::INTEGER, options: ['unsigned' => true])]
-    protected int $uid;
+    /** Клиент (users.id) */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'id', nullable: false)]
+    protected User $user;
 
-    /** prod_serv_modes.id */
-    #[ORM\Column(name: 'srvmode_id', type: Types::INTEGER)]
-    protected int $srvmodeId;
+    /** Режим услуги (prod_serv_modes.id) */
+    #[ORM\ManyToOne(targetEntity: ProdServMode::class)]
+    #[ORM\JoinColumn(name: 'srvmode_id', referencedColumnName: 'id', nullable: false)]
+    protected ProdServMode $serviceMode;
 
-    /** prod_serv_mode_costs.id */
     #[ORM\Column(name: 'srvcost_id', type: Types::INTEGER)]
-    protected int $srvcostId;
+    protected int $srvcostId = 1;
 
+    /**
+     * Финансовый период, за который делается перерасчёт (fid_refund).
+     * В БД это INT с default 0 без FK, поэтому оставляем scalar.
+     */
     #[ORM\Column(name: 'fid_refund', type: Types::INTEGER, options: ['default' => 0])]
     protected int $fidRefund = 0;
 
@@ -65,11 +72,173 @@ class UserPayable
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_IMMUTABLE)]
     protected \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(name: 'usmid', type: Types::INTEGER, options: ['default' => 0])]
-    protected int $usmid = 0;
+    /** Связанный user_serv_modes.usmid (если есть) */
+    #[ORM\ManyToOne(targetEntity: UserServMode::class)]
+    #[ORM\JoinColumn(name: 'usmid', referencedColumnName: 'usmid', nullable: true)]
+    protected ?UserServMode $userServMode = null;
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getFinPeriod(): FinPeriod
+    {
+        return $this->finPeriod;
+    }
+
+    public function setFinPeriod(FinPeriod $finPeriod): void
+    {
+        $this->finPeriod = $finPeriod;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function getServiceMode(): ProdServMode
+    {
+        return $this->serviceMode;
+    }
+
+    public function setServiceMode(ProdServMode $serviceMode): void
+    {
+        $this->serviceMode = $serviceMode;
+    }
+
+    public function getSrvcostId(): int
+    {
+        return $this->srvcostId;
+    }
+
+    public function setSrvcostId(int $srvcostId): void
+    {
+        $this->srvcostId = $srvcostId;
+    }
+
+    public function getFidRefund(): int
+    {
+        return $this->fidRefund;
+    }
+
+    public function setFidRefund(int $fidRefund): void
+    {
+        $this->fidRefund = $fidRefund;
+    }
+
+    public function getType(): UserPayableType
+    {
+        return $this->type;
+    }
+
+    public function setType(UserPayableType $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getCost(): string
+    {
+        return $this->cost;
+    }
+
+    public function setCost(string $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    public function getUnits(): int
+    {
+        return $this->units;
+    }
+
+    public function setUnits(int $units): void
+    {
+        $this->units = $units;
+    }
+
+    public function getAmount(): string
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(string $amount): void
+    {
+        $this->amount = $amount;
+    }
+
+    public function getDiscount(): string
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(string $discount): void
+    {
+        $this->discount = $discount;
+    }
+
+    public function getPayable(): string
+    {
+        return $this->payable;
+    }
+
+    public function setPayable(string $payable): void
+    {
+        $this->payable = $payable;
+    }
+
+    public function getInfluence(): float
+    {
+        return $this->influence;
+    }
+
+    public function setInfluence(float $influence): void
+    {
+        $this->influence = $influence;
+    }
+
+    public function getIsReal(): int
+    {
+        return $this->isReal;
+    }
+
+    public function setIsReal(int $isReal): void
+    {
+        $this->isReal = $isReal;
+    }
+
+    public function getIsApplied(): int
+    {
+        return $this->isApplied;
+    }
+
+    public function setIsApplied(int $isApplied): void
+    {
+        $this->isApplied = $isApplied;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUserServMode(): ?UserServMode
+    {
+        return $this->userServMode;
+    }
+
+    public function setUserServMode(?UserServMode $userServMode): void
+    {
+        $this->userServMode = $userServMode;
     }
 }

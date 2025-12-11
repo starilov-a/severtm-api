@@ -93,7 +93,7 @@ class UserServModeService
     /*
      * Добавление нового режима услуги клиенту
      * */
-    protected function addServiceMode(User $user, ProdServMode $mode, OptionsUserServModeDto $optionsUserServModeDto): bool
+    protected function addServiceMode(User $user, ProdServMode $mode, OptionsUserServModeDto $optionsUserServModeDto): void
     {
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_ADD_SERVICES');
         $master = $this->userRepo->find(UserSessionService::getUserId());
@@ -110,7 +110,7 @@ class UserServModeService
         ));
 
         // Добавление услуги в транзакции
-        return $this->em->getConnection()->transactional(function () use (
+        $this->em->getConnection()->transactional(function () use (
             $user,
             $master,
             $mode,
@@ -129,19 +129,21 @@ class UserServModeService
             // 3.1 Подготовка объекта для создания списания
             $writeOffDto = new TypedWriteOffDto();
             $writeOffDto->setServMode($userServMode);
-            $writeOffDto->setFinPeriod($optionsUserServModeDto->getFinPeriod());
             $writeOffDto->setPayableType('no_packet');
             $writeOffDto->setComment('Добавление услуги ' . $userServMode->getMode()->getName());
             $writeOffDto->setUser($user);
             // 3.2 Списание деняг
             $this->writeOffService->makeWriteOffForAddingMode($writeOffDto);
 
+            // фиксируем $userServMode
+            $this->save($userServMode);
+
             // 4. Логирование
             $comment = $optionsUserServModeDto->getComment();
             $this->loggerService->businessLog(new BusinessLogDto(
                 $master->getId(),
                 $webAction->getId(),
-                'Услуга('.$mode->getName().'-'.$mode->getId().' ) добавлена пользователю ' . $user->getId() .
+                'Услуга('.$mode->getName().':'.$mode->getId().' ) добавлена пользователю ' . $user->getId() .
                 '. Кол-во услуг - ' . $optionsUserServModeDto->getCountUnits(). '. ' . (!empty($comment) ? 'Комментарий ('.$comment.')' : '' ) ,
                 true
             ));
@@ -155,14 +157,11 @@ class UserServModeService
         $userServMode->setFinPeriod($optionsUserServModeDto->getFinPeriod());
         $userServMode->setUser($user);
         $userServMode->setMode($prodServMode);
-        $userServMode->setServiceCostId(1); //старый параметр не используется, но обязательный
         $userServMode->setUnits($optionsUserServModeDto->getCountUnits());
         $userServMode->setIsActive(true);
         $userServMode->setUseCost(true);
 
-        $this->save($userServMode);
-
-        return $userServMode;
+        return $this->save($userServMode);
     }
 
     // Конечное применение userServMode

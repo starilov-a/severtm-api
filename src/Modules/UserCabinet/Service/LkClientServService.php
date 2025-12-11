@@ -39,37 +39,42 @@ class LkClientServService
 
         return [
             [
-                'servId' => 1,
+                'servId' =>4,
                 'name' => 'Интернет',
                 'code' => 'internet',
                 'modes' => [
                     [
-                        'modeId' => 101,
-                        'name' => 'Базовый',
-                        'code' => 'basic',
+                        'modeId' => 1516,
+                        'name' => 'Новгород: Unlim 6Мбит/сек (500.00 руб.)',
+                        'code' => '8001',
                     ],
                     [
-                        'modeId' => 102,
-                        'name' => 'Премиум',
-                        'code' => 'premium',
+                        'modeId' => 1785,
+                        'name' => 'Череповец: Стартовый (360.00 руб.)',
+                        'code' => '12323',
+                    ],
+                    [
+                        'modeId' => 1656,
+                        'name' => 'ZNET Ярославль: Unlim 40-100 Мбит/с (650 руб)',
+                        'code' => '23423',
+                    ],
+                    [
+                        'modeId' => 1900,
+                        'name' => 'ZNET Челябинск: Unlim 20-100 Мбит/с (650р)',
+                        'code' => '2344323',
                     ],
                 ],
             ],
             [
-                'servId' => 2,
-                'name' => 'Телевидение',
+                'servId' => 9,
+                'name' => 'Телефония',
                 'code' => 'tv',
                 'modes' => [
                     [
-                        'modeId' => 201,
-                        'name' => 'Стандартный пакет',
+                        'modeId' => 4444,
+                        'name' => '50р телефония',
                         'code' => 'standard',
-                    ],
-                    [
-                        'modeId' => 202,
-                        'name' => 'Расширенный пакет',
-                        'code' => 'extended',
-                    ],
+                    ]
                 ],
             ],
         ];
@@ -80,42 +85,6 @@ class LkClientServService
         $user = $this->userRepo->find($uid);
         $currentServs = $this->userServModeService->getCurrentServiceWithModes($user);
 
-        return [
-            [
-                'servId' => 1,
-                'name' => 'Интернет',
-                'code' => 'internet',
-                'modes' => [
-                    [
-                        'modeId' => 101,
-                        'name' => 'Базовый',
-                        'code' => 'basic',
-                    ],
-                    [
-                        'modeId' => 102,
-                        'name' => 'Премиум',
-                        'code' => 'premium',
-                    ],
-                ],
-            ],
-            [
-                'servId' => 2,
-                'name' => 'Телевидение',
-                'code' => 'tv',
-                'modes' => [
-                    [
-                        'modeId' => 201,
-                        'name' => 'Стандартный пакет',
-                        'code' => 'standard',
-                    ],
-                    [
-                        'modeId' => 202,
-                        'name' => 'Расширенный пакет',
-                        'code' => 'extended',
-                    ],
-                ],
-            ],
-        ];
         return array_map(function ($serv) {
             return [
                 'servId' => $serv->getId(),

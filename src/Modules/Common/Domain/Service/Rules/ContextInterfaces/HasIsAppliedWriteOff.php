@@ -2,7 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\ContextInterfaces;
 
-class HasIsAppliedWriteOff
+interface HasIsAppliedWriteOff
 {
-
+    public function getIsAppliedWriteOff(): bool;
 }

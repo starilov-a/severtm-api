@@ -1,7 +1,8 @@
 <?php
 namespace App\Modules\Common\Infrastructure\Service\Auth\Dto;
 
-use App\Modules\UserCabinet\Service\Dto\Dto;
+
+use App\Modules\Common\Domain\Service\Dto\Dto;
 
 class SessionDto extends Dto
 {
