@@ -4,10 +4,11 @@ namespace App\Modules\Common\Domain\Repository;
 
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
-class TariffRepository extends ProdServModeRepository
+class TariffRepository extends ServiceEntityRepository
 
 {
     public const INTERNET_PRODUCT_SERVICE_CODE = 'internet';
@@ -32,18 +33,19 @@ class TariffRepository extends ProdServModeRepository
 
         $qb->leftJoin('t.groups', 'tg');
 
-        $codes = $dto->getGroupCodes();
-        if (!empty($codes)) {
-            foreach ($codes as $key => $code)
-                $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
-        }
-
-        // может быть стоит убрать join я хз
-        $regionCodes = $dto->getRegionGroupCodes();
-        if (!empty($regionCodes)) {
-            foreach ($regionCodes as $key => $code)
-                $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
-        }
+        //TODO: вернуть проверку
+//        $codes = $dto->getGroupCodes();
+//        if (!empty($codes)) {
+//            $qb->andWhere('tg.code IN (:codes)')
+//                ->setParameter('codes', $codes);
+//        }
+//
+//        // может быть стоит убрать join я хз
+//        $regionCodes = $dto->getRegionGroupCodes();
+//        if (!empty($regionCodes)) {
+//            foreach ($regionCodes as $key => $code)
+//                $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
+//        }
 
         // Сортировка:
         $qb->orderBy('t.'.$dto->getOrderBy(), $dto->getOrderDir());

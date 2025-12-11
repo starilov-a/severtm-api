@@ -88,7 +88,7 @@ class LkClientTariffService
         $currentTariff = $client->getCurrentTariff();
         $dto->setMinPrice($currentTariff->getPrice());
 
-
+        //TODO: перенести в RULE
         //2. Тариф доступен для изменения:
         $dto->addGroupCodes('canBeChangeByClient');
         //3. Тариф имеет группу, обозначающая необходимый регион

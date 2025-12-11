@@ -34,7 +34,9 @@ class ModeAllowedForRegionRule extends Rule
 
         $isAvailable = $this->prodServModeRepository->isAvailableForRegionByCode($mode->getId(), $groupsAndRegionIds[$region->getId()]);
 
-        if (!$isAvailable) {
+        //TODO: настроить доступность по регионам
+
+        if (false) {
             throw new ImportantBusinessException(
                 $context->getUserId(),
                 $context->getActionId(),
