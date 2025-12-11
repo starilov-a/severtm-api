@@ -49,7 +49,7 @@ class UserServModeService
         $currentServs = [];
 
         foreach ($modes as $mode) {
-            $service = $mode->getMode()->getService();
+            $service = $mode->getProductService();
             $service->addMode($mode);
 
             $currentServs[$service->getId()] = $service;

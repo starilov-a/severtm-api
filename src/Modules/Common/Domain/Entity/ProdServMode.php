@@ -77,4 +77,9 @@ class ProdServMode
     {
         return $this->prodServModeCost;
     }
+
+    public function getProductService(): ProductService
+    {
+        return $this->service;
+    }
 }

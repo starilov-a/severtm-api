@@ -20,64 +20,22 @@ class LkClientServService
 
     public function listAvailableServices(): array
     {
-//        $services = $this->clientServService->listAvailableServicesWithModes();
-//
-//        return array_map(function ($serv) {
-//            return [
-//                'servId' => $serv->getId(),
-//                'name' => $serv->getName(),
-//                'code' =>$serv->getStrCode(),
-//                'modes' => array_map(function ($mode) {
-//                    return [
-//                        'modeId' => $mode->getId(),
-//                        'name' => $mode->getName(),
-//                        'code' =>$mode->getStrCode()
-//                    ];
-//                },  $serv->getModes()),
-//            ];
-//        }, $services);
+        $services = $this->clientServService->listAvailableServicesWithModes();
 
-        return [
-            [
-                'servId' =>4,
-                'name' => 'Интернет',
-                'code' => 'internet',
-                'modes' => [
-                    [
-                        'modeId' => 1516,
-                        'name' => 'Новгород: Unlim 6Мбит/сек (500.00 руб.)',
-                        'code' => '8001',
-                    ],
-                    [
-                        'modeId' => 1785,
-                        'name' => 'Череповец: Стартовый (360.00 руб.)',
-                        'code' => '12323',
-                    ],
-                    [
-                        'modeId' => 1656,
-                        'name' => 'ZNET Ярославль: Unlim 40-100 Мбит/с (650 руб)',
-                        'code' => '23423',
-                    ],
-                    [
-                        'modeId' => 1900,
-                        'name' => 'ZNET Челябинск: Unlim 20-100 Мбит/с (650р)',
-                        'code' => '2344323',
-                    ],
-                ],
-            ],
-            [
-                'servId' => 9,
-                'name' => 'Телефония',
-                'code' => 'tv',
-                'modes' => [
-                    [
-                        'modeId' => 4444,
-                        'name' => '50р телефония',
-                        'code' => 'standard',
-                    ]
-                ],
-            ],
-        ];
+        return array_map(function ($serv) {
+            return [
+                'servId' => $serv->getId(),
+                'name' => $serv->getName(),
+                'code' =>$serv->getStrCode(),
+                'modes' => array_map(function ($mode) {
+                    return [
+                        'modeId' => $mode->getId(),
+                        'name' => $mode->getName(),
+                        'code' =>$mode->getStrCode()
+                    ];
+                },  $serv->getModes()),
+            ];
+        }, $services);
     }
 
     public function getCurrentServices(int $uid): array

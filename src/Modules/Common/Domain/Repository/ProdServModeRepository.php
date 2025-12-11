@@ -16,18 +16,20 @@ class ProdServModeRepository extends ServiceEntityRepository
 
     public function getModeByFilter(ServModeFilterDto $filter): array
     {
-        $qb = $this->createQueryBuilder('m');
+        $qb = $this->createQueryBuilder('psm');
 
         $serv = $filter->getProductService();
         if (isset($serv))
-            $qb->andWhere('m.service = :service')->setParameter('service', $serv);
+            $qb->andWhere('psm.service = :service')->setParameter('service', $serv);
+
+
 
         //TODO: сделать как свяжем группы
 //        $codes = $filter->getGroupCodes();
 //        if (!empty($codes))
 //            $qb->join('m.groups', 'g')->andWhere('g.code IN (:codes)')->setParameter('codes', implode(',',$codes));
 
-        $qb->orderBy('m.'.$filter->getOrderBy(), $filter->getOrderDir());
+        $qb->orderBy('psm.'.$filter->getOrderBy(), $filter->getOrderDir());
 
         // Пагинация
         if (null !== $filter->getLimit())  $qb->setMaxResults(max(1, (int)$filter->getLimit()));

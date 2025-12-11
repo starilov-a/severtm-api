@@ -41,14 +41,13 @@ class UserServService
         //3. Регион
         $servs = $this->servService->getActiveServs($serviceFilterDto);
 
-
         #2. Получение режимов услуг
         $servModeFilterDto = new ServModeFilterDto();
         //1. Наличие группы
         $servModeFilterDto->addGroupCode($clientGroup);
 
         // Наполнение serv и modes
-        foreach ($servs as $serv) {
+        foreach ($servs as &$serv) {
             $servModeFilterDto->setProductService($serv);
             $modes = $this->servModeService->getActiveModes($servModeFilterDto);
             foreach ($modes as $mode)

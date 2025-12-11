@@ -73,7 +73,7 @@ final class UserServModeRepository extends ServiceEntityRepository
             ->andWhere('usm.user = :user')->setParameter('user', $user)
             ->andWhere('usm.isActive = 1')
             ->andWhere('f.isCurrent = 1')
-            ->andWhere('s.strCode != internet')
+            ->andWhere('s.strCode != :code')->setParameter('code', 'internet')
             ->orderBy('s.priority', 'ASC')
             ->addOrderBy('m.priority', 'ASC')
             ->getQuery()

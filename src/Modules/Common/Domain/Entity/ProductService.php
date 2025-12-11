@@ -68,6 +68,8 @@ class ProductService
     public function isPeriodic(): bool { return (bool)$this->isPeriodic; }
     public function isSelfService(): bool { return $this->selfService === '1'; }
     public function isAdminOnly(): bool { return ($this->prodAdmin ?? 'Y') === 'Y'; }
-    public function addMode(ProdServMode $mode): void { $modes[] = $mode; }
+    public function addMode(ProdServMode $mode): void {
+        $this->modes[] = $mode;
+    }
     public function getModes(): array { return $this->modes; }
 }
