@@ -56,6 +56,7 @@ class ProductService
     private int $isVisible = 1;
 
     private ?array $modes =[];
+    private ?array $userModes =[];
 
     // --- getters / helpers ---
     public function getId(): int { return $this->id; }
@@ -71,5 +72,9 @@ class ProductService
     public function addMode(ProdServMode $mode): void {
         $this->modes[] = $mode;
     }
+    public function addUserMode(UserServMode $mode): void {
+        $this->userModes[] = $mode;
+    }
     public function getModes(): array { return $this->modes; }
+    public function getUserModes(): array { return $this->userModes; }
 }

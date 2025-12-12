@@ -42,12 +42,30 @@ class ServServiceController extends Controller
     public function addAvailableServ(Request $request, LkClientServService $servService)
     {
         $uid = UserSessionService::getUserId();
-        $modeId = $request->get('mode_id');
+        $data = $request->toArray();
 
-        $servService->enableService($uid, $modeId);
+        $servService->enableService($uid, $data['mode_id']);
 
         return $this->json([
             'message' => 'Успешное добавление услуги!'
+        ]);
+    }
+
+    #[Route(
+        '/disable-serv',
+        name: 'disableServ',
+        methods: ['POST'],
+        requirements: ['mode_id' => '\d{3,6}']
+    )]
+    public function disableServ(Request $request, LkClientServService $servService)
+    {
+        $uid = UserSessionService::getUserId();
+        $data = $request->toArray();
+
+        $servService->disableService($uid, $data['mode_id']);
+
+        return $this->json([
+            'message' => 'Услуга отключена.'
         ]);
     }
 }

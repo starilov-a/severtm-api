@@ -4,6 +4,7 @@ namespace App\Modules\UserCabinet\Service;
 
 use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
+use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use App\Modules\Common\Domain\Service\UserServService;
@@ -15,7 +16,8 @@ class LkClientServService
         protected UserServService $clientServService,
         protected UserRepository  $userRepo,
         protected ProdServModeRepository  $prodServModeRepo,
-        protected UserServModeService $userServModeService
+        protected UserServModeService $userServModeService,
+        protected UserServModeRepository $userServModeRepo
     ){}
 
     public function listAvailableServices(): array
@@ -24,12 +26,12 @@ class LkClientServService
 
         return array_map(function ($serv) {
             return [
-                'servId' => $serv->getId(),
+                'id' => $serv->getId(),
                 'name' => $serv->getName(),
                 'code' =>$serv->getStrCode(),
                 'modes' => array_map(function ($mode) {
                     return [
-                        'modeId' => $mode->getId(),
+                        'id' => $mode->getId(),
                         'name' => $mode->getName(),
                         'code' =>$mode->getStrCode()
                     ];
@@ -45,16 +47,18 @@ class LkClientServService
 
         return array_map(function ($serv) {
             return [
-                'servId' => $serv->getId(),
+                'id' => $serv->getId(),
                 'name' => $serv->getName(),
                 'code' =>$serv->getStrCode(),
-                'modes' => array_map(function ($mode) {
+                'type' => 'ProductService',
+                'modes' => array_map(function ($userMode) {
                     return [
-                        'modeId' => $mode->getId(),
-                        'name' => $mode->getName(),
-                        'code' =>$mode->getStrCode()
+                        'usmid' => $userMode->getId(),
+                        'name' => $userMode->getMode()->getName(),
+                        'code' => $userMode->getMode()->getStrCode(),
+                        'type' => 'UserServMode',
                     ];
-                },  $serv->getModes()),
+                },  $serv->getUserModes()),
             ];
         }, $currentServs);
     }
@@ -79,8 +83,12 @@ class LkClientServService
     /*
      * Отключение услуги клиентом
      * */
-    public function disableService(int $uid, int $serviceId): bool
+    public function disableService(int $uid, int $userModeId): bool
     {
+        $userServMode = $this->userServModeRepo->findOneBy(['id' => $userModeId, 'user' =>  $this->userRepo->find($uid)]);
+
+        $this->userServModeService->disableServiceMode($userServMode);
+
         return false;
     }
 

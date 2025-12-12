@@ -64,12 +64,11 @@ final class UserServModeRepository extends ServiceEntityRepository
     // Активные режимы пользователя (без интернета)
     public function findCurrentModesWithService(User $user): array
     {
-        return $this->getEntityManager()->createQueryBuilder()
-            ->select('m, s')
-            ->from(ProdServMode::class, 'm')
+        return $this->createQueryBuilder('usm')
+            ->join('usm.mode', 'm')
             ->join('m.service', 's')
-            ->join('App\Modules\Common\Domain\Entity\UserServMode', 'usm', 'WITH', 'usm.mode = m')
             ->join('usm.finPeriod', 'f')
+            ->addSelect('m', 's')
             ->andWhere('usm.user = :user')->setParameter('user', $user)
             ->andWhere('usm.isActive = 1')
             ->andWhere('f.isCurrent = 1')
@@ -78,5 +77,36 @@ final class UserServModeRepository extends ServiceEntityRepository
             ->addOrderBy('m.priority', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Найти активный UserServMode по ProdServMode и пользователю.
+     * Использует текущий финпериод (isCurrent = 1).
+     */
+    public function findActiveByModeAndUser(ProdServMode $mode, User $user): ?UserServMode
+    {
+        return $this->createQueryBuilder('usm')
+            ->join('usm.finPeriod', 'f')
+            ->andWhere('usm.mode = :mode')->setParameter('mode', $mode)
+            ->andWhere('usm.user = :user')->setParameter('user', $user)
+            ->andWhere('usm.isActive = 1')
+            ->andWhere('f.isCurrent = 1')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Найти UserServMode по usm_id с подгруженным пользователем.
+     */
+    public function findOneWithUserById(int $usmId): ?UserServMode
+    {
+        return $this->createQueryBuilder('usm')
+            ->leftJoin('usm.user', 'u')
+            ->addSelect('u')
+            ->andWhere('usm.id = :id')->setParameter('id', $usmId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

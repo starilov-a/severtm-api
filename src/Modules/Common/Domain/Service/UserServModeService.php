@@ -49,13 +49,13 @@ class UserServModeService
         $currentServs = [];
 
         foreach ($modes as $mode) {
-            $service = $mode->getProductService();
-            $service->addMode($mode);
+            $service = $mode->getMode()->getService();
+            $service->addUserMode($mode);
 
             $currentServs[$service->getId()] = $service;
         }
 
-        return $currentServs;
+        return array_values($currentServs);
     }
 
     /*
@@ -88,6 +88,31 @@ class UserServModeService
     {
         $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getNext());
         $this->addServiceMode($user, $mode, $optionsUserServModeDto);
+    }
+
+    public function disableServiceMode(UserServMode $mode)
+    {
+        $master = $this->userRepo->find(UserSessionService::getUserId());
+        $webAction = $this->webActionRepo->findIdByCid('WA_USERS_DELETE_SERVICE');
+        $currentFinPeriod = $this->finPeriodRepo->getCurrent();
+
+        //Логика
+        // 1.относится к клиенту
+        // 2.
+
+        //Транзакция
+        $this->em->getConnection()->transactional(function () use (
+            $master,
+            $mode,
+            $webAction
+        ) {
+           $mode->setIsActive(false);
+
+            //Удаление устройств
+
+            $this->save($mode);
+
+        });
     }
 
     /*
@@ -135,6 +160,8 @@ class UserServModeService
             // 3.2 Списание деняг
             $this->writeOffService->makeWriteOffForAddingMode($writeOffDto);
 
+            //TODO: insert upid_parameters
+
             // фиксируем $userServMode
             $this->save($userServMode);
 
@@ -165,7 +192,7 @@ class UserServModeService
     }
 
     // Конечное применение userServMode
-    public function save(UserServMode $userServMode): UserServMode
+    protected function save(UserServMode $userServMode): UserServMode
     {
         $this->em->persist($userServMode);
         $this->em->flush();
