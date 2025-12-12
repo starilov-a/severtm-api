@@ -37,13 +37,12 @@ class TariffController extends Controller
     public function changeNextTariff(Request $request, LkClientTariffService $tariffService)
     {
         $uid = UserSessionService::getUserId();
-        $tariffId = $request->get('tariff_id');
+        $data = $request->toArray();
+        $tariffId = $data['tariff_id'];
 
         $tariffService->changeNextTariff($uid, $tariffId);
 
-        return $this->json([
-            'message' => 'Тариф на следующий месяц успешно изменен'
-        ]);
+        return $this->response(true, 'Тариф на следующий месяц успешно изменен');
     }
 
     #[Route(

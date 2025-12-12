@@ -54,10 +54,9 @@ class ServServiceController extends Controller
     #[Route(
         '/disable-serv',
         name: 'disableServ',
-        methods: ['POST'],
-        requirements: ['mode_id' => '\d{3,6}']
+        methods: ['POST']
     )]
-    public function disableServ(Request $request, LkClientServService $servService)
+    public function disableServ(Request $request, LkClientServService $servService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         $data = $request->toArray();
@@ -67,5 +66,22 @@ class ServServiceController extends Controller
         return $this->json([
             'message' => 'Услуга отключена.'
         ]);
+    }
+
+    #[Route(
+        '/enable-service',
+        name: 'enableServ',
+        methods: ['POST']
+    )]
+    public function enableServ(Request $request, LkClientServService $servService): JsonResponse
+    {
+        $data = $request->toArray();
+        return $this->response(
+            $servService->enableService(
+                UserSessionService::getUserId(),
+                $data['mode_id']
+            ),
+            'Тариф успешно сменен'
+        );
     }
 }
