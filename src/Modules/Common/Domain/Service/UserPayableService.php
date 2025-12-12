@@ -46,6 +46,8 @@ class UserPayableService
         $userPayable->setIsReal($writeOffDto->isReal());
         $userPayable->setIsApplied($writeOffDto->isApplied());
 
+        // Наполнение доп. параметров
+
         $userPayable = $this->save($userPayable);
 
         return $userPayable;
