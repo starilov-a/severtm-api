@@ -1,0 +1,13 @@
+stages:
+  - deploy
+
+create_file_job:
+  stage: deploy
+  script:
+    - /opt/ci-cd-scripts/deploy_lk_api.sh
+  only:
+    - master
+  tags:
+    - lk-dev
+
+
