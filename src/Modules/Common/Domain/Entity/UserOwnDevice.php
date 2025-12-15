@@ -16,7 +16,7 @@ class UserOwnDevice
     protected User $user;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Device::class)]
+    #[ORM\OneToOne(targetEntity: Device::class)]
     #[ORM\JoinColumn(name: 'device_id', referencedColumnName: 'device_id', nullable: false)]
     protected Device $device;
 
@@ -59,6 +59,31 @@ class UserOwnDevice
     public function setDeviceComment(?string $deviceComment): void
     {
         $this->deviceComment = $deviceComment;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getDevice(): Device
+    {
+        return $this->device;
+    }
+
+    public function getTimeStamp(): \DateTimeInterface
+    {
+        return $this->timeStamp;
+    }
+
+    public function getMasterUid(): ?int
+    {
+        return $this->masterUid;
+    }
+
+    public function getDeviceComment(): ?string
+    {
+        return $this->deviceComment;
     }
 
 

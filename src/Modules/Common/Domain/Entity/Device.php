@@ -21,6 +21,13 @@ class Device
     #[ORM\Column(name: 'device_type_id', type: Types::INTEGER, nullable: true)]
     private ?int $deviceTypeId = null;
 
+    /**
+     * Принадлежность устройства пользователю (user_own_devices).
+     * В БД device_id уникален в user_own_devices, поэтому связь фактически one-to-one.
+     */
+    #[ORM\OneToOne(mappedBy: 'device', targetEntity: UserOwnDevice::class)]
+    private ?UserOwnDevice $ownDevice = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -45,6 +52,17 @@ class Device
     public function setDeviceTypeId(?int $deviceTypeId): self
     {
         $this->deviceTypeId = $deviceTypeId;
+        return $this;
+    }
+
+    public function getOwnDevice(): ?UserOwnDevice
+    {
+        return $this->ownDevice;
+    }
+
+    public function setOwnDevice(?UserOwnDevice $ownDevice): self
+    {
+        $this->ownDevice = $ownDevice;
         return $this;
     }
 }

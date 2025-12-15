@@ -15,20 +15,6 @@ class DeviceService
         protected UserOwnDeviceService $userOwnDeviceService
     ){}
 
-    /**
-     * Привязать устройство к конкретной активной услуге пользователя.
-     *
-     * 1) находим/создаём Device и связываем его с пользователем (user_own_devices);
-     * 2) вешаем это устройство на переданный UserServMode.
-     */
-    public function attachDeviceToServiceMode(UserServMode $userServMode, Device $device): UserServMode
-    {
-        // привязываем устройство к режиму услуги
-        $userServMode->setDevice($device);
-
-        return $userServMode;
-    }
-
     public function addOrCreateForUser(User $user, DeviceDto $deviceDto)
     {
         // 1. Создание нового Устройства

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service\Dto\Request;
 
+use App\Modules\Common\Domain\Entity\Device;
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserPayable;
@@ -19,6 +20,7 @@ class TypedWriteOffDto extends Dto
     protected bool $isReal = true; // фиктивная или настоящая (?)
     protected bool $isApplied = true; // приминяется ли (?)
     protected ?string $comment; // приминяется ли (?)
+    protected ?Device $device = null;
 
     public function getServMode(): UserServMode
     {
@@ -97,5 +99,15 @@ class TypedWriteOffDto extends Dto
     public function setUser(User $user): void
     {
         $this->user = $user;
+    }
+
+    public function getDevice(): ?Device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?Device $device): void
+    {
+        $this->device = $device;
     }
 }

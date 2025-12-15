@@ -14,6 +14,7 @@ class UserPayableService
         protected UserPayableRepository $userPayableRepo,
         protected UserPayableTypeRepository $userPayableTypeRepo,
         protected UserServModePriceService $userServModePriceService,
+        protected UserPayableParameterService  $userPayableParameterService,
     ) {}
 
     /**
@@ -46,9 +47,11 @@ class UserPayableService
         $userPayable->setIsReal($writeOffDto->isReal());
         $userPayable->setIsApplied($writeOffDto->isApplied());
 
-        // Наполнение доп. параметров
-
         $userPayable = $this->save($userPayable);
+
+        // Наполнение доп. параметров
+        if (!empty($writeOffDto->getDevice()))
+            $this->userPayableParameterService->addLinkToDevice($userPayable, $writeOffDto->getDevice());
 
         return $userPayable;
     }

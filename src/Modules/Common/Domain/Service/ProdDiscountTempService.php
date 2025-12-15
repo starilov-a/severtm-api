@@ -6,7 +6,7 @@ use App\Modules\Common\Domain\Entity\ProdDiscountTemp;
 use App\Modules\Common\Domain\Entity\UserPayable;
 use App\Modules\Common\Domain\Repository\ProdDiscountTempRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Infrastructure\Service\Auth\Entity\Session;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class ProdDiscountTempService
 {
@@ -30,7 +30,7 @@ class ProdDiscountTempService
         $discountTemp->setQnt($userPayable->getPayable());
         $discountTemp->setNumber($userPayable->getPayable());
         $discountTemp->setDiscountDate($userPayable->getCreatedAt()->getTimestamp());
-        $discountTemp->setMaster($this->userRepo->find(Session::getUserIp()));
+        $discountTemp->setMaster($this->userRepo->find(UserSessionService::getUserId()));
         $discountTemp->setProdComments($comment);
 
         $this->save($discountTemp);

@@ -23,9 +23,10 @@ class UserPayableParameterService
         $userPayableParameter->setParameter($this->enumParameterRepo->findOneBy(['code' => 'device_id']));
         $userPayableParameter->setValue($device->getId());
 
+        return $this->save($userPayableParameter);
     }
 
-    public function save(UserPayableParameter $userPayableParameter): UserPayableParameter
+    protected function save(UserPayableParameter $userPayableParameter): UserPayableParameter
     {
         $em = $this->userPayableParameterRepo->getEntityManager();
         $em->persist($userPayableParameter);

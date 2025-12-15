@@ -8,6 +8,7 @@ use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use App\Modules\Common\Domain\Service\UserServService;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 
 class LkClientServService
 {
@@ -86,6 +87,10 @@ class LkClientServService
     public function disableService(int $uid, int $userModeId): bool
     {
         $userServMode = $this->userServModeRepo->findOneBy(['id' => $userModeId, 'user' =>  $this->userRepo->find($uid)]);
+
+        // Проверка
+        if (!$userServMode)
+            throw new BusinessException('Эта услуга не привязана к вашему договору.');
 
         $this->userServModeService->disableServiceMode($userServMode);
 

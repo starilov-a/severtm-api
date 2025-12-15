@@ -32,6 +32,7 @@ class UserServModeService
         protected WebActionRepository $webActionRepo,
         protected UserRepository $userRepo,
         protected FinPeriodRepository $finPeriodRepo,
+        protected UserOwnDeviceService $userOwnDeviceService,
 
         protected AddServiceModeRuleChain $addServiceModeRuleChain,
     ){}
@@ -90,7 +91,7 @@ class UserServModeService
         $this->addServiceMode($user, $mode, $optionsUserServModeDto);
     }
 
-    public function disableServiceMode(UserServMode $mode)
+    public function disableServiceMode(UserServMode $userServMode)
     {
         $master = $this->userRepo->find(UserSessionService::getUserId());
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_DELETE_SERVICE');
@@ -103,15 +104,23 @@ class UserServModeService
         //Транзакция
         $this->em->getConnection()->transactional(function () use (
             $master,
-            $mode,
+            $userServMode,
             $webAction
         ) {
-           $mode->setIsActive(false);
+            $userServMode->setIsActive(false);
+            //Отвязка устройства
+            if ($userServMode->getDevice())
+                $this->userOwnDeviceService->removeDeviceFromUser($userServMode->getDevice());
 
-            //Удаление устройств
+            $this->save($userServMode);
 
-            $this->save($mode);
-
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $master->getId(),
+                $webAction->getId(),
+                'Услуга('.$userServMode->getMode()->getName().',usmid:'.$userServMode->getId().' ) 
+                отключена у пользователя: ' . $userServMode->getUser()->getId(),
+                true
+            ));
         });
     }
 
@@ -145,27 +154,27 @@ class UserServModeService
             // 1. Добавление usm
             $userServMode = $this->createUserServMode($user, $mode, $optionsUserServModeDto);
 
-            // 2. Добавление устройства и привязка к текущей услуге
-            if (!empty($optionsUserServModeDto->getDeviceDto())) {
-                $device = $this->deviceService->addOrCreateForUser($user, $optionsUserServModeDto->getDeviceDto());
-                $this->deviceService->attachDeviceToServiceMode($userServMode, $device);
-            }
-
-            // 3.1 Подготовка объекта для создания списания
+            // 2 Подготовка объекта для создания списания
             $writeOffDto = new TypedWriteOffDto();
             $writeOffDto->setServMode($userServMode);
             $writeOffDto->setPayableType('no_packet');
             $writeOffDto->setComment('Добавление услуги ' . $userServMode->getMode()->getName());
             $writeOffDto->setUser($user);
-            // 3.2 Списание деняг
-            $this->writeOffService->makeWriteOffForAddingMode($writeOffDto);
 
-            //TODO: insert upid_parameters
+            // 3. Добавление устройства и привязка к текущей услуге
+            if (!empty($optionsUserServModeDto->getDeviceDto())) {
+                $device = $this->deviceService->addOrCreateForUser($user, $optionsUserServModeDto->getDeviceDto());
+                $userServMode->setDevice($device);
+                $writeOffDto->setDevice($device);
+            }
+
+            // 4 Списание деняг
+            $this->writeOffService->makeWriteOffForAddingMode($writeOffDto);
 
             // фиксируем $userServMode
             $this->save($userServMode);
 
-            // 4. Логирование
+            // 5. Логирование
             $comment = $optionsUserServModeDto->getComment();
             $this->loggerService->businessLog(new BusinessLogDto(
                 $master->getId(),
