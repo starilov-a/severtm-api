@@ -23,7 +23,7 @@ class UserIsNotActivatedRule extends Rule
         )
             throw new \LogicException('Wrong context passed to UserIsNotActivatedRule');
 
-        if ($context->getUser()->isJuridical() != 2) {
+        if ($context->getUser()->isJuridical() == 2) {
             $this->loggerService->businessLog(new BusinessLogDto(
                 $context->getMaster()->getId(),
                 1,
