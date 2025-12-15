@@ -11,7 +11,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PaymentsController extends Controller
 {
-
+    public function authenticate(): bool
+    {
+        return true;
+    }
 
     #[Route(
         '/get-balance/',
