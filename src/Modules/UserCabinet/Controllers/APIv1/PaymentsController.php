@@ -5,6 +5,7 @@ namespace App\Modules\UserCabinet\Controllers\APIv1;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\LkPaymentsService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -15,10 +16,9 @@ class PaymentsController extends Controller
     #[Route(
         '/get-balance/',
         name: 'getBalance',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
+        methods: ['GET']
     )]
-    public function getBalance(LkPaymentsService $paymentsService)
+    public function getBalance(LkPaymentsService $paymentsService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         return $this->responseData($paymentsService->getBalance($uid));
@@ -27,10 +27,9 @@ class PaymentsController extends Controller
     #[Route(
         '/get-write-offs/',
         name: 'getWriteOffs',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
+        methods: ['GET']
     )]
-    public function getWriteOffs(Request $request, LkPaymentsService $paymentsService)
+    public function getWriteOffs(Request $request, LkPaymentsService $paymentsService): JsonResponse
     {
         $filterDto = new FilterDto();
         $filterDto->setLimit($request->query->get('limit'));
@@ -43,10 +42,9 @@ class PaymentsController extends Controller
     #[Route(
         '/get-replenishments/',
         name: 'getReplenishments',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
+        methods: ['GET']
     )]
-    public function getReplenishments(Request $request, LkPaymentsService $paymentsService)
+    public function getReplenishments(Request $request, LkPaymentsService $paymentsService): JsonResponse
     {
         $filterDto = new FilterDto();
         $filterDto->setLimit($request->query->get('limit'));
@@ -60,10 +58,9 @@ class PaymentsController extends Controller
     #[Route(
         '/get-debt/',
         name: 'getDebt',
-        methods: ['GET'],
-        requirements: ['uid' => '\d{8}']
+        methods: ['GET']
     )]
-    public function getDebt(LkPaymentsService $paymentsService)
+    public function getDebt(LkPaymentsService $paymentsService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         return $this->responseData($paymentsService->getDebt($uid));
