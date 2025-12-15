@@ -38,6 +38,7 @@ class LkClientTariffService
         $currentTariff = $user->getCurrentTariff();
 
         return new TariffDto(
+            $currentTariff->getId(),
             $currentTariff->getName(),
             $currentTariff->getPrice(),
             !($currentTariff->getId() === 1)

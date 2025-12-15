@@ -32,9 +32,8 @@ class TariffController extends Controller
         '/change-next-tariff',
         name: 'changeNextTariff',
         methods: ['POST'],
-        requirements: ['tariff_id' => '\d{5}']
     )]
-    public function changeNextTariff(Request $request, LkClientTariffService $tariffService)
+    public function changeNextTariff(Request $request, LkClientTariffService $tariffService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         $data = $request->toArray();
@@ -50,7 +49,7 @@ class TariffController extends Controller
         name: 'getAvailableTariffs',
         methods: ['GET']
     )]
-    public function getAvailableTariffs(LkClientTariffService $tariffService)
+    public function getAvailableTariffs(LkClientTariffService $tariffService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
 
