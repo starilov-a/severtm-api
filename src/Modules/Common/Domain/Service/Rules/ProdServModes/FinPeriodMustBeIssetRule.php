@@ -13,6 +13,7 @@ class FinPeriodMustBeIssetRule extends Rule
 
     public function check(object $context): bool
     {
+        //TODO стоит перенести в папку FinPeriod
         if (!$context instanceof HasUserId || !$context instanceof HasActionId || !$context instanceof HasNullbleVar) {
             throw new \LogicException('Wrong context passed to FinPeriodMustBeIssetRule');
         }

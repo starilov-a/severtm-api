@@ -2,8 +2,10 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Domain\Entity\FreezeReason;
 use App\Modules\Common\Domain\Repository\UserRepository;
-
+use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
+use App\Modules\Common\Domain\Service\FreezeService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Domain\Repository\WebUserRepository;
@@ -16,20 +18,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LkUserProfileService
 {
-    protected UserRepository $userRepo;
-    protected WebUserRepository $webUserRepo;
-    protected EntityManagerInterface $em;
+
 
     public function __construct(
-        UserRepository         $userRepo,
-        WebUserRepository      $webUserRepo,
-        EntityManagerInterface $em
-    )
-    {
-        $this->userRepo = $userRepo;
-        $this->webUserRepo = $webUserRepo;
-        $this->em = $em;
-    }
+        protected EntityManagerInterface    $em,
+
+        protected FreezeService             $freezeService,
+
+        protected UserRepository            $userRepo,
+        protected WebUserRepository         $webUserRepo,
+    ) {}
     public function getShortUserInfo(int $uid): array
     {
         $user = $this->userRepo->find($uid);
@@ -57,6 +55,7 @@ class LkUserProfileService
 
     public function updateUserInfo(int $uid, WebUserRequestDto $dto): int
     {
+        //TODO нужно будет перенести в common
         $user = $this->userRepo->find($uid);
 
         $webUser = $this->webUserRepo->find($user->getId());
@@ -71,6 +70,7 @@ class LkUserProfileService
 
     public function updateUserPassword($uid, WebUserRequestDto $dto): int
     {
+        //TODO нужно будет перенести в common
         $webUser = $this->webUserRepo->find($uid);
 
         $pass = md5($dto->getPasswdHash());
@@ -84,10 +84,52 @@ class LkUserProfileService
 
     public function checkPassword(string $pass): void
     {
+        //TODO нужно будет перенести в common
         $webUser = $this->webUserRepo->find(UserSessionService::getUserId());
         if($webUser->getPasswdHash() !== md5($pass)){
             throw new BusinessException("Старый пароль введен не верно!");
         }
+    }
+
+    public function getReasonForFreeze(int $uid): array
+    {
+        $reasons = $this->freezeService->getClientReasonForFreeze();
+
+        return array_map(static function (FreezeReason $reason): array {
+            return [
+                'id' => $reason->getId(),
+                'reason' => $reason->getName(),
+            ];
+        }, $reasons);
+    }
+
+    /*
+     * Заморозка клиента
+     * */
+    public function freezeProfile(int $uid, string $startDate, string $comment): bool
+    {
+        $taskDto = new CreateUserTaskDto(
+            $this->userRepo->find($uid),
+            new \DateTime($startDate),
+            $comment
+        );
+
+        $this->freezeService->createFreezeUserTask($taskDto);
+
+        return true;
+    }
+
+    /*
+     * Получение отсрочки для клиента
+     * */
+    public function takeBreak(int $uid): bool
+    {
+        return false;
+    }
+
+    public function getCountAvailableBreaks(int $uid): int
+    {
+
     }
 
 }

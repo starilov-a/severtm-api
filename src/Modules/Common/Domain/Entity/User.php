@@ -88,9 +88,9 @@ class User
 
     /* ---------- Блокировка ---------- */
 
-//    #[ORM\ManyToOne(targetEntity: BlockState::class)]
-//    #[ORM\JoinColumn(name: 'block', referencedColumnName: 'block_id', nullable: false)]
-//    private BlockState $blockState;
+    #[ORM\ManyToOne(targetEntity: BlockState::class)]
+    #[ORM\JoinColumn(name: 'block', referencedColumnName: 'block_id', nullable: false)]
+    private BlockState $blockState;
 
     #[ORM\Column(name: 'block_date', type: Types::DATETIME_MUTABLE, options: ['default' => '1970-01-01 00:00:00'])]
     private \DateTimeInterface $blockDate;
@@ -268,6 +268,16 @@ class User
     public function getBillAbs(): float
     {
         return $this->billAbs;
+    }
+
+    public function getBlockState(): BlockState
+    {
+        return $this->blockState;
+    }
+
+    public function setBlockState(BlockState $blockState): void
+    {
+        $this->blockState = $blockState;
     }
 
     public function isCredit(): bool

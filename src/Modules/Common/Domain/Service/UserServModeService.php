@@ -97,10 +97,6 @@ class UserServModeService
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_DELETE_SERVICE');
         $currentFinPeriod = $this->finPeriodRepo->getCurrent();
 
-        //Логика
-        // 1.относится к клиенту
-        // 2.
-
         //Транзакция
         $this->em->getConnection()->transactional(function () use (
             $master,

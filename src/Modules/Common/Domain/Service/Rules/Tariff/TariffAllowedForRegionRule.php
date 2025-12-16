@@ -18,7 +18,10 @@ class TariffAllowedForRegionRule extends Rule
     public function check(object $context): bool
     {
 
-        if (!$context instanceof HasActionId || !$context instanceof HasTariff || !$context instanceof HasRegion || !$context instanceof HasUserId)
+        if (!($context instanceof HasActionId) ||
+            !($context instanceof HasTariff) ||
+            !($context instanceof HasRegion) ||
+            !($context instanceof HasUserId))
             throw new \LogicException('Wrong context passed to TariffAllowedForRegionRule');
 
         // TODO: Нужно сделать проверку на address_banned

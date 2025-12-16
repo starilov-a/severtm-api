@@ -109,4 +109,19 @@ final class UserServModeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function hasActiveMultiPeriodModes(int $userId, int $finPeriodId): bool
+    {
+        $qb = $this->createQueryBuilder('usm')
+            ->select('1')
+            ->join('usm.mode', 'm')
+            ->join('usm.finPeriod', 'f')
+            ->andWhere('usm.user = :uid')->setParameter('uid', $userId)
+            ->andWhere('f.id = :fid')->setParameter('fid', $finPeriodId)
+            ->andWhere('usm.isActive = 1')
+            ->andWhere('m.periods > 1')
+            ->setMaxResults(1);
+
+        return null !== $qb->getQuery()->getOneOrNullResult();
+    }
 }

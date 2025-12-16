@@ -96,20 +96,4 @@ class LkClientServService
 
         return false;
     }
-
-    /*
-     * Заморозка услуг клиентом
-     * */
-    public function freezeServices(int $uid): bool
-    {
-        return false;
-    }
-
-    /*
-     * Получение отсрочки для клиента
-     * */
-    public function takeBreak(int $uid): bool
-    {
-        return false;
-    }
 }
