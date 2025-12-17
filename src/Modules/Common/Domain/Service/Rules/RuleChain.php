@@ -2,8 +2,6 @@
 
 namespace App\Modules\Common\Domain\Service\Rules;
 
-use App\Modules\Common\Domain\Service\Rules\RuleChainInterface;
-
 class RuleChain implements RuleChainInterface
 {
     /** @param RuleInterface[] $rules */

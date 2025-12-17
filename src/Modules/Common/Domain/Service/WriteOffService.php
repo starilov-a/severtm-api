@@ -51,6 +51,7 @@ class WriteOffService
             $writeOffDto->isApplied(),
             $writeOffDto->isReal()
         );
+
         // логические проверки
         if (!$this->shouldMakeWriteOffRuleChain->checkAll($contextForRule)) {
             $this->loggerService->businessLog(new BusinessLogDto(

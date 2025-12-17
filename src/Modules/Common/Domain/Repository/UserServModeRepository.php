@@ -2,12 +2,10 @@
 
 namespace App\Modules\Common\Domain\Repository;
 
+use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
-use App\Modules\Common\Domain\Service\Dto\Request\CreateUserServModeDto;
-use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
-use App\Modules\Common\Domain\Service\Dto\Request\UserServModeDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -96,28 +94,14 @@ final class UserServModeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    /**
-     * Найти UserServMode по usm_id с подгруженным пользователем.
-     */
-    public function findOneWithUserById(int $usmId): ?UserServMode
-    {
-        return $this->createQueryBuilder('usm')
-            ->leftJoin('usm.user', 'u')
-            ->addSelect('u')
-            ->andWhere('usm.id = :id')->setParameter('id', $usmId)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function hasActiveMultiPeriodModes(int $userId, int $finPeriodId): bool
+    // Есть ли активный user_ser_mode (режим) в указанном фин периоде у пользователя
+    public function hasActiveMultiPeriodModes(User $user, FinPeriod $finPeriod): bool
     {
         $qb = $this->createQueryBuilder('usm')
             ->select('1')
             ->join('usm.mode', 'm')
-            ->join('usm.finPeriod', 'f')
-            ->andWhere('usm.user = :uid')->setParameter('uid', $userId)
-            ->andWhere('f.id = :fid')->setParameter('fid', $finPeriodId)
+            ->andWhere('usm.user = :user')->setParameter('user', $user)
+            ->andWhere('usm.finPeriod = :finPeriod')->setParameter('finPeriod', $finPeriod)
             ->andWhere('usm.isActive = 1')
             ->andWhere('m.periods > 1')
             ->setMaxResults(1);

@@ -300,9 +300,10 @@ class User
         return $this->blockComments;
     }
 
-    public function getRegDate(): int
+    public function getRegDate(): \DateTimeImmutable
     {
-        return $this->regDate;
+        $date = new \DateTimeImmutable();
+        return $date->setTimestamp($this->regDate);
     }
 
     public function getAbPstart(): int

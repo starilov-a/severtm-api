@@ -89,7 +89,7 @@ class Tariff
     public function getId(): int { return $this->id; }
     public function getTid(): int { return $this->tid; }
     public function getName(): ?string { return $this->name; }
-    public function getPrice(): string { return $this->price; }
+    public function getPrice(): float { return (float) $this->price; }
     public function getServiceModeId(): int { return $this->serviceMode->getId(); }
     public function getProdServMode(): ProdServMode{ return $this->serviceMode;}
 

@@ -2,7 +2,12 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\Freeze;
 
+use App\Modules\Common\Domain\Entity\UserTaskState;
+use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskContext;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasStartFreezeDate;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasUser;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasWebAction;
 use App\Modules\Common\Domain\Service\Rules\Rule;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
@@ -18,37 +23,39 @@ use App\Modules\Common\Domain\Repository\UserTaskRepository;
 class FreezeOnlyOncePerMonthRule extends Rule
 {
     public function __construct(
-        private UserTaskRepository $userTaskRepository,
-    ) {
-    }
+        protected UserTaskRepository $userTaskRepo,
+        protected UserTaskStateRepository $taskStateRepo,
+    ) {}
 
+    /** @var HasWebAction & HasStartFreezeDate & HasUser $context */
     public function check(object $context): bool
     {
-        if (!$context instanceof CreateFreezeTaskContext) {
-            throw new \LogicException('Wrong context passed to FreezeOnlyOncePerMonthRule');
-        }
+        if (
+            !($context instanceof HasWebAction) ||
+            !($context instanceof HasStartFreezeDate) ||
+            !($context instanceof HasUser)
+        ) throw new \LogicException('Wrong context passed to FreezeOnlyOncePerMonthRule');
 
-        $startDate = \DateTimeImmutable::createFromInterface($context->getStartDate());
-        $now = $context->getNow();
 
-        if ((int)$startDate->format('Ym') > (int)$now->format('Ym')) {
+        $startDate = $context->getStartFreezeDate()->setTime(0, 0);
+        $now = new \DateTimeImmutable();
+
+        //start_date в будущих месяцах
+        if ((int)$startDate->format('Ym') > (int)$now->format('Ym'))
             return true;
-        }
 
-        $startOfMonth = $now->modify('first day of this month midnight');
-
-        $alreadyFrozen = $this->userTaskRepository->hasTaskWithStateInPeriod(
+        $alreadyFrozen = $this->userTaskRepo->hasTaskWithStateInPeriod(
             $context->getUser(),
-            $context->getFreezeTaskType(),
-            $context->getFinishedState(),
-            $startOfMonth,
+            $this->taskStateRepo->findOneBy(['str_code' => 'new']),
+            $this->taskStateRepo->findOneBy(['str_code' => 'finished']),
+            new \DateTimeImmutable('first day of this month'),
             $now
         );
 
         if ($alreadyFrozen) {
             throw new ImportantBusinessException(
-                $context->getUserId(),
-                $context->getActionId(),
+                $this->getMasterId(),
+                $context->getWebAction()->getId(),
                 'Заморозка доступна не чаще одного раза в месяц'
             );
         }

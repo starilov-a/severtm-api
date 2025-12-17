@@ -2,11 +2,9 @@
 
 namespace App\Modules\Common\Domain\Service;
 
-use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserTask;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
-use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -17,16 +15,19 @@ class TaskService
     public function __construct(
         protected EntityManagerInterface $em,
         protected UserRepository $userRepo,
+        protected WebActionRepository $webActionRepo,
+
     ){}
     public function createUserTask(CreateUserTaskDto $createUserTaskDto): UserTask
     {
         $master = $this->userRepo->find(UserSessionService::getUserId());
+        $webAction = $this->webActionRepo->findIdByCid('TASKS');
         $userTask = new UserTask();
 
         if (!$createUserTaskDto->getUserTaskState()) {
             throw new ImportantBusinessException(
                 $master->getId(),
-                999,
+                $webAction->getId(),
                 'Для задачи не указано состояние'
             );
         }
@@ -34,7 +35,7 @@ class TaskService
         if (!$createUserTaskDto->getUserTaskType()) {
             throw new ImportantBusinessException(
                 $master->getId(),
-                999,
+                $webAction->getId(),
                 'Для задачи не указан тип'
             );
         }

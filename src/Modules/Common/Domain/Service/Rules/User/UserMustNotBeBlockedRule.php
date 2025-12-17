@@ -2,33 +2,33 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\User;
 
-use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasActionId;
-use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasMaster;
+use App\Modules\Common\Domain\Repository\BlockStateRepository;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasUser;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasWebAction;
 use App\Modules\Common\Domain\Service\Rules\Rule;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
-use Psr\Log\LoggerInterface;
 
+/**
+ * Бизнес-правило:
+ * Клиент не должен быть заблокирован
+ */
 class UserMustNotBeBlockedRule extends Rule
 {
     public function __construct(
         protected LoggerService $loggerService,
+        protected BlockStateRepository $blockStateRepo,
     ){}
+    /** @var HasWebAction & HasUser $context */
     public function check(object $context): bool
     {
-        if (
-            !($context instanceof HasUser) ||
-            !($context instanceof HasMaster) ||
-            !($context instanceof HasActionId)
-        )
-            throw new \LogicException('Wrong context passed to UserIsNotActivatedRule');
+        if (!($context instanceof HasUser) || !($context instanceof HasWebAction))
+            throw new \LogicException('Wrong context passed to UserMustNotBeBlockedRule');
 
-        if ($context->getUser()->get) {
+        if ($context->getUser()->getBlockState() == $this->blockStateRepo->findByCode('blocked')) {
             throw new ImportantBusinessException(
-                $context->getUserId(),
-                $context->getActionId(),
+                $this->getMasterId(),
+                $context->getWebAction()->getId(),
                 "Пользователь является заблокированным"
             );
         }

@@ -4,6 +4,7 @@ namespace App\Modules\Common\Domain\Service\Rules\Freeze;
 
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskContext;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasActionId;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasWebAction;
 use App\Modules\Common\Domain\Service\Rules\Rule;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use Doctrine\DBAL\Connection;
@@ -11,19 +12,22 @@ use Doctrine\DBAL\Connection;
 /**
  * Бизнес-правило:
  * заморозка разрешена только тем тарифам/режимам, которые помечены параметром группы group_freeze=1.
+ *
+ * СЕЙЧАС ВСЕ ТАРИФЫ МОГУТ БЫТЬ ЗАМОРОЖЕННЫМИ
  */
 class CurrentTariffMustAllowFreezeRule extends Rule
 {
     public function __construct(
         private Connection $connection,
-    ) {
-    }
+    ) {}
 
     public function check(object $context): bool
     {
-        if (!($context instanceof HasActionId)) {
+        if (!($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to CurrentTariffMustAllowFreezeRule');
-        }
+
+        return true;
+        // в будущем может быть стоит переделать, сейчас не активно но логика предусмотрена
 
         $sql = <<<SQL
             SELECT 1

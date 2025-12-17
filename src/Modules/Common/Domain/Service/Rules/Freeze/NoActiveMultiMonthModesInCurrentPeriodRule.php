@@ -2,8 +2,12 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\Freeze;
 
+use App\Modules\Common\Domain\Repository\FinPeriodRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskContext;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasStartFreezeDate;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasUser;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasWebAction;
 use App\Modules\Common\Domain\Service\Rules\Rule;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 
@@ -15,26 +19,25 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 class NoActiveMultiMonthModesInCurrentPeriodRule extends Rule
 {
     public function __construct(
-        private UserServModeRepository $userServModeRepository,
-    ) {
-    }
+        protected UserServModeRepository $userServModeRepo,
+        protected FinPeriodRepository $finPeriodRepo,
+    ) {}
 
+    /** @var HasWebAction & HasUser $context */
     public function check(object $context): bool
     {
-        if (!$context instanceof CreateFreezeTaskContext) {
+        if (!($context instanceof HasUser) || !($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to NoActiveMultiMonthModesInCurrentPeriodRule');
-        }
 
-        $finPeriodId = $context->getCurrentFinPeriod()->getId();
-        $hasMultiMonthModes = $this->userServModeRepository->hasActiveMultiPeriodModes(
-            $context->getUserId(),
-            $finPeriodId
+        $hasMultiMonthModes = $this->userServModeRepo->hasActiveMultiPeriodModes(
+            $context->getUser(),
+            $this->finPeriodRepo->getCurrent(),
         );
 
         if ($hasMultiMonthModes) {
             throw new ImportantBusinessException(
-                $context->getUserId(),
-                $context->getActionId(),
+                $this->getMasterId(),
+                $context->getWebAction()->getId(),
                 'Заморозка недоступна при активных предоплаченных услугах'
             );
         }

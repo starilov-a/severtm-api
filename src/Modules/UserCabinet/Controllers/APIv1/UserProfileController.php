@@ -111,8 +111,7 @@ class UserProfileController extends Controller
     )]
     public function getReasonForFreeze(LKUserProfileService $userProfileService)
     {
-        $uid = UserSessionService::getUserId();
-        return $this->response($userProfileService->getReasonForFreeze($uid), 'Список доступных причин заморозки');
+        return $this->response($userProfileService->getReasonForFreeze(), 'Список доступных причин заморозки');
     }
 
     #[Route(

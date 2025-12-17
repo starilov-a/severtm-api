@@ -91,14 +91,14 @@ class LkUserProfileService
         }
     }
 
-    public function getReasonForFreeze(int $uid): array
+    public function getReasonForFreeze(): array
     {
         $reasons = $this->freezeService->getClientReasonForFreeze();
 
         return array_map(static function (FreezeReason $reason): array {
             return [
                 'id' => $reason->getId(),
-                'reason' => $reason->getName(),
+                'name' => $reason->getName(),
             ];
         }, $reasons);
     }
@@ -110,7 +110,7 @@ class LkUserProfileService
     {
         $taskDto = new CreateUserTaskDto(
             $this->userRepo->find($uid),
-            new \DateTime($startDate),
+            new \DateTimeImmutable($startDate),
             $comment
         );
 

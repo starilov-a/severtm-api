@@ -9,7 +9,7 @@ use App\Modules\Common\Domain\Service\Rules\Rule;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
-class UserIsNotActivatedRule extends Rule
+class UserIsNotActivatedExceptionRule extends Rule
 {
     public function __construct(
         protected LoggerService $loggerService

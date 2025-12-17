@@ -54,10 +54,6 @@ class WriteOffsParamsRule extends Rule
             );
         }
 
-
-
-
-
         return true;
     }
 }

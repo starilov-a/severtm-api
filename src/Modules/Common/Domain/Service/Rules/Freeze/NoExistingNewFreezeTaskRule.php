@@ -3,7 +3,11 @@
 namespace App\Modules\Common\Domain\Service\Rules\Freeze;
 
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
+use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
+use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskContext;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasUser;
+use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasWebAction;
 use App\Modules\Common\Domain\Service\Rules\Rule;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 
@@ -14,24 +18,27 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 class NoExistingNewFreezeTaskRule extends Rule
 {
     public function __construct(
-        private UserTaskRepository $userTaskRepository,
-    ) {
-    }
+        protected UserTaskRepository $userTaskRepo,
+        protected UserTaskStateRepository $taskStateRepo,
+        protected UserTaskTypeRepository $taskTypeRepo,
+    ) {}
 
+    /** @var HasUser & HasWebAction $context */
     public function check(object $context): bool
     {
-        if (!$context instanceof CreateFreezeTaskContext) {
+        if (!($context instanceof HasUser) || !($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to NoExistingNewFreezeTaskRule');
-        }
 
-        if ($this->userTaskRepository->hasTaskWithState(
+        $issetTask = $this->userTaskRepo->hasTaskWithState(
             $context->getUser(),
-            $context->getFreezeTaskType(),
-            $context->getNewState()
-        )) {
+            $this->taskTypeRepo->findOneBy(['str_code' => 'freeze']),
+            $this->taskStateRepo->findOneBy(['str_code' => 'new'])
+        );
+
+        if ($issetTask) {
             throw new ImportantBusinessException(
-                $context->getUserId(),
-                $context->getActionId(),
+                $this->getMasterId(),
+                $context->getWebAction()->getId(),
                 'Задача на заморозку уже создана и ожидает выполнения'
             );
         }

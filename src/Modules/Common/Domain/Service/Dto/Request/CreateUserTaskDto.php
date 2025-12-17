@@ -13,7 +13,7 @@ class CreateUserTaskDto extends Dto
 {
     public function __construct(
         protected User $user,
-        protected \DateTime $startDate,
+        protected \DateTimeImmutable $startDate,
         protected string $comment,
         protected ?UserTaskType $userTaskType = null,
         protected ?UserTaskState $userTaskState = null,
@@ -29,14 +29,14 @@ class CreateUserTaskDto extends Dto
         $this->user = $user;
     }
 
-    public function getStartDate(): \DateTime
+    public function getStartDate(): \DateTimeImmutable
     {
         return $this->startDate;
     }
 
-    public function setStartDate(string $startDate): void
+    public function setStartDate(\DateTimeImmutable $startDate): void
     {
-        $this->startDate = new \DateTime($startDate);
+        $this->startDate = $startDate;
     }
 
     public function getComment(): string
