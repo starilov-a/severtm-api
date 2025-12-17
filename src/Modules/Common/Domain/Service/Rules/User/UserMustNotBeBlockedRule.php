@@ -24,8 +24,8 @@ class UserMustNotBeBlockedRule extends Rule
     {
         if (!($context instanceof HasUser) || !($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to UserMustNotBeBlockedRule');
-
-        if ($context->getUser()->getBlockState() == $this->blockStateRepo->findByCode('blocked')) {
+        $context->getUser()->setBlockState($this->blockStateRepo->findByCode('unblocked'));
+        if ($context->getUser()->getBlockState() === $this->blockStateRepo->findByCode('blocked')) {
             throw new ImportantBusinessException(
                 $this->getMasterId(),
                 $context->getWebAction()->getId(),

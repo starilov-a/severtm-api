@@ -31,8 +31,8 @@ class NoExistingNewFreezeTaskRule extends Rule
 
         $issetTask = $this->userTaskRepo->hasTaskWithState(
             $context->getUser(),
-            $this->taskTypeRepo->findOneBy(['str_code' => 'freeze']),
-            $this->taskStateRepo->findOneBy(['str_code' => 'new'])
+            $this->taskTypeRepo->findOneBy(['code' => 'freeze']),
+            $this->taskStateRepo->findOneBy(['code' => 'new'])
         );
 
         if ($issetTask) {

@@ -115,17 +115,17 @@ class UserProfileController extends Controller
     }
 
     #[Route(
-        '/freeze',
-        name: 'freeze',
+        '/enable-freeze',
+        name: 'enableFreeze',
         methods: ['POST']
     )]
-    public function freeze(Request $request, LKUserProfileService $userProfileService)
+    public function enableFreeze(Request $request, LKUserProfileService $userProfileService)
     {
         //TODO: сделать валидацию
         $data = $request->toArray();
         $uid = UserSessionService::getUserId();
 
-        $userProfileService->freezeProfile($uid, $data['startDate'], $data['comment']);
+        $userProfileService->freezeProfile($uid, $data['startDate'], $data['reason_id']);
 
         return $this->responseMessage('Аккаунт будет заморожен с указанного числа!');
     }

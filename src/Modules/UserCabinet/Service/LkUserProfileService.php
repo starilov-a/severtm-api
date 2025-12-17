@@ -3,6 +3,7 @@
 namespace App\Modules\UserCabinet\Service;
 
 use App\Modules\Common\Domain\Entity\FreezeReason;
+use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\Common\Domain\Service\FreezeService;
@@ -27,6 +28,7 @@ class LkUserProfileService
 
         protected UserRepository            $userRepo,
         protected WebUserRepository         $webUserRepo,
+        protected FreezeReasonRepository    $freezeReasonRepo,
     ) {}
     public function getShortUserInfo(int $uid): array
     {
@@ -106,12 +108,12 @@ class LkUserProfileService
     /*
      * Заморозка клиента
      * */
-    public function freezeProfile(int $uid, string $startDate, string $comment): bool
+    public function freezeProfile(int $uid, string $startDate, int $reasonId): bool
     {
         $taskDto = new CreateUserTaskDto(
             $this->userRepo->find($uid),
             new \DateTimeImmutable($startDate),
-            $comment
+            $this->freezeReasonRepo->find($reasonId)
         );
 
         $this->freezeService->createFreezeUserTask($taskDto);

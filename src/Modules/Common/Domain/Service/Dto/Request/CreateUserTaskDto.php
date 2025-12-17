@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service\Dto\Request;
 
+use App\Modules\Common\Domain\Entity\FreezeReason;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserTask;
 use App\Modules\Common\Domain\Entity\UserTaskState;
@@ -14,7 +15,7 @@ class CreateUserTaskDto extends Dto
     public function __construct(
         protected User $user,
         protected \DateTimeImmutable $startDate,
-        protected string $comment,
+        protected FreezeReason $reason,
         protected ?UserTaskType $userTaskType = null,
         protected ?UserTaskState $userTaskState = null,
     ){}
@@ -39,14 +40,14 @@ class CreateUserTaskDto extends Dto
         $this->startDate = $startDate;
     }
 
-    public function getComment(): string
+    public function getFreezeReason(): FreezeReason
     {
-        return $this->comment;
+        return $this->reason;
     }
 
-    public function setComment(string $comment): void
+    public function setFreezeReason(FreezeReason $reason): void
     {
-        $this->comment = $comment;
+        $this->reason = $reason;
     }
 
     public function getUserTaskState(): ?UserTaskState

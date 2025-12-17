@@ -41,7 +41,7 @@ class TaskService
         }
 
         $userTask->setUser($createUserTaskDto->getUser());
-        $userTask->setComment($createUserTaskDto->getComment());
+        $userTask->setComment($createUserTaskDto->getFreezeReason()->getName());
         $userTask->setCreatedAt(new \DateTime());
         $userTask->setStartTime($createUserTaskDto->getStartDate());
         $userTask->setAuthor($master->getWebUser());

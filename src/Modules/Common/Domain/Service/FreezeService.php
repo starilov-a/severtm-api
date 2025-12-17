@@ -40,8 +40,8 @@ class FreezeService
         );
 
         // наполнение необходимых типов и состояний задачи
-        $createUserTaskDto->setUserTaskState($this->taskStateRepo->findOneBy(['str_code' => 'new']));
-        $createUserTaskDto->setUserTaskType($this->taskTypeRepo->findOneBy(['str_code' => 'freeze']));
+        $createUserTaskDto->setUserTaskState($this->taskStateRepo->findOneBy(['code' => 'new']));
+        $createUserTaskDto->setUserTaskType($this->taskTypeRepo->findOneBy(['code' => 'freeze']));
 
         return $this->taskService->createUserTask($createUserTaskDto);
     }

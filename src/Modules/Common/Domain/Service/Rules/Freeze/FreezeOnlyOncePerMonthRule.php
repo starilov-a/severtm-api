@@ -4,6 +4,7 @@ namespace App\Modules\Common\Domain\Service\Rules\Freeze;
 
 use App\Modules\Common\Domain\Entity\UserTaskState;
 use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
+use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskContext;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasStartFreezeDate;
 use App\Modules\Common\Domain\Service\Rules\ContextInterfaces\HasUser;
@@ -25,6 +26,7 @@ class FreezeOnlyOncePerMonthRule extends Rule
     public function __construct(
         protected UserTaskRepository $userTaskRepo,
         protected UserTaskStateRepository $taskStateRepo,
+        protected UserTaskTypeRepository $taskTypeRepo,
     ) {}
 
     /** @var HasWebAction & HasStartFreezeDate & HasUser $context */
@@ -46,8 +48,8 @@ class FreezeOnlyOncePerMonthRule extends Rule
 
         $alreadyFrozen = $this->userTaskRepo->hasTaskWithStateInPeriod(
             $context->getUser(),
-            $this->taskStateRepo->findOneBy(['str_code' => 'new']),
-            $this->taskStateRepo->findOneBy(['str_code' => 'finished']),
+            $this->taskTypeRepo->findOneBy(['code' => 'freeze']),
+            $this->taskStateRepo->findOneBy(['code' => 'finished']),
             new \DateTimeImmutable('first day of this month'),
             $now
         );
