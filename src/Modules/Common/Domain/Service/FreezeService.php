@@ -10,8 +10,8 @@ use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskContext;
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskRuleChain;
+use App\Modules\Common\Domain\Service\Rules\Contexts\CreateFreezeTaskContext;
 
 class FreezeService
 {

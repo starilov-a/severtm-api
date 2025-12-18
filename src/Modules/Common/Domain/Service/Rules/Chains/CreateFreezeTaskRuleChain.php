@@ -2,18 +2,21 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\Chains;
 
-use App\Modules\Common\Domain\Service\Rules\Freeze\CurrentTariffMustAllowFreezeRule;
-use App\Modules\Common\Domain\Service\Rules\Freeze\FreezeEligibilityByBalanceOrSeniorityOrFutureMonthRule;
-use App\Modules\Common\Domain\Service\Rules\Freeze\FreezeOnlyOncePerMonthRule;
-use App\Modules\Common\Domain\Service\Rules\Freeze\NoActiveMultiMonthModesInCurrentPeriodRule;
-use App\Modules\Common\Domain\Service\Rules\Freeze\NoExistingNewFreezeTaskRule;
-use App\Modules\Common\Domain\Service\Rules\Freeze\StartDateMustBeTodayOrFutureRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Freeze\CurrentTariffMustAllowFreezeRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Freeze\FreezeEligibilityByBalanceOrSeniorityOrFutureMonthRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Freeze\FreezeOnlyOncePerMonthRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Freeze\NoActiveMultiMonthModesInCurrentPeriodRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Freeze\NoExistingNewFreezeTaskRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Freeze\StartDateMustBeTodayOrFutureRule;
+use App\Modules\Common\Domain\Service\Rules\Definitions\User\UserMustNotBeBlockedRule;
+use App\Modules\Common\Domain\Service\Rules\Results\ChainRuleItem;
 use App\Modules\Common\Domain\Service\Rules\RuleChain;
-use App\Modules\Common\Domain\Service\Rules\User\UserMustNotBeBlockedRule;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
 class CreateFreezeTaskRuleChain extends RuleChain
 {
     public function __construct(
+        LoggerService $loggerService,
         UserMustNotBeBlockedRule $userMustNotBeBlockedRule,
         StartDateMustBeTodayOrFutureRule $startDateMustBeTodayOrFutureRule,
         FreezeOnlyOncePerMonthRule $freezeOnlyOncePerMonthRule,
@@ -22,14 +25,15 @@ class CreateFreezeTaskRuleChain extends RuleChain
         NoActiveMultiMonthModesInCurrentPeriodRule $noActiveMultiMonthModesInCurrentPeriodRule,
         FreezeEligibilityByBalanceOrSeniorityOrFutureMonthRule $freezeEligibilityRule,
     ) {
-        $this->rules = [
-            $userMustNotBeBlockedRule,
-            $startDateMustBeTodayOrFutureRule,
-            $freezeOnlyOncePerMonthRule,
-            $noExistingNewFreezeTaskRule,
-            $currentTariffMustAllowFreezeRule,
-            $noActiveMultiMonthModesInCurrentPeriodRule,
-            $freezeEligibilityRule,
+        parent::__construct($loggerService);
+        $this->items = [
+            new ChainRuleItem($userMustNotBeBlockedRule),
+            new ChainRuleItem($startDateMustBeTodayOrFutureRule),
+            new ChainRuleItem($freezeOnlyOncePerMonthRule),
+            new ChainRuleItem($noExistingNewFreezeTaskRule),
+            new ChainRuleItem($currentTariffMustAllowFreezeRule),
+            new ChainRuleItem($noActiveMultiMonthModesInCurrentPeriodRule),
+            new ChainRuleItem($freezeEligibilityRule)
         ];
     }
 }

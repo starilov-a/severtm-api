@@ -2,8 +2,6 @@
 
 namespace App\Modules\Common\Domain\Service;
 
-use App\Modules\Common\Domain\Entity\Device;
-use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
@@ -13,12 +11,11 @@ use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\Dto\Request\TypedWriteOffDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\AddServiceModeContext;
 use App\Modules\Common\Domain\Service\Rules\Chains\AddServiceModeRuleChain;
+use App\Modules\Common\Domain\Service\Rules\Contexts\AddServiceModeContext;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
-use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserServModeService
