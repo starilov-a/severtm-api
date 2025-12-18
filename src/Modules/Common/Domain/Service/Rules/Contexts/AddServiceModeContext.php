@@ -5,18 +5,23 @@ namespace App\Modules\Common\Domain\Service\Rules\Contexts;
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\Region;
+use App\Modules\Common\Domain\Entity\User;
+use App\Modules\Common\Domain\Entity\WebAction;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasActionId;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasBoolVar;
+use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasMaster;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasModeUnitCount;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasNullbleVar;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasProdServMode;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasRegion;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasUserId;
+use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasWebAction;
 
-class AddServiceModeContext implements HasUserId, HasActionId, HasProdServMode, HasRegion, HasBoolVar, HasNullbleVar, HasModeUnitCount
+class AddServiceModeContext implements HasWebAction, HasMaster, HasProdServMode, HasRegion, HasBoolVar, HasNullbleVar, HasModeUnitCount
 {
     public function __construct(
-        protected int $userId,
+        protected WebAction $webAction,
+        protected User $master,
         protected int $actionId,
         protected ?FinPeriod $finPeriod,
         protected ProdServMode $mode,
@@ -44,11 +49,6 @@ class AddServiceModeContext implements HasUserId, HasActionId, HasProdServMode, 
         return $this->mode;
     }
 
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
     public function getModeUnitCount(): int
     {
         return $this->modeUnitCount;
@@ -57,5 +57,15 @@ class AddServiceModeContext implements HasUserId, HasActionId, HasProdServMode, 
     public function getRegion(): Region
     {
         return $this->region;
+    }
+
+    public function getMaster(): User
+    {
+        return $this->master;
+    }
+
+    public function getWebAction(): WebAction
+    {
+        return $this->webAction;
     }
 }

@@ -127,7 +127,8 @@ class UserServModeService
 
         // Цепочка проверок
         $this->addServiceModeRuleChain->checkAll(new AddServiceModeContext(
-            userId: $master->getId(),
+            webAction: $webAction,
+            master: $master,
             actionId: $webAction->getId(),
             finPeriod: $optionsUserServModeDto->getFinPeriod(),
             mode: $mode,

@@ -16,7 +16,6 @@ class TaskService
         protected EntityManagerInterface $em,
         protected UserRepository $userRepo,
         protected WebActionRepository $webActionRepo,
-
     ){}
     public function createUserTask(CreateUserTaskDto $createUserTaskDto): UserTask
     {
@@ -49,6 +48,11 @@ class TaskService
         $userTask->setType($createUserTaskDto->getUserTaskType());
 
         return  $this->save($userTask);
+    }
+
+    public function update(UserTask $userTask): UserTask
+    {
+        return $this->save($userTask);
     }
 
     protected function save(UserTask $userTask): UserTask

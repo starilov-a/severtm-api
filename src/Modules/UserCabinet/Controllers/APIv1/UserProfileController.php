@@ -129,4 +129,18 @@ class UserProfileController extends Controller
 
         return $this->responseMessage('Аккаунт будет заморожен с указанного числа!');
     }
+
+    #[Route(
+        '/disable-freeze',
+        name: 'enableFreeze',
+        methods: ['POST']
+    )]
+    public function disableFreeze(LKUserProfileService $userProfileService)
+    {
+        $uid = UserSessionService::getUserId();
+
+        $userProfileService->unfreezeProfile($uid);
+
+        return $this->responseMessage('Аккаунт разморожен!');
+    }
 }

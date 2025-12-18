@@ -4,14 +4,16 @@ namespace App\Modules\Common\Domain\Service\Rules\Contexts;
 
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\WebAction;
+use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasMaster;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasStartFreezeDate;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasUser;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasWebAction;
 
-class CreateFreezeTaskContext implements HasUser, HasWebAction, HasStartFreezeDate
+class CreateFreezeTaskContext implements HasUser, HasWebAction, HasStartFreezeDate, HasMaster
 {
     public function __construct(
         protected WebAction $webAction,
+        protected User $master,
         protected User $user,
         protected \DateTimeImmutable $startDate,
     ) {}
@@ -29,5 +31,10 @@ class CreateFreezeTaskContext implements HasUser, HasWebAction, HasStartFreezeDa
     public function getStartFreezeDate(): \DateTimeImmutable
     {
         return $this->startDate;
+    }
+
+    public function getMaster(): User
+    {
+        return $this->master;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Modules\Common\Domain\Service\Rules\Contexts;
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
+use App\Modules\Common\Domain\Entity\WebAction;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasFinPeriod;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasIsAppliedWriteOff;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasIsRealWriteOff;
@@ -13,10 +14,12 @@ use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasPayabl
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasRefundFinPeriod;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasUser;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasUserServMode;
+use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasWebAction;
 
-class ShouldMakeWriteOffContext implements HasUser, HasFinPeriod, HasPayableType, HasUserServMode, HasRefundFinPeriod, HasIsRealWriteOff, HasIsAppliedWriteOff, HasMaster
+class ShouldMakeWriteOffContext implements HasWebAction, HasMaster,  HasUser, HasFinPeriod, HasPayableType, HasUserServMode, HasRefundFinPeriod, HasIsRealWriteOff, HasIsAppliedWriteOff
 {
     public function __construct(
+        protected WebAction    $webAction,
         protected User         $master,
         protected User         $user,
         protected FinPeriod    $finPeriod,
@@ -84,5 +87,10 @@ class ShouldMakeWriteOffContext implements HasUser, HasFinPeriod, HasPayableType
     public function getMaster(): User
     {
         return $this->master;
+    }
+
+    public function getWebAction(): WebAction
+    {
+        return $this->webAction;
     }
 }

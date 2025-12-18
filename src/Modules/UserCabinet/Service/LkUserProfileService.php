@@ -122,6 +122,16 @@ class LkUserProfileService
     }
 
     /*
+     * Заморозка клиента
+     * */
+    public function unfreezeProfile(int $uid): bool
+    {
+
+
+        return true;
+    }
+
+    /*
      * Получение отсрочки для клиента
      * */
     public function takeBreak(int $uid): bool
