@@ -16,11 +16,15 @@ class ModeAllowedForRegionRule extends Rule
 
     public function __construct(protected ProdServModeRepository $prodServModeRepository){}
 
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
 
-        if (!$context instanceof HasActionId || !$context instanceof HasProdServMode || !$context instanceof HasRegion || !$context instanceof HasUserId)
-            throw new \LogicException('Wrong context passed to ModeAllowedForRegionRule');
+        if (
+            !($context instanceof HasActionId) ||
+            !($context instanceof HasProdServMode) ||
+            !$context instanceof HasRegion ||
+            !$context instanceof HasUserId
+        ) throw new \LogicException('Wrong context passed to ModeAllowedForRegionRule');
 
         $groupsAndRegionIds = [
             1 => 'velikij_novgorod_tariffs',

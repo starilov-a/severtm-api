@@ -45,11 +45,12 @@ class RuleChain implements RuleChainInterface
                 return false;
             }
 
+            $exceptionClass = $item->exceptionClass ?? ImportantBusinessException::class;
 
-            throw new ImportantBusinessException(
+            throw new $exceptionClass(
                 $context->getMaster()->getId() ?? 0,
                 $context->getWebAction()->getId() ?? 0,
-                $result->message ?? 'Ошибка бизнес-правила'
+                $result->message ?? 'Ошибка бизнес-правил'
             );
         }
 

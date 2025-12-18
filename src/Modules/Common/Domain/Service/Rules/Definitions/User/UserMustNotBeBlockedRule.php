@@ -21,7 +21,7 @@ class UserMustNotBeBlockedRule extends Rule
         protected BlockStateRepository $blockStateRepo,
     ){}
     /** @var HasWebAction & HasUser $context */
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (!($context instanceof HasUser) || !($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to UserMustNotBeBlockedRule');

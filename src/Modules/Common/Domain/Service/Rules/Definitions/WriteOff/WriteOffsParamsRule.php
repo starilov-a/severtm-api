@@ -20,16 +20,14 @@ class WriteOffsParamsRule extends Rule
      * @param object $context
      * @return bool
      */
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (
-            !$context instanceof HasActionId ||
-            !$context instanceof HasUser ||
-            !$context instanceof HasPayableType ||
-            !$context instanceof HasUserServMode ||
-            !$context instanceof HasRefundFinPeriod ||
-            !$context instanceof HasIsAppliedWriteOff ||
-            !$context instanceof HasIsRealWriteOff
+            !($context instanceof HasPayableType) ||
+            !($context instanceof HasUserServMode) ||
+            !($context instanceof HasRefundFinPeriod) ||
+            !($context instanceof HasIsAppliedWriteOff) ||
+            !($context instanceof HasIsRealWriteOff)
         ) throw new \LogicException('Wrong context passed to WriteOffsParamsRule');
 
 

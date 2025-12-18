@@ -15,13 +15,12 @@ class UserIsNotActivatedRule extends Rule
         protected LoggerService $loggerService
     ){}
 
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (
-            !$context instanceof HasUser ||
-            !$context instanceof HasMaster
-        )
-            throw new \LogicException('Wrong context passed to UserIsNotActivatedRule');
+            !($context instanceof HasUser) ||
+            !($context instanceof HasMaster)
+        ) throw new \LogicException('Wrong context passed to UserIsNotActivatedRule');
 
         if ($context->getUser()->isJuridical() == 2)
             RuleResult::fail('Пользователь является не активированным юриком');

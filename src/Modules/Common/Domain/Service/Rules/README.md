@@ -159,7 +159,7 @@ class ModeAllowedForRegionRule extends Rule
 
     public function __construct(protected ProdServModeRepository $prodServModeRepository){}
 
-    public function check(object $context): void
+    public function check(object $context = null): void
     {
 
         if (!$context instanceof HasActionId || !$context instanceof HasProdServMode || !$context instanceof HasRegion || !$context instanceof HasUserId)

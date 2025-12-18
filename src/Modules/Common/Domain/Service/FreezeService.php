@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service;
 
+use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserTask;
 use App\Modules\Common\Domain\Repository\FinPeriodRepository;
 use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
@@ -11,7 +12,11 @@ use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\Common\Domain\Service\Rules\Chains\CreateFreezeTaskRuleChain;
+use App\Modules\Common\Domain\Service\Rules\Chains\CreateUnfreezeTaskRuleChain;
 use App\Modules\Common\Domain\Service\Rules\Contexts\CreateFreezeTaskContext;
+use App\Modules\Common\Domain\Service\Rules\Definitions\Semaphore\CloseMonthSemaphoreIsNotRunningRule;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
@@ -21,7 +26,8 @@ use Psr\Log\LoggerInterface;
 class FreezeService
 {
     protected const FREEZE_ACTION_CID = 'W3_FIRST_FREEZE_ACCOUNT';
-    protected const UNFREEZE_ACTION_CID = 'WA_UNFREEZE_ACCOUNT';
+    protected const UNFREEZE_ACTION_CID = 'W3_FIRST_UNFREEZE_ACCOUNT';
+    protected const GET_FREEZE_ACTION_CID = 'WA_FREEZE_INFO';
 
     public function __construct(
         protected EntityManagerInterface $em,
@@ -35,6 +41,7 @@ class FreezeService
         protected WebActionRepository $webActionRepo,
         protected FinPeriodRepository $finPeriodRepo,
         protected CreateFreezeTaskRuleChain $createFreezeTaskRuleChain,
+        protected CloseMonthSemaphoreIsNotRunningRule $closeMonthSemaphoreIsNotRunningRule,
     ) {}
 
     public function createFreezeUserTask(CreateUserTaskDto $createUserTaskDto): UserTask
@@ -78,8 +85,18 @@ class FreezeService
         $master = $this->userRepo->find(UserSessionService::getUserId());
         $webAction = $this->webActionRepo->findIdByCid(self::UNFREEZE_ACTION_CID);
 
-        $userTask->setState($this->taskStateRepo->findOneBy(['code' => 'cancelled']));
-        $this->taskService->update($userTask);
+        // Бизнес логика
+        $ruleResult = $this->closeMonthSemaphoreIsNotRunningRule->check();
+        if (!$ruleResult->ok) {
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $master->getId(),
+                $webAction->getId(),
+                $ruleResult->message,
+                false
+            ));
+            throw new BusinessException('Ошибка сервера.');
+        }
+
 
         return $this->em->getConnection()->transactional(function () use (
             $webAction,
@@ -89,15 +106,24 @@ class FreezeService
             $userTask->setState($this->taskStateRepo->findOneBy(['code' => 'cancelled']));
             $userTask = $this->taskService->update($userTask);
 
+            //TODO: тут нужно реализовать процедуру: __sys_unblock_recalc_tm
+
             $this->loggerService->businessLog(new BusinessLogDto(
                 $master->getId(),
                 $webAction->getId(),
-                'Задача на разморозку пользователя'.$userTask->getUser()->getId().' успешно создана!',
+                'Пользователь'.$userTask->getUser()->getId().' успешно разморожен!.',
                 true
             ));
 
             return $userTask;
         });
+    }
+
+    public function getUserFreezeStatus(User $user): array
+    {
+        $webAction = $this->webActionRepo->findIdByCid(self::GET_FREEZE_ACTION_CID);
+
+        return $this->taskStateRepo->findBy(['user' => $user, 'type' => $this->taskTypeRepo->findOneBy(['code' => 'freeze'])]);
     }
 
     public function getClientReasonForFreeze(): array

@@ -73,7 +73,7 @@ class UserPayable
     protected \DateTimeImmutable $createdAt;
 
     /** Связанный user_serv_modes.usmid (если есть) */
-    #[ORM\ManyToOne(targetEntity: UserServMode::class)]
+    #[ORM\OneToOne(targetEntity: UserServMode::class)]
     #[ORM\JoinColumn(name: 'usmid', referencedColumnName: 'usmid', nullable: true)]
     protected ?UserServMode $userServMode = null;
 

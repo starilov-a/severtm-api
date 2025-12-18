@@ -103,44 +103,4 @@ class UserProfileController extends Controller
         return $this->response($userProfileService->updateUserPassword($uid, $webUseDto), 'Пользовательский пароль обновлен');
 
     }
-
-    #[Route(
-        '/get-reason-for-freeze',
-        name: 'getReasonForFreeze',
-        methods: ['GET']
-    )]
-    public function getReasonForFreeze(LKUserProfileService $userProfileService)
-    {
-        return $this->response($userProfileService->getReasonForFreeze(), 'Список доступных причин заморозки');
-    }
-
-    #[Route(
-        '/enable-freeze',
-        name: 'enableFreeze',
-        methods: ['POST']
-    )]
-    public function enableFreeze(Request $request, LKUserProfileService $userProfileService)
-    {
-        //TODO: сделать валидацию
-        $data = $request->toArray();
-        $uid = UserSessionService::getUserId();
-
-        $userProfileService->freezeProfile($uid, $data['startDate'], $data['reason_id']);
-
-        return $this->responseMessage('Аккаунт будет заморожен с указанного числа!');
-    }
-
-    #[Route(
-        '/disable-freeze',
-        name: 'enableFreeze',
-        methods: ['POST']
-    )]
-    public function disableFreeze(LKUserProfileService $userProfileService)
-    {
-        $uid = UserSessionService::getUserId();
-
-        $userProfileService->unfreezeProfile($uid);
-
-        return $this->responseMessage('Аккаунт разморожен!');
-    }
 }

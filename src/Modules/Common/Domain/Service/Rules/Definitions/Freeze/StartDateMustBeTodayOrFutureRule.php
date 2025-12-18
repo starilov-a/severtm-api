@@ -15,7 +15,7 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 class StartDateMustBeTodayOrFutureRule extends Rule
 {
     /** @var HasWebAction & HasStartFreezeDate $context */
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (!($context instanceof HasStartFreezeDate) || !($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to StartDateMustBeTodayOrFutureRule');

@@ -26,7 +26,7 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
  */
 class FreezeEligibilityByBalanceOrSeniorityOrFutureMonthRule extends Rule
 {
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         /** @var HasWebAction & HasStartFreezeDate & HasUser $context */
         if (

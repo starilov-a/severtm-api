@@ -12,11 +12,13 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 class UnitsMustBePositiveRule extends Rule
 {
 
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
-        if (!$context instanceof HasUserId || !$context instanceof HasActionId || !$context instanceof HasModeUnitCount) {
-            throw new \LogicException('Wrong context passed to UnitsMustBePositiveRule');
-        }
+        if (
+            !($context instanceof HasUserId) ||
+            !($context instanceof HasActionId) ||
+            !($context instanceof HasModeUnitCount)
+        ) throw new \LogicException('Wrong context passed to UnitsMustBePositiveRule');
 
         // Основная бизнес логика
         if ($context->getModeUnitCount() < 1)

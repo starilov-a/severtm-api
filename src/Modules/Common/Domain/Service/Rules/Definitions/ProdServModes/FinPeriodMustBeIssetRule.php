@@ -12,12 +12,14 @@ use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 class FinPeriodMustBeIssetRule extends Rule
 {
 
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         //TODO стоит перенести в папку FinPeriod
-        if (!$context instanceof HasUserId || !$context instanceof HasActionId || !$context instanceof HasNullbleVar) {
-            throw new \LogicException('Wrong context passed to FinPeriodMustBeIssetRule');
-        }
+        if (
+            !($context instanceof HasUserId) ||
+            !($context instanceof HasActionId) ||
+            !($context instanceof HasNullbleVar)
+        ) throw new \LogicException('Wrong context passed to FinPeriodMustBeIssetRule');
 
         // Основная бизнес логика
         if ($context->getNullbleVar() === null)

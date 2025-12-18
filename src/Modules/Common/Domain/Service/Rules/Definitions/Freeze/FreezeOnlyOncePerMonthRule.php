@@ -29,7 +29,7 @@ class FreezeOnlyOncePerMonthRule extends Rule
     ) {}
 
     /** @var HasWebAction & HasStartFreezeDate & HasUser $context */
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (
             !($context instanceof HasWebAction) ||

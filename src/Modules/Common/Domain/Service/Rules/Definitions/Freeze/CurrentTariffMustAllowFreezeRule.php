@@ -20,7 +20,7 @@ class CurrentTariffMustAllowFreezeRule extends Rule
         private Connection $connection,
     ) {}
 
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (!($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to CurrentTariffMustAllowFreezeRule');

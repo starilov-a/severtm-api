@@ -6,5 +6,5 @@ use App\Modules\Common\Domain\Service\Rules\Results\RuleResult;
 
 interface RuleInterface
 {
-    public function check(object $context): RuleResult;
+    public function check(object $context = null): RuleResult;
 }

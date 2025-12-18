@@ -15,16 +15,18 @@ class WriteOff
     private int $id;
 
     /** users.id */
-    #[ORM\Column(name: 'uid', type: Types::INTEGER, options: ['unsigned' => true])]
-    private int $userId;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'id', nullable: false)]
+    protected User $user;
 
     /** Опциональный код продукта (как в БД) */
     #[ORM\Column(name: 'prod_code', type: Types::INTEGER, options: ['unsigned' => true])]
     private int $productCode;
 
     /** prod_serv_mode_costs.id */
-    #[ORM\Column(name: 'srvmodecost_id', type: Types::INTEGER)]
-    private int $serviceModeCostId;
+    #[ORM\ManyToOne(targetEntity: ProdServModeCost::class)]
+    #[ORM\JoinColumn(name: 'srvmodecost_id', referencedColumnName: 'id', nullable: false)]
+    protected ProdServModeCost $modeCost;
 
     /** Сумма списания (FLOAT(16,4) в БД) */
     #[ORM\Column(name: 'qnt', type: Types::FLOAT)]
@@ -39,8 +41,9 @@ class WriteOff
     private int $discountDateTs;
 
     /** Доп. пометка (мастер/подуслуга) */
-    #[ORM\Column(name: 'master', type: Types::STRING, length: 20)]
-    private string $master;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'master', referencedColumnName: 'id', nullable: false)]
+    private User $master;
 
     #[ORM\Column(name: 'prod_comments', type: Types::STRING, length: 128, nullable: true)]
     private ?string $comment = null;
@@ -57,25 +60,28 @@ class WriteOff
     #[ORM\Column(name: 'charge_date', type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $chargedAt;
 
-    /** user_payables.upid (если есть связь) */
-    #[ORM\Column(name: 'upid', type: Types::INTEGER, nullable: true)]
-    private ?int $payableId = null;
+    #[ORM\OneToOne(targetEntity: UserPayable::class)]
+    #[ORM\JoinColumn(name: 'upid', referencedColumnName: 'upid', nullable: true)]
+    protected ?UserPayable $payable = null;
 
     /* ---------------- Getters ---------------- */
 
     public function getId(): int { return $this->id; }
-    public function getUserId(): int { return $this->userId; }
+    public function getUser(): User { return $this->user; }
     public function getProductCode(): int { return $this->productCode; }
-    public function getServiceModeCostId(): int { return $this->serviceModeCostId; }
+    public function getServiceModeCost(): ProdServModeCost { return $this->modeCost; }
     public function getAmount(): float { return $this->amount; }
     public function getUnits(): float { return $this->units; }
     public function getDiscountDateTs(): int { return $this->discountDateTs; }
-    public function getMaster(): string { return $this->master; }
+    public function getMaster(): User { return $this->master; }
     public function getComment(): ?string { return $this->comment; }
     public function getBalanceBefore(): ?float { return $this->balanceBefore; }
     public function getBalanceAfter(): ?float { return $this->balanceAfter; }
     public function getChargedAt(): \DateTimeImmutable { return $this->chargedAt; }
-    public function getPayableId(): ?int { return $this->payableId; }
+    public function getPayable(): ?UserPayable
+    {
+        return $this->payable;
+    }
 
     /** Удобный доступ к discount_date как к дате */
     public function getDiscountedAt(): ?\DateTimeImmutable

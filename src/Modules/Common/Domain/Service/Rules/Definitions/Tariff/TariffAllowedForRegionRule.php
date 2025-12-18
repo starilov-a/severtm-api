@@ -16,7 +16,7 @@ class TariffAllowedForRegionRule extends Rule
 
     public function __construct(protected ModeAllowedForRegionRule $modeAllowedForRegionRule){}
 
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
 
         if (!($context instanceof HasActionId) ||

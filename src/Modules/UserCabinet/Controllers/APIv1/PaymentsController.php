@@ -35,11 +35,14 @@ class PaymentsController extends Controller
     public function getWriteOffs(Request $request, LkPaymentsService $paymentsService): JsonResponse
     {
         $filterDto = new FilterDto();
-        $filterDto->setLimit($request->query->get('limit'));
-        $filterDto->setOffset($request->query->get('offset'));
+        if ($request->query->get('limit'))
+            $filterDto->setLimit($request->query->get('limit'));
+        if ($request->query->get('offset'))
+            $filterDto->setOffset($request->query->get('offset'));
 
         $uid = UserSessionService::getUserId();
-        return $this->responseData($paymentsService->getWriteOffs($uid, $filterDto));
+
+        return $this->responseData($paymentsService->getWriteOffs($uid, $filterDto)->toArray());
     }
 
     #[Route(
@@ -50,12 +53,15 @@ class PaymentsController extends Controller
     public function getReplenishments(Request $request, LkPaymentsService $paymentsService): JsonResponse
     {
         $filterDto = new FilterDto();
-        $filterDto->setLimit($request->query->get('limit'));
-        $filterDto->setOffset($request->query->get('offset'));
+
+        if ($request->query->get('limit'))
+            $filterDto->setLimit($request->query->get('limit'));
+        if ($request->query->get('offset'))
+            $filterDto->setOffset($request->query->get('offset'));
 
         $uid = UserSessionService::getUserId();
 
-        return $this->responseData($paymentsService->getReplenishments($uid, $filterDto));
+        return $this->responseData($paymentsService->getReplenishments($uid, $filterDto)->toArray());
     }
 
     #[Route(

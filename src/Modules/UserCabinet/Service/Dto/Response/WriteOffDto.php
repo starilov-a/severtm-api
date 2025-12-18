@@ -4,14 +4,16 @@ namespace App\Modules\UserCabinet\Service\Dto\Response;
 
 
 
+use App\Modules\Common\Domain\Entity\UserPayable;
 use App\Modules\Common\Domain\Entity\WriteOff;
 use App\Modules\Common\Domain\Service\Dto\Dto;
 
 class WriteOffDto extends Dto
 {
     private int $id;
-    private ?string $payableId;
     private ?string $date;
+    private float $amount;
+    private string $prodServMode;
 
 
     /**
@@ -22,8 +24,9 @@ class WriteOffDto extends Dto
     public function __construct(WriteOff $writeOff)
     {
         $this->id = $writeOff->getId();
-        $this->payableId = $writeOff->getPayableId();
         $this->date = $writeOff->getChargedAt()->format('Y-m-d H:i:s');
+        $this->amount = $writeOff->getAmount();
+        $this->prodServMode = $writeOff->getServiceModeCost()->getMode()->getName();
     }
 
     public function getId(): int
@@ -31,14 +34,19 @@ class WriteOffDto extends Dto
         return $this->id;
     }
 
-    public function getPayableId(): string
+    public function getUserServMode(): string
     {
-        return $this->payableId;
+        return $this->prodServMode;
     }
 
     public function getDate(): ?string
     {
         return $this->date;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
     }
 
 }

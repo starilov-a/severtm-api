@@ -2,7 +2,9 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
+use App\Modules\Common\Domain\Repository\WriteOffRepository;
 use App\Modules\Common\Domain\Service\BalanceService;
 use App\Modules\Common\Domain\Service\DebtService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
@@ -21,9 +23,11 @@ class LkPaymentsService
         protected BalanceService $balanceSerivce,
         protected WriteOffService $writeOffService,
         protected ReplenishmentService $replenishmentService,
+        protected ReplenishmentRepository $replenishmentRepository,
         protected DebtService $debtService,
         protected UserPaymentsService $userPaymentsService,
-        protected UserRepository $userRepo
+        protected UserRepository $userRepo,
+        protected WriteOffRepository $writeOffRepo,
     ){}
 
     /*
@@ -65,14 +69,17 @@ class LkPaymentsService
      * */
     public function getWriteOffs(int $uid, FilterDto $filter): WriteOffCollectionDto
     {
-        $user = $this->userRepo->find($uid);
-
-        $writeOffs = $this->writeOffService->getUserWriteOffs($user, $filter);
+        $writeOffs = $this->writeOffRepo->findBy(
+            ['user' => $this->userRepo->find($uid)],
+            ['discountDateTs' => 'DESC'],
+            $filter->getLimit(),
+            $filter->getOffset()
+        );
 
         $dtoCollection = new WriteOffCollectionDto();
-        foreach ($writeOffs as $writeOff) {
+        foreach ($writeOffs as $writeOff)
             $dtoCollection->add(new WriteOffDto($writeOff));
-        }
+
         return $dtoCollection;
     }
 
@@ -81,14 +88,16 @@ class LkPaymentsService
      * */
     public function getReplenishments(int $uid, FilterDto $filter): ReplenishmentsCollectionDto
     {
-        $user = $this->userRepo->find($uid);
-
-        $replenishments = $this->replenishmentService->getUserReplenishments($user, $filter);
+        $replenishments = $this->replenishmentRepository->findBy(
+            ['user' => $this->userRepo->find($uid)],
+            ['dateTs' => 'DESC'],
+            $filter->getLimit(),
+            $filter->getOffset()
+        );
 
         $dtoCollection = new ReplenishmentsCollectionDto();
-        foreach ($replenishments as $replenishment) {
+        foreach ($replenishments as $replenishment)
             $dtoCollection->add(new ReplenishmentDto($replenishment));
-        }
 
         return $dtoCollection;
     }

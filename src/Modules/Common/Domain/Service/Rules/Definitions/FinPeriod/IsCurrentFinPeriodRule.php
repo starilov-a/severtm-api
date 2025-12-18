@@ -12,9 +12,9 @@ class IsCurrentFinPeriodRule extends Rule
     public function __construct(
         protected LoggerService $loggerService,
     ){}
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
-        if (!$context instanceof HasFinPeriod)
+        if (!($context instanceof HasFinPeriod))
             throw new \LogicException('Wrong context passed to IsCurrentFinPeriodRule');
 
         if (!$context->getFinPeriod()->isCurrent())

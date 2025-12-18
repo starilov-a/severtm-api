@@ -48,8 +48,11 @@ class Replenishment
     private int $realPayDateTs;
 
     /** users.id */
-    #[ORM\Column(name: 'uid', type: Types::INTEGER, options: ['unsigned' => true])]
     private int $userId;
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'id', nullable: false)]
+    protected User $user;
 
     /** Перенесён ли  */
     #[ORM\Column(name: 'has_been_transferred', type: Types::INTEGER)]

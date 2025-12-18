@@ -24,7 +24,7 @@ class NoExistingNewFreezeTaskRule extends Rule
     ) {}
 
     /** @var HasUser & HasWebAction $context */
-    public function check(object $context): RuleResult
+    public function check(object $context = null): RuleResult
     {
         if (!($context instanceof HasUser) || !($context instanceof HasWebAction))
             throw new \LogicException('Wrong context passed to NoExistingNewFreezeTaskRule');
