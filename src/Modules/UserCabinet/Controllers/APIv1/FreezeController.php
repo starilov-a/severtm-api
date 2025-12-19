@@ -43,7 +43,7 @@ class FreezeController extends Controller
 
     #[Route(
         '/disable-freeze',
-        name: 'enableFreeze',
+        name: 'disableFreeze',
         methods: ['POST']
     )]
     public function disableFreeze(LkFreezeService $freezeService): JsonResponse
@@ -63,7 +63,7 @@ class FreezeController extends Controller
     public function getStatusFreeze(LkFreezeService $freezeService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        $freezeService->get($uid);
+        $freezeService->unfreezeProfile($uid);
 
         return $this->responseMessage('Аккаунт разморожен!');
     }

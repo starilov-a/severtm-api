@@ -123,6 +123,8 @@ class FreezeService
     {
         $webAction = $this->webActionRepo->findIdByCid(self::GET_FREEZE_ACTION_CID);
 
+        //TODO: много логики
+
         return $this->taskStateRepo->findBy(['user' => $user, 'type' => $this->taskTypeRepo->findOneBy(['code' => 'freeze'])]);
     }
 
