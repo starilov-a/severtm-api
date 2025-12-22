@@ -48,8 +48,6 @@ class TariffService
 
         $this->modeAllowedForRegionRule->check(
             new TariffAllowedForRegionContext(
-                $master->getId(),
-                $webAction->getId(),
                 $newNextTariff,
                 $user->getRegion()
             )

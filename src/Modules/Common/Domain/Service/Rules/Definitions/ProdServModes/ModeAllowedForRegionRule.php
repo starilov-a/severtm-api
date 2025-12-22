@@ -6,10 +6,10 @@ use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasActionId;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasProdServMode;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasRegion;
+use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasTariff;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasUserId;
 use App\Modules\Common\Domain\Service\Rules\Results\RuleResult;
 use App\Modules\Common\Domain\Service\Rules\Rule;
-use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 
 class ModeAllowedForRegionRule extends Rule
 {
@@ -20,10 +20,8 @@ class ModeAllowedForRegionRule extends Rule
     {
 
         if (
-            !($context instanceof HasActionId) ||
-            !($context instanceof HasProdServMode) ||
-            !$context instanceof HasRegion ||
-            !$context instanceof HasUserId
+            !($context instanceof HasTariff) ||
+            !($context instanceof HasRegion)
         ) throw new \LogicException('Wrong context passed to ModeAllowedForRegionRule');
 
         $groupsAndRegionIds = [
