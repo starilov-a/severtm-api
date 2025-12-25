@@ -19,8 +19,9 @@ final class Auth
     {
 
 
-        if(UserSessionService::loggedIn())
-            throw new AuthException("Уже авторизован", 403);
+//        if(UserSessionService::loggedIn()){
+//            throw new AuthException("Уже авторизован", 403);
+//        }
 
         $user = $this->em->getRepository(WebUser::class)->findOneBy(
             [
