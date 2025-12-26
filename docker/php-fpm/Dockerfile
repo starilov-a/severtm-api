@@ -1,11 +1,9 @@
 FROM php:8.2-fpm-alpine
 
-
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG NO_PROXY
 
-# И сделаем их доступными всем RUN-командам и приложениям
 ENV http_proxy=${HTTP_PROXY} \
     https_proxy=${HTTPS_PROXY} \
     no_proxy=${NO_PROXY}
@@ -29,17 +27,16 @@ RUN apk add --no-cache \
 RUN docker-php-ext-install pdo pdo_mysql
 
 ARG INSTALL_XDEBUG=false
-RUN if [ ${INSTALL_XDEBUG} = true ]; \
-    then \
-     pecl install xdebug && docker-php-ext-enable xdebug; \
-    fi;
+RUN if [ ${INSTALL_XDEBUG} = true ]; then \
+        pecl install xdebug && docker-php-ext-enable xdebug; \
+    fi
 
 COPY ./docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Configure non-root user.
 ARG PUID=1000
 ARG PGID=1000
-RUN apk --no-cache add shadow && \
+RUN apk add --no-cache shadow && \
     groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
