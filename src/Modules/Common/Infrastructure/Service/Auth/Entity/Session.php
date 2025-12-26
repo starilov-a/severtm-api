@@ -52,7 +52,7 @@ final class Session
 
     static public function getUserIp(): string
     {
-        $Ip = $_SERVER['REMOTE_ADDR'];
+        $Ip = $_SERVER['REMOTE_ADDR'] ?? null;
         if (getenv('HTTP_X_FORWARDED_FOR')) {
             if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", getenv('HTTP_X_FORWARDED_FOR'), $Ip3)) {
                 $Ip2 = array('/^0\./', '/^127\.0\.0\.1/', '/^192\.168\..*/', '/^172\.16\..*/', '/^10..*/', '/^224..*/', '/^240..*/');
@@ -65,8 +65,8 @@ final class Session
         return $Ip;
     }
 
-    static public function getUserAgent(): string
+    static public function getUserAgent(): ?string
     {
-        return $_SERVER['HTTP_USER_AGENT'];
+        return $_SERVER['HTTP_USER_AGENT'] ?? null;
     }
 }
