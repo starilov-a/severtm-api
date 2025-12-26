@@ -68,3 +68,10 @@ docker/.env
 #dashboard
 public/data/dashboard.json
 public/dashboard.php
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
+.env.test.local
+/tmp
