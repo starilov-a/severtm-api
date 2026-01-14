@@ -11,9 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BlockHistoryService
 {
-
-
-
     public function __construct(
         protected EntityManagerInterface    $em,
 
