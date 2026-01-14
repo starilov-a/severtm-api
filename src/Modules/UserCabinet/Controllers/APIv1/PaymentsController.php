@@ -74,4 +74,15 @@ class PaymentsController extends Controller
         $uid = UserSessionService::getUserId();
         return $this->responseData($paymentsService->getDebt($uid));
     }
+
+    #[Route(
+        'get-payment-link',
+        name: 'getPaymentLink',
+        methods: ['GET']
+    )]
+    public function getPaymentLink(LkPaymentsService $paymentsService): JsonResponse
+    {
+        $link = $paymentsService->getPaymentLink(UserSessionService::getDistrict());
+        return $this->responseData($link);
+    }
 }

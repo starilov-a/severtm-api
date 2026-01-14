@@ -43,7 +43,7 @@ class UserSessionService
         return $_SESSION['permsBuilder'] ?? false;
     }
 
-    static public function getDistrict(): bool
+    static public function getDistrict(): ?int
     {
         return $_SESSION['district'] ?? false;
     }
