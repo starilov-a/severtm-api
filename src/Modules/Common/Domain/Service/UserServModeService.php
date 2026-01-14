@@ -6,13 +6,14 @@ use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Repository\FinPeriodRepository;
+use App\Modules\Common\Domain\Repository\UserJurStateRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
-use App\Modules\Common\Domain\Service\Dto\Request\TypedWriteOffDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\AddServiceModeRuleChain;
+use App\Modules\Common\Domain\Service\Rules\Chains\UserServMode\AddServiceModeRuleChain;
 use App\Modules\Common\Domain\Service\Rules\Contexts\AddServiceModeContext;
+use App\Modules\Common\Domain\Service\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
@@ -21,18 +22,19 @@ use Doctrine\ORM\EntityManagerInterface;
 class UserServModeService
 {
     public function __construct(
-        protected EntityManagerInterface $em,
-        protected UserServModeRepository $userServModeRepo,
-        protected DeviceService $deviceService,
-        protected WriteOffService $writeOffService,
-        protected LoggerService $loggerService,
-        protected WebActionRepository $webActionRepo,
-        protected UserRepository $userRepo,
-        protected FinPeriodRepository $finPeriodRepo,
-        protected UserOwnDeviceService $userOwnDeviceService,
+        protected EntityManagerInterface    $em,
+        protected UserServModeRepository    $userServModeRepo,
+        protected DeviceService             $deviceService,
+        protected LoggerService             $loggerService,
+        protected WebActionRepository       $webActionRepo,
+        protected UserRepository            $userRepo,
+        protected FinPeriodRepository       $finPeriodRepo,
+        protected UserOwnDeviceService      $userOwnDeviceService,
+        protected UserJurStateRepository    $jurStateRepo,
+        protected UserIsNotNotActivatedRule $userIsNotNotActivatedRule,
 
-        protected AddServiceModeRuleChain $addServiceModeRuleChain,
-    ){}
+        protected AddServiceModeRuleChain   $addServiceModeRuleChain,
+    ) {}
 
     /*
      * Получение активных режимов клиента с услугами
@@ -66,61 +68,10 @@ class UserServModeService
         return $this->userServModeRepo->findCurrentModesWithService($user);
     }
 
-    // Использовать для добавления услуги в текущем месяце
-    public function addCurrentServiceMode(
-        User $user,
-        ProdServMode $mode,
-        OptionsUserServModeDto $optionsUserServModeDto = new OptionsUserServModeDto
-    ): void
-    {
-        $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getCurrent());
-        $this->addServiceMode($user, $mode, $optionsUserServModeDto);
-    }
-
-    // Использовать для добавления услуги в следующем месяце
-    public function addNextServiceMode(
-        User $user,
-        ProdServMode $mode,
-        OptionsUserServModeDto $optionsUserServModeDto = new OptionsUserServModeDto
-    ): void
-    {
-        $optionsUserServModeDto->setFinPeriod($this->finPeriodRepo->getNext());
-        $this->addServiceMode($user, $mode, $optionsUserServModeDto);
-    }
-
-    public function disableServiceMode(UserServMode $userServMode)
-    {
-        $master = $this->userRepo->find(UserSessionService::getUserId());
-        $webAction = $this->webActionRepo->findIdByCid('WA_USERS_DELETE_SERVICE');
-        $currentFinPeriod = $this->finPeriodRepo->getCurrent();
-
-        //Транзакция
-        $this->em->getConnection()->transactional(function () use (
-            $master,
-            $userServMode,
-            $webAction
-        ) {
-            $userServMode->setIsActive(false);
-            //Отвязка устройства
-            if ($userServMode->getDevice())
-                $this->userOwnDeviceService->removeDeviceFromUser($userServMode->getDevice());
-
-            $this->save($userServMode);
-
-            $this->loggerService->businessLog(new BusinessLogDto(
-                $master->getId(),
-                $webAction->getId(),
-                'Услуга('.$userServMode->getMode()->getName().',usmid:'.$userServMode->getId().' ) 
-                отключена у пользователя: ' . $userServMode->getUser()->getId(),
-                true
-            ));
-        });
-    }
-
     /*
      * Добавление нового режима услуги клиенту
      * */
-    protected function addServiceMode(User $user, ProdServMode $mode, OptionsUserServModeDto $optionsUserServModeDto): void
+    public function addServiceMode(User $user, ProdServMode $mode, OptionsUserServModeDto $optionsUserServModeDto): UserServMode
     {
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_ADD_SERVICES');
         $master = $this->userRepo->find(UserSessionService::getUserId());
@@ -137,47 +88,29 @@ class UserServModeService
             modeUnitCount: $optionsUserServModeDto->getCountUnits(),
         ));
 
-        // Добавление услуги в транзакции
-        $this->em->getConnection()->transactional(function () use (
-            $user,
-            $master,
-            $mode,
-            $webAction,
-            $optionsUserServModeDto
-        ) {
-            // 1. Добавление usm
-            $userServMode = $this->createUserServMode($user, $mode, $optionsUserServModeDto);
+        // 1. Добавление usm
+        $userServMode = $this->createUserServMode($user, $mode, $optionsUserServModeDto);
 
-            // 2 Подготовка объекта для создания списания
-            $writeOffDto = new TypedWriteOffDto();
-            $writeOffDto->setServMode($userServMode);
-            $writeOffDto->setPayableType('no_packet');
-            $writeOffDto->setComment('Добавление услуги ' . $userServMode->getMode()->getName());
-            $writeOffDto->setUser($user);
+        // Добавление устройства и привязка к текущей услуге
+        if (!empty($optionsUserServModeDto->getDeviceDto())) {
+            $device = $this->deviceService->addOrCreateForUser($user, $optionsUserServModeDto->getDeviceDto());
+            $userServMode->setDevice($device);
+        }
 
-            // 3. Добавление устройства и привязка к текущей услуге
-            if (!empty($optionsUserServModeDto->getDeviceDto())) {
-                $device = $this->deviceService->addOrCreateForUser($user, $optionsUserServModeDto->getDeviceDto());
-                $userServMode->setDevice($device);
-                $writeOffDto->setDevice($device);
-            }
+        // фиксируем $userServMode
+        $this->save($userServMode);
 
-            // 4 Списание деняг
-            $this->writeOffService->makeWriteOffForAddingMode($writeOffDto);
+        // 4. Логирование
+        $comment = $optionsUserServModeDto->getComment();
+        $this->loggerService->businessLog(new BusinessLogDto(
+            $master->getId(),
+            $webAction->getId(),
+            'Услуга('.$mode->getName().':'.$mode->getId().' ) добавлена пользователю ' . $user->getId() .
+            '. Кол-во услуг - ' . $optionsUserServModeDto->getCountUnits(). '. ' . (!empty($comment) ? 'Комментарий ('.$comment.')' : '' ) ,
+            true
+        ));
 
-            // фиксируем $userServMode
-            $this->save($userServMode);
-
-            // 5. Логирование
-            $comment = $optionsUserServModeDto->getComment();
-            $this->loggerService->businessLog(new BusinessLogDto(
-                $master->getId(),
-                $webAction->getId(),
-                'Услуга('.$mode->getName().':'.$mode->getId().' ) добавлена пользователю ' . $user->getId() .
-                '. Кол-во услуг - ' . $optionsUserServModeDto->getCountUnits(). '. ' . (!empty($comment) ? 'Комментарий ('.$comment.')' : '' ) ,
-                true
-            ));
-        });
+        return $userServMode;
     }
 
     protected function createUserServMode(User $user, ProdServMode $prodServMode, OptionsUserServModeDto $optionsUserServModeDto): UserServMode
@@ -194,8 +127,16 @@ class UserServModeService
         return $this->save($userServMode);
     }
 
+    public function delete(ProdServMode $prodServMode): bool
+    {
+        $this->em->remove($prodServMode);
+        $this->em->flush();
+
+        return true;
+    }
+
     // Конечное применение userServMode
-    protected function save(UserServMode $userServMode): UserServMode
+    public function save(UserServMode $userServMode): UserServMode
     {
         $this->em->persist($userServMode);
         $this->em->flush();

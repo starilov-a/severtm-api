@@ -20,8 +20,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LkUserProfileService
 {
-
-
     public function __construct(
         protected EntityManagerInterface    $em,
 
@@ -96,14 +94,15 @@ class LkUserProfileService
     /*
      * Получение отсрочки для клиента
      * */
-    public function takeBreak(int $uid): bool
+    public function takeBreak(int $uid): void
     {
-        return false;
+
     }
 
-    public function getCountAvailableBreaks(int $uid): int
+    public function getStatusBreaks(int $uid): array
     {
 
+        return [];
     }
 
 }

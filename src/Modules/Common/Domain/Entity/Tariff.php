@@ -39,7 +39,7 @@ class Tariff
     private string $excessCost;
 
     #[ORM\Column(name: 'bw', type: Types::BIGINT, options: ['unsigned' => true])]
-    private string $bandwidth;
+    private string $bw;
 
     #[ORM\Column(name: 'tar_period', type: Types::INTEGER, nullable: true, options: ['unsigned' => true])]
     private ?int $tariffPeriod = null;
@@ -73,7 +73,7 @@ class Tariff
     private ProdServMode $serviceMode;
 
     #[ORM\Column(name: 'maxbw', type: Types::BIGINT, options: ['unsigned' => true])]
-    private string $maxBandwidth;
+    private string $maxBw;
 
     /**
      * EXTRA_LAZY: contains(), count() и т.п. будут выполнять точечные запросы,
@@ -90,8 +90,11 @@ class Tariff
     public function getTid(): int { return $this->tid; }
     public function getName(): ?string { return $this->name; }
     public function getPrice(): float { return (float) $this->price; }
+    public function getTariffPeriod(): int { return $this->tariffPeriod; }
     public function getServiceModeId(): int { return $this->serviceMode->getId(); }
     public function getProdServMode(): ProdServMode{ return $this->serviceMode;}
+    public function getBw(): string {return $this->bw;}
+    public function getMaxBw(): string {return $this->maxBw;}
 
     // TODO: сделать через группу "Отключен от сети"(?)
     public function isDisconnected(): bool
@@ -114,8 +117,6 @@ class Tariff
         return $this->hasGroupCode('canBeChangeByClient');
     }
 
-
-
     private function hasGroupCode(string $code): bool
     {
         // шаблон, который накладывается в указанную модель
@@ -125,5 +126,100 @@ class Tariff
 
         // Doctrine построит SQL с WHERE code = ? AND tc_id = ? LIMIT 1
         return !$this->groups->matching($criteria)->isEmpty();
+    }
+
+    public function setDepType(int $depType): void
+    {
+        $this->depType = $depType;
+    }
+
+    public function setDiscount(float $discount): void
+    {
+        $this->discount = $discount;
+    }
+
+    public function setTarNext(?int $tarNext): void
+    {
+        $this->tarNext = $tarNext;
+    }
+
+    public function setTarUser(string $tarUser): void
+    {
+        $this->tarUser = $tarUser;
+    }
+
+    public function setTarMaster(string $tarMaster): void
+    {
+        $this->tarMaster = $tarMaster;
+    }
+
+    public function setTarAdmin(string $tarAdmin): void
+    {
+        $this->tarAdmin = $tarAdmin;
+    }
+
+    public function setEndAt(?\DateTimeInterface $endAt): void
+    {
+        $this->endAt = $endAt;
+    }
+
+    public function setStartAt(?\DateTimeInterface $startAt): void
+    {
+        $this->startAt = $startAt;
+    }
+
+    public function setTariffPeriod(?int $tariffPeriod): void
+    {
+        $this->tariffPeriod = $tariffPeriod;
+    }
+
+    public function setBw(string $bw): void
+    {
+        $this->bw = $bw;
+    }
+
+    public function setMaxBw(string $maxBw): void
+    {
+        $this->maxBw = $maxBw;
+    }
+
+    public function setExcessCost(string $excessCost): void
+    {
+        $this->excessCost = $excessCost;
+    }
+
+    public function setPrepaidTraffic(string $prepaidTraffic): void
+    {
+        $this->prepaidTraffic = $prepaidTraffic;
+    }
+
+    public function setPrice(string $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setChangeUserId(int $changeUserId): void
+    {
+        $this->changeUserId = $changeUserId;
+    }
+
+    public function setChangeDate(int $changeDate): void
+    {
+        $this->changeDate = $changeDate;
+    }
+
+    public function setTid(int $tid): void
+    {
+        $this->tid = $tid;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 }

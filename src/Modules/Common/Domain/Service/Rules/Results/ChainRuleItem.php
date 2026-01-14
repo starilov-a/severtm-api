@@ -2,7 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service\Rules\Results;
 
-use App\Modules\Common\Domain\Service\Rules\RuleInterface;
+use App\Modules\Common\Domain\Service\Rules\Interfaces\RuleInterface;
 
 final class ChainRuleItem
 {

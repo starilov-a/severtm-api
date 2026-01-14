@@ -19,27 +19,24 @@ class ModeAllowedForRegionRule extends Rule
     public function check(object $context = null): RuleResult
     {
 
-        if (
-            !($context instanceof HasTariff) ||
-            !($context instanceof HasRegion)
-        ) throw new \LogicException('Wrong context passed to ModeAllowedForRegionRule');
+//        if (!($context instanceof HasTariff))
+//            throw new \LogicException('Wrong context passed to ModeAllowedForRegionRule');
+//
+//        $groupsAndRegionIds = [
+//            1 => 'velikij_novgorod_tariffs',
+//            2 => 'cherepevets_tariffs',
+//            3 => 'chelyzbinsk_tariffs',
+//            4 => 'yaroslavl_tariffs'
+//        ];
 
-        $groupsAndRegionIds = [
-            1 => 'velikij_novgorod_tariffs',
-            2 => 'cherepevets_tariffs',
-            3 => 'chelyzbinsk_tariffs',
-            4 => 'yaroslavl_tariffs'
-        ];
-
-        $mode = $context->getMode();
-        $region = $context->getRegion();
-
-        $isAvailable = $this->prodServModeRepository->isAvailableForRegionByCode($mode->getId(), $groupsAndRegionIds[$region->getId()]);
+//        $tariff = $context->getTariff();
+//        $region = $context->getRegion();
+//        $isAvailable = $this->prodServModeRepository->isAvailableForRegionByCode($mode->getId(), $groupsAndRegionIds[$region->getId()]);
 
         //TODO: настроить доступность по регионам
-
-        if (false)
-            return RuleResult::fail("Режим {$mode->getName()}({$mode->getId()}) не доступен в регионе {$region->getName()}");
+//
+//        if (false)
+//            return RuleResult::fail("Режим {$mode->getName()}({$mode->getId()}) не доступен в регионе {$region->getName()}");
 
         return RuleResult::ok();
     }

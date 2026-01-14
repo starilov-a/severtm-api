@@ -99,63 +99,59 @@ class FinPeriodRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        return $conn->transactional(function () use ($conn, $userId, $fromFid): int {
-
-            // Убедимся, что этот fid действительно в будущем
-            if (!$this->isFidInFuture($fromFid))
-                return true;
-
-
-            // Возьмём дату старта этого периода
-            $startDate = $conn->fetchOne(
-                'SELECT start_date FROM fin_periods WHERE id = :fid',
-                ['fid' => $fromFid],
-                ['fid' => ParameterType::INTEGER]
-            );
-            if (!$startDate)
-                return true;
-
-            // Удаляем всё в будущих периодах начиная с этой даты
-            $params = [
-                'uid'       => $userId,
-                'startDate' => $startDate,
-            ];
-            $types = [
-                'uid'       => ParameterType::INTEGER,
-                'startDate' => ParameterType::STRING,
-            ];
-
-            //TODO: Добавить логи - что удалилось
-
-            // user_discounts
-            $conn->executeStatement(<<<SQL
-                DELETE ud
-                FROM fin_periods f
-                JOIN user_discounts ud ON ud.fid = f.id
-                WHERE ud.uid = :uid
-                  AND f.start_date >= :startDate
-            SQL, $params, $types);
-
-            // user_payables
-            $conn->executeStatement(<<<SQL
-                DELETE up
-                FROM fin_periods f
-                JOIN user_payables up ON up.fid = f.id
-                WHERE up.uid = :uid
-                  AND f.start_date >= :startDate
-            SQL, $params, $types);
-
-            // user_serv_modes
-            $conn->executeStatement(<<<SQL
-                DELETE um
-                FROM fin_periods f
-                JOIN user_serv_modes um ON um.fid = f.id
-                WHERE um.uid = :uid
-                  AND f.start_date >= :startDate
-            SQL, $params, $types);
-
+        // Убедимся, что этот fid действительно в будущем
+        if (!$this->isFidInFuture($fromFid))
             return true;
-        });
+
+        // Возьмём дату старта этого периода
+        $startDate = $conn->fetchOne(
+            'SELECT start_date FROM fin_periods WHERE id = :fid',
+            ['fid' => $fromFid],
+            ['fid' => ParameterType::INTEGER]
+        );
+        if (!$startDate)
+            return true;
+
+        // Удаляем всё в будущих периодах начиная с этой даты
+        $params = [
+            'uid'       => $userId,
+            'startDate' => $startDate,
+        ];
+        $types = [
+            'uid'       => ParameterType::INTEGER,
+            'startDate' => ParameterType::STRING,
+        ];
+
+        //TODO: Добавить логи - что удалилось
+
+        // user_discounts
+        $conn->executeStatement(<<<SQL
+            DELETE ud
+            FROM fin_periods f
+            JOIN user_discounts ud ON ud.fid = f.id
+            WHERE ud.uid = :uid
+              AND f.start_date >= :startDate
+        SQL, $params, $types);
+
+        // user_payables
+        $conn->executeStatement(<<<SQL
+            DELETE up
+            FROM fin_periods f
+            JOIN user_payables up ON up.fid = f.id
+            WHERE up.uid = :uid
+              AND f.start_date >= :startDate
+        SQL, $params, $types);
+
+        // user_serv_modes
+        $conn->executeStatement(<<<SQL
+            DELETE um
+            FROM fin_periods f
+            JOIN user_serv_modes um ON um.fid = f.id
+            WHERE um.uid = :uid
+              AND f.start_date >= :startDate
+        SQL, $params, $types);
+
+        return true;
     }
 
     /**

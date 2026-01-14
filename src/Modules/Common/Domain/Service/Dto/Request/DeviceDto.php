@@ -9,8 +9,7 @@ class DeviceDto
         protected string $serialNumber,
         protected ?int $deviceTypeId = null,
         protected ?string $comment = null,
-    ) {
-    }
+    ) {}
 
     public function getId(): int
     {

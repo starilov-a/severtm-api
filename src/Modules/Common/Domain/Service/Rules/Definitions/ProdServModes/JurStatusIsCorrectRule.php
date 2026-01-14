@@ -19,12 +19,8 @@ class JurStatusIsCorrectRule extends Rule
 
     public function check(object $context = null): RuleResult
     {
-        if (
-            !($context instanceof HasUserId) ||
-            !($context instanceof HasActionId) ||
-            !($context instanceof HasProdServMode) ||
-            !($context instanceof HasBoolVar)
-        ) throw new \LogicException('Wrong context passed to JurStatusIsCorrectRule');
+        if (!($context instanceof HasProdServMode) || !($context instanceof HasBoolVar))
+            throw new \LogicException('Wrong context passed to JurStatusIsCorrectRule');
 
 
         $modeIsJuridical = $this->prodServModeService->isJuridical($context->getMode());

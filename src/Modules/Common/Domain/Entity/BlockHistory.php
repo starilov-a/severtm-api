@@ -18,8 +18,9 @@ class BlockHistory
     #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true])]
     private int $id;
 
-    #[ORM\Column(name: 'block_uid', type: Types::INTEGER, options: ['unsigned' => true])]
-    private int $blockUid;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'block_uid', referencedColumnName: 'id', nullable: false)]
+    private User $user;
 
     #[ORM\Column(name: 'block_date', type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
     private \DateTimeInterface $blockDate;
@@ -30,8 +31,9 @@ class BlockHistory
     #[ORM\Column(name: 'block_status', type: Types::SMALLINT, nullable: true)]
     private ?int $blockStatus = null;
 
-    #[ORM\Column(name: 'block_who', type: Types::STRING, length: 20, nullable: true)]
-    private ?string $blockWho = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'block_who', referencedColumnName: 'id', nullable: true)]
+    private User $master;
 
     #[ORM\Column(name: 'block_comments', type: Types::STRING, length: 255, nullable: true)]
     private ?string $blockComments = null;
@@ -41,14 +43,14 @@ class BlockHistory
         return $this->id;
     }
 
-    public function getBlockUid(): int
+    public function getUser(): User
     {
-        return $this->blockUid;
+        return $this->user;
     }
 
-    public function setBlockUid(int $blockUid): self
+    public function setUser(User $user): self
     {
-        $this->blockUid = $blockUid;
+        $this->user = $user;
 
         return $this;
     }
@@ -89,14 +91,14 @@ class BlockHistory
         return $this;
     }
 
-    public function getBlockWho(): ?string
+    public function getMaster(): User
     {
-        return $this->blockWho;
+        return $this->master;
     }
 
-    public function setBlockWho(?string $blockWho): self
+    public function setMaster(User $master): self
     {
-        $this->blockWho = $blockWho;
+        $this->master = $master;
 
         return $this;
     }

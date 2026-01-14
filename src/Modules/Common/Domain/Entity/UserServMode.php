@@ -102,9 +102,9 @@ class UserServMode
         $this->useCost = $useCost;
     }
 
-    public function setIsActive(int $isActive): void
+    public function setIsActive(bool $isActive): void
     {
-        $this->isActive = $isActive;
+        $this->isActive = (int) $isActive;
     }
 
     public function setUnits(int $units): void

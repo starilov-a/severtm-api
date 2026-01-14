@@ -2,15 +2,13 @@
 
 namespace App\Modules\Common\Domain\Service\Rules;
 
-use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasMaster;
-use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasStartFreezeDate;
-use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasUser;
 use App\Modules\Common\Domain\Service\Rules\Contexts\ContextInterfaces\HasWebAction;
+use App\Modules\Common\Domain\Service\Rules\Interfaces\RuleChainInterface;
 use App\Modules\Common\Domain\Service\Rules\Results\ChainRuleItem;
 use App\Modules\Common\Domain\Service\Rules\Results\RuleMode;
+use App\Modules\Common\Domain\Service\Rules\Results\RuleResult;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
-use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
@@ -55,5 +53,96 @@ class RuleChain implements RuleChainInterface
         }
 
         return true;
+    }
+
+    public function checkAllWithResult(object $context): RuleResult
+    {
+        foreach ($this->items as $item) {
+            $result = $item->rule->check($context);
+
+            if ($result->ok)
+                continue;
+
+            return $result;
+        }
+        return RuleResult::ok();
+    }
+
+    public function checkAny(object $context): bool
+    {
+        if (!($context instanceof HasWebAction) || !($context instanceof HasMaster)) {
+            throw new \LogicException('Wrong context passed to RuleChain');
+        }
+
+        $firstSoftFail = null;     /** @var RuleResult|null $firstSoftFail */
+        $firstHardFail = null;     /** @var array{item: ChainRuleItem, result: RuleResult}|null $firstHardFail */
+
+        foreach ($this->items as $item) {
+            $result = $item->rule->check($context);
+
+            // Успех: хотя бы одно правило прошло → пропускаем
+            if ($result->ok) {
+                return true;
+            }
+
+            // Запоминаем первый soft fail — пригодится для лога/возврата
+            if ($item->mode === RuleMode::SOFT) {
+                $firstSoftFail ??= $result;
+                continue;
+            }
+
+            // HARD fail: запомним первый hard fail, но продолжаем,
+            // вдруг какое-то следующее правило пройдет и мы вернем true.
+            $firstHardFail ??= ['item' => $item, 'result' => $result];
+        }
+
+        // Если дошли сюда — значит ВСЕ правила провалились
+
+        // HARD приоритетнее: кидаем исключение
+        if ($firstHardFail !== null) {
+            $item = $firstHardFail['item'];
+            $result = $firstHardFail['result'];
+
+            $exceptionClass = $item->exceptionClass ?? ImportantBusinessException::class;
+
+            throw new $exceptionClass(
+                $context->getMaster()->getId() ?? 0,
+                $context->getWebAction()->getId() ?? 0,
+                $result->message ?? 'Ошибка бизнес-правил'
+            );
+        }
+
+        // Только SOFT провалы → логируем один раз и возвращаем false
+        $msg = $firstSoftFail?->message ?? 'Ни одно правило не прошло';
+        $this->loggerService->businessLog(new BusinessLogDto(
+            $context->getMaster()->getId() ?? 0,
+            $context->getWebAction()->getId() ?? 0,
+            $msg,
+            false
+        ));
+
+        return false;
+    }
+
+    public function checkAnyWithResult(object $context): RuleResult
+    {
+        // В этом методе НЕ бросаем исключения (по названию WithResult).
+        // Просто возвращаем ok или причину.
+        if (!($context instanceof HasWebAction) || !($context instanceof HasMaster))
+            throw new \LogicException('Wrong context passed to RuleChain');
+
+
+        $firstFail = null; /** @var RuleResult|null $firstFail */
+
+        foreach ($this->items as $item) {
+            $result = $item->rule->check($context);
+
+            if ($result->ok)
+                return RuleResult::ok();
+
+            $firstFail ??= $result;
+        }
+
+        return $firstFail ?? RuleResult::fail('No rules configured'); // если items пустой
     }
 }

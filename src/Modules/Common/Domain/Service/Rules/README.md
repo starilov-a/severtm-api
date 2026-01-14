@@ -16,15 +16,33 @@ Context → RuleChain::checkAll()
 - Пример: `Definitions/ProdServModes/UnitsMustBePositiveRule` проверяет, что количество подключаемых единиц услуги > 0 и использует `HasModeUnitCount`.
 
 ## 3. RuleChain
-- Реализация: `App\Modules\Common\Domain\Service\Rules\RuleChain` (+ интерфейс `RuleChainInterface`; текущая сигнатура в интерфейсе устарела, ориентируйтесь на реализацию `checkAll(object $context): bool`).
+- Реализация: `App\Modules\Common\Domain\Service\Rules\RuleChain` (+ интерфейс `RuleChainInterface`).
 - Конструктор цепочки получает `LoggerService` и формирует массив `ChainRuleItem` (правило + режим выполнения + класс исключения).
 - Контекст для цепочки обязан реализовать как минимум `HasWebAction` и `HasMaster`, чтобы можно было корректно залогировать ошибку/исключение.
-- Алгоритм `checkAll()`:
-  1. Итерирует элементы `$items`.
-  2. Вызывает `Rule::check($context)`.
-  3. При `RuleResult::ok()` просто продолжает.
-  4. Если `RuleMode::SOFT`, пишет `businessLog` и возвращает `false`.
-  5. Если `RuleMode::HARD`, выбрасывает `ImportantBusinessException` (или переданный класс) с сообщением правила.
+
+### API цепочки (4 метода)
+| Метод | Смысл | Возврат | Логирование | Исключения |
+|---|---|---|---|---|
+| `checkAll($context)` | **все правила должны пройти** | `bool` | при первом `SOFT`-провале пишет `businessLog` | при первом `HARD`-провале бросает `ImportantBusinessException` (или `exceptionClass`) |
+| `checkAllWithResult($context)` | **все правила должны пройти** | `RuleResult` (первый fail или ok) | нет | не бросает бизнес-исключения (возвращает fail) |
+| `checkAny($context)` | **достаточно, чтобы прошло хотя бы 1 правило** | `bool` | если все правила провалились и среди провалов нет `HARD`, пишет `businessLog` один раз | если все правила провалились и был хотя бы один `HARD` — бросает исключение (первое `HARD`) |
+| `checkAnyWithResult($context)` | **достаточно, чтобы прошло хотя бы 1 правило** | `RuleResult` (ok или причина провала) | нет | не бросает бизнес-исключения (возвращает fail) |
+
+### Алгоритм `checkAll()`
+1. Итерирует элементы `$items`.
+2. Вызывает `Rule::check($context)`.
+3. При `RuleResult::ok()` просто продолжает.
+4. Если `RuleMode::SOFT`, пишет `businessLog` и возвращает `false`.
+5. Если `RuleMode::HARD`, выбрасывает `ImportantBusinessException` (или переданный класс) с сообщением правила.
+
+### Алгоритм `checkAny()`
+1. Итерирует правила, пока не найдется первое успешное: при `RuleResult::ok()` сразу возвращает `true`.
+2. Если правило провалилось:
+   - `SOFT`: запоминает первый `fail`, продолжает.
+   - `HARD`: запоминает первый `HARD fail`, продолжает (вдруг дальше будет успех).
+3. Если успеха нет (все правила провалились):
+   - если был хотя бы один `HARD fail` → бросает исключение;
+   - иначе логирует первый `SOFT fail` и возвращает `false`.
 - Цепочки наследуются от `RuleChain` (см. `Chains/CreateFreezeTaskRuleChain`, `Chains/AddServiceModeRuleChain`, `Chains/ShouldMakeWriteOffRuleChain`).
 
 ### ChainRuleItem и режимы
@@ -87,6 +105,24 @@ if (!$this->shouldMakeWriteOffRuleChain->checkAll($context)) {
 }
 ```
 Если цепочка проходит полностью, метод возвращает `true`, и бизнес‑процесс (создание платежей, задач, списаний) продолжается.
+
+### Когда нужен `WithResult`
+Иногда нужно **не бросать исключения и не логировать в цепочке**, а аккуратно решить, что делать дальше на уровне use-case:
+```php
+$result = $this->someRuleChain->checkAllWithResult($context);
+if (!$result->ok) {
+    // например: показать пользователю message, собрать свой ответ API,
+    // или конвертировать в единый тип ошибки на верхнем уровне
+}
+```
+
+### Когда нужен `checkAny`
+Пример: допускаем выполнение сценария, если пользователь подходит **хотя бы по одному критерию** (например, один из нескольких “пропусков”/исключений).
+```php
+if (!$this->someAlternativeChain->checkAny($context)) {
+    // ни один вариант не прошел: soft → false (и залогировано), hard → исключение
+}
+```
 
 ## 7. Дополнительные рекомендации
 1. **Новые правила**: именуйте классы в терминах домена (`FreezeOnlyOncePerMonthRule`). В методе `check()` оставляйте небольшие блоки логики и при необходимости выносите тяжелые операции во внедренные сервисы.

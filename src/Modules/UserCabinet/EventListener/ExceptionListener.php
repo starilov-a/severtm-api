@@ -4,6 +4,7 @@ namespace App\Modules\UserCabinet\EventListener;
 
 use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Exception\HiddenImportantBusinessException;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\Common\Infrastructure\Exception\ValidationException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -35,16 +36,26 @@ final class ExceptionListener
         $request = $event->getRequest();
 
         $status = match (true) {
-            $e instanceof ImportantBusinessException    => Response::HTTP_BAD_REQUEST,
-            $e instanceof BusinessException             => Response::HTTP_BAD_REQUEST,
-            $e instanceof AuthException                 => Response::HTTP_UNAUTHORIZED,
-            $e instanceof ValidationException           => Response::HTTP_BAD_REQUEST,
-            default                                     => Response::HTTP_INTERNAL_SERVER_ERROR,
+            $e instanceof ImportantBusinessException        => Response::HTTP_BAD_REQUEST,
+            $e instanceof HiddenImportantBusinessException  => Response::HTTP_BAD_REQUEST,
+            $e instanceof BusinessException                 => Response::HTTP_BAD_REQUEST,
+            $e instanceof AuthException                     => Response::HTTP_UNAUTHORIZED,
+            $e instanceof ValidationException               => Response::HTTP_BAD_REQUEST,
+            default                                         => Response::HTTP_INTERNAL_SERVER_ERROR,
         };
 
         $message = $e->getMessage();
+        if ($e instanceof HiddenImportantBusinessException) {
+            $this->loggerService->businessLog(new BusinessLogDto(
+                $e->getUserId(),
+                $e->getActionId(),
+                $e->getMessage(),
+                $e->getStatus(),
+                $e->getIp()
+            ));
 
-        if ($e instanceof ImportantBusinessException) {
+            $message = 'Ошибка сервера';
+        }elseif ($e instanceof ImportantBusinessException) {
             $this->loggerService->businessLog(new BusinessLogDto(
                 $e->getUserId(),
                 $e->getActionId(),
@@ -60,7 +71,7 @@ final class ExceptionListener
             $event->setResponse($response);
 
             return;
-        } elseif ($status >= 500) {
+        }  elseif ($status >= 500) {
             $this->loggerService->errorLog(new ErrorLogDto(
                 $e->getMessage(),
                 array_filter([

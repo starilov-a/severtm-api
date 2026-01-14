@@ -5,6 +5,8 @@ namespace App\Modules\Common\Domain\Entity;
 use App\Modules\Common\Domain\Repository\ProductServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ProductServiceRepository::class)]
 #[ORM\Table(name: 'products_services')]
@@ -57,6 +59,11 @@ class ProductService
 
     private ?array $modes =[];
     private ?array $userModes =[];
+    #[ORM\ManyToMany(targetEntity: PsGroup::class, inversedBy: 'services')]
+    #[ORM\JoinTable(name: 'ps_belong_groups')]
+    #[ORM\JoinColumn(name: 'ps_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'ps_group_id', referencedColumnName: 'ps_group_id')]
+    private Collection $groups;
 
     // --- getters / helpers ---
     public function getId(): int { return $this->id; }
@@ -77,4 +84,41 @@ class ProductService
     }
     public function getModes(): array { return $this->modes; }
     public function getUserModes(): array { return $this->userModes; }
+
+    public function __construct()
+    {
+        $this->groups = new ArrayCollection();
+    }
+
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(PsGroup $group): void
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
+    }
+
+    public function removeGroup(PsGroup $group): void
+    {
+        $this->groups->removeElement($group);
+    }
+    public function hasGroup(PsGroup $group): bool
+    {
+        return $this->groups->contains($group);
+    }
+
+    public function hasGroupByCode(string $code): bool
+    {
+        foreach ($this->groups as $group) {
+            if ($group->getCode() === $code) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

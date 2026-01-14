@@ -7,6 +7,7 @@ use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -81,7 +82,7 @@ final class UserServModeRepository extends ServiceEntityRepository
      * Найти активный UserServMode по ProdServMode и пользователю.
      * Использует текущий финпериод (isCurrent = 1).
      */
-    public function findActiveByModeAndUser(ProdServMode $mode, User $user): ?UserServMode
+    public function findActiveByModeAndUser(ProdServMode $mode, User $user, ?FinPeriod $finPeriod = null): ?UserServMode
     {
         return $this->createQueryBuilder('usm')
             ->join('usm.finPeriod', 'f')
@@ -108,4 +109,85 @@ final class UserServModeRepository extends ServiceEntityRepository
 
         return null !== $qb->getQuery()->getOneOrNullResult();
     }
+
+
+    /**
+     * Поиск активных услуг пользователя
+     * @return UserServMode[]
+     */
+    public function findCurrentActiveModes(User $user): array
+    {
+        return $this->createQueryBuilder('usm')
+            ->join('usm.finPeriod', 'f')
+            ->andWhere('usm.user = :user')->setParameter('user', $user)
+            ->andWhere('usm.isActive = 1')
+            ->andWhere('f.isCurrent = 1')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /** Есть активная аренда в текущем финпериоде */
+    public function hasRentNow(int $userId): bool
+    {
+        $sql = <<<SQL
+            SELECT 1
+            FROM user_serv_modes usm
+            JOIN prod_serv_modes psm ON psm.id = usm.srvmode_id
+            JOIN products_services ps ON ps.id  = psm.srv_id
+            JOIN fin_periods fp       ON fp.id  = usm.fid
+            WHERE usm.uid = :uid
+              AND fp.is_current = 1
+              AND usm.use_cost = 1
+              AND usm.is_active = 1
+              AND ps.str_code = :rent
+            LIMIT 1
+        SQL;
+
+        $conn = $this->entityManager->getConnection();
+        $val = $conn->fetchOne($sql, [
+            'uid'       => $userId,
+            'rent'      => 'rent',
+        ], [
+            'uid'       => ParameterType::INTEGER,
+            'rent'      => ParameterType::STRING,
+        ]);
+
+        return $val !== false;
+    }
+
+    // Активные режимы пользователя (интернет)
+    public function findActiveTariffsByUser(User $user): array
+    {
+        return $this->createQueryBuilder('usm')
+            ->join('usm.mode', 'm')
+            ->join('m.service', 's')
+            ->andWhere('usm.user = :user')->setParameter('user', $user)
+            ->andWhere('usm.isActive = 1')
+            ->andWhere('s.strCode = :code')->setParameter('code', 'internet')
+            ->orderBy('s.priority', 'ASC')
+            ->addOrderBy('m.priority', 'ASC')
+            ->getQuery()->getResult();
+    }
+
+    // Активный режимм пользователя за период (интернет)
+    public function findActiveTariffsByUserAndFinPeriod(User $user, FinPeriod $finPeriod): UserServMode
+    {
+        $userServMode = $this->createQueryBuilder('usm')
+            ->join('usm.mode', 'm')
+            ->join('m.service', 's')
+            ->andWhere('usm.user = :user')->setParameter('user', $user)
+            ->andWhere('usm.isActive = 1')
+            ->andWhere('s.strCode = :code')->setParameter('code', 'internet')
+            ->andWhere('usm.finPeriod = :finPeriod')->setParameter('finPeriod', $finPeriod)
+            ->orderBy('usm.id', 'ASC')
+            ->getQuery()->getOneOrNullResult();
+
+        if (!$userServMode)
+            throw new \InvalidArgumentException('NULL при получении последней активной услуги интернета');
+
+        return $userServMode;
+    }
+
+
 }

@@ -20,7 +20,7 @@ class CloseMonthSemaphoreIsNotRunningRule extends Rule
         ]);
 
         if (!empty($semaphores))
-            RuleResult::fail('Запущена блокировка закрытия месяца');
+            return RuleResult::fail('Запущена блокировка закрытия месяца');
 
         return RuleResult::ok();
     }

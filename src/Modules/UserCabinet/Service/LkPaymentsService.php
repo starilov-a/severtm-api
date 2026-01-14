@@ -4,15 +4,15 @@ namespace App\Modules\UserCabinet\Service;
 
 use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WriteOffRepository;
-use App\Modules\Common\Domain\Service\BalanceService;
-use App\Modules\Common\Domain\Service\DebtService;
+use App\Modules\Common\Domain\Repository\ProdDiscountHistoryRepository;
+use App\Modules\Common\Domain\Service\Definitions\Finances\BalanceService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\DebtService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\ReplenishmentService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\ProdDiscountHistoryService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
-use App\Modules\Common\Domain\Service\ReplenishmentService;
-use App\Modules\Common\Domain\Service\UserPaymentsService;
-use App\Modules\Common\Domain\Service\WriteOffService;
-use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
+use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
 
@@ -20,14 +20,14 @@ class LkPaymentsService
 {
 
     public function __construct(
-        protected BalanceService $balanceSerivce,
-        protected WriteOffService $writeOffService,
-        protected ReplenishmentService $replenishmentService,
-        protected ReplenishmentRepository $replenishmentRepository,
-        protected DebtService $debtService,
-        protected UserPaymentsService $userPaymentsService,
-        protected UserRepository $userRepo,
-        protected WriteOffRepository $writeOffRepo,
+        protected BalanceService                $balanceSerivce,
+        protected ProdDiscountHistoryService    $writeOffService,
+        protected ReplenishmentService          $replenishmentService,
+        protected ReplenishmentRepository       $replenishmentRepository,
+        protected DebtService                   $debtService,
+        protected UserPaymentsService           $userPaymentsService,
+        protected UserRepository                $userRepo,
+        protected ProdDiscountHistoryRepository $writeOffRepo,
     ){}
 
     /*
