@@ -45,7 +45,15 @@ class UnfreezeInternetNoJuridicalUserUseCase
 
     ) {}
     /**
-     * разморозка интернета физических лиц (без voip) (по процедуре __sys_unblock_recalc_tm)
+     * UseCase: разморозка интернета физических лиц
+     *
+     * 1. Бизнес проверки
+     * 2. Поиск активной задачи на заморозку и её отмена
+     * 3. Получаем тариф, который будет подключен после разморозки
+     * 4. Поиск активного тарифа (*user_serv_mode*) на период блокировки и рефаунд до конца месяца того же фин периода
+     * 5. Поиск и отключение всех предыдущих активных тарифов
+     * 6. UseCase: Изменение текущего тарифа
+     * 7. Запись о изменении статуса блокировки в историю блокировок (*BlockHistory*)
      *
      * @param User $user
      * @return UserTask
@@ -81,9 +89,6 @@ class UnfreezeInternetNoJuridicalUserUseCase
             // TODO: в дальнейшем их вообще не должно быть
             $this->tariffService->disableTariffByUserServMode($userServMode);
         }
-
-        // Отключаем информацию о тарифах(текущим и следующим) у пользователя
-        $this->userService->disconnectedTariffs($user);
 
         // включаем интернет на текущий(+ списание)
         $this->changeCurrentTariffUseCase->handle($user, $tariffForActivate);

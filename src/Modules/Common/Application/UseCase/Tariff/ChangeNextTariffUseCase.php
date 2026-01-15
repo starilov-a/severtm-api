@@ -30,6 +30,19 @@ class ChangeNextTariffUseCase
 
         protected AddNextServiceModeUseCase $addNextServiceModeUseCase,
     ) {}
+
+    /**
+     * UseCase: Изменение следующего тарифа
+     *
+     *  1. Меняем тариф в таблице
+     *  2. Чистим все будущие тарифы
+     *  3. UseCase: Добавление user_serv_modes на след. месяц
+     *
+     * @param User $user
+     * @param Tariff $newNextTariff
+     * @return bool
+     * @throws \Exception
+     */
     public function handle(User $user, Tariff $newNextTariff): bool
     {
         $finPeriod = $this->finPeriodRepo->getNext();

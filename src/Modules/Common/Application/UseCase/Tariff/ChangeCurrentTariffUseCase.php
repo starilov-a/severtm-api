@@ -31,6 +31,15 @@ class ChangeCurrentTariffUseCase
 
         protected AddCurrentServiceModeUseCase  $addCurrentServiceModeUseCase,
     ) {}
+
+    /**
+     * UseCase: Изменение текущего тарифа
+     *
+     * @param User $user
+     * @param Tariff $newCurrentTariff
+     * @return bool
+     * @throws \Exception
+     */
     public function handle(User $user, Tariff $newCurrentTariff): bool
     {
         $currentFinPeriod = $this->finPeriodRepo->getCurrent();

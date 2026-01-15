@@ -25,9 +25,10 @@ class AddCurrentServiceModeUseCase
         protected UserIsNotNotActivatedRule $userIsNotNotActivatedRule,
     ) {}
     /**
-     * Агрегатор добавления опции на текущий месяц
-     * 1. Добавление любой опции
-     * 2. Списание
+     * UseCase: Добавление опции на текущий месяц
+     *
+     * 1. Добавление опций
+     * 2. Списание (если не неактивированный юрик)
      *
      * @param User $user
      * @param ProdServMode $mode

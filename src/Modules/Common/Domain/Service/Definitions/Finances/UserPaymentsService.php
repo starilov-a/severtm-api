@@ -18,6 +18,10 @@ use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
+/**
+ * Сервис отвечающий за агрегирование работы c задолженностями и начислениями (prod_discount_temp/user_payables)
+ *
+ */
 class UserPaymentsService
 {
     public function __construct(

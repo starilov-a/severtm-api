@@ -14,8 +14,11 @@ class AddNextServiceModeUseCase
         protected FinPeriodRepository $finPeriodRepo,
         protected UserServModeService $userServModeService,
     ) {}
+
     /**
-     *  Агрегатор добавления любой опции на следующий месяц
+     * UseCase: Добавление опции на следующий месяц
+     *
+     * 1. Добавление опций
      *
      * @param User $user
      * @param ProdServMode $mode

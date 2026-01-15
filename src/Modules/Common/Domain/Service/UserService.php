@@ -54,11 +54,10 @@ class UserService
         return $this->save($user);
     }
 
-    public function disconnectedTariffs(User $user): User
+    public function disconnectCurrentTariff(User $user): User
     {
         $disconnectedTariff = $this->tariffRepo->find(1);
         $user->setCurrentTariff($disconnectedTariff);
-        $user->setNextTariff($disconnectedTariff);
 
         return $this->save($user);
     }

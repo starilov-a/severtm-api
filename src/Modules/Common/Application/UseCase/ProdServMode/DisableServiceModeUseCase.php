@@ -21,6 +21,17 @@ class DisableServiceModeUseCase
         protected UserOwnDeviceService      $userOwnDeviceService,
         protected UserServModeService       $userServModeService,
     ) {}
+
+    /**
+     * UseCase: Отключение активной опции
+     *
+     * 1. Выставление статуса isActive=false
+     * 2. Отвязка устройств
+     * 3. Сохранение изменений
+     *
+     * @param UserServMode $userServMode
+     * @return void
+     */
     public function handle(UserServMode $userServMode): void
     {
         $master = $this->userRepo->find(UserSessionService::getUserId());
