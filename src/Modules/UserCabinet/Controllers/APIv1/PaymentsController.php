@@ -74,4 +74,29 @@ class PaymentsController extends Controller
         $uid = UserSessionService::getUserId();
         return $this->responseData($paymentsService->getDebt($uid));
     }
+
+    #[Route(
+        '/can-take-break/',
+        name: 'canTakeBreak',
+        methods: ['GET']
+    )]
+    public function canTakeBreak(LkPaymentsService $paymentsService): JsonResponse
+    {
+        $uid = UserSessionService::getUserId();
+        return $this->response($paymentsService->canTakeBreak($uid), 'Текущая возможность взять отсрочку');
+    }
+
+    #[Route(
+        '/take-break/',
+        name: 'takeBreak',
+        methods: ['POST']
+    )]
+    public function takeBreak(LkPaymentsService $paymentsService): JsonResponse
+    {
+        $uid = UserSessionService::getUserId();
+
+        $paymentsService->canTakeBreak($uid);
+
+        return $this->responseMessage('Отсрочка на сутки успешно активирована!');
+    }
 }

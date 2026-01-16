@@ -310,14 +310,29 @@ class User
         return $this->credit;
     }
 
+    public function setCredit(bool $credit): void
+    {
+        $this->credit = $credit;
+    }
+
     public function getCreditDeadline(): ?\DateTimeInterface
     {
         return $this->creditDeadline;
     }
 
+    public function setCreditDeadline(\DateTimeInterface $creditDeadline): void
+    {
+        $this->creditDeadline = $creditDeadline;
+    }
+
     public function getBlockDate(): \DateTimeInterface
     {
         return $this->blockDate;
+    }
+
+    public function setBlockDate(\DateTimeInterface $blockDate): void
+    {
+        $this->blockDate = $blockDate;
     }
 
     public function getBlockComments(): string
