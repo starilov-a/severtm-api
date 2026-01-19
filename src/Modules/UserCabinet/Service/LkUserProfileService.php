@@ -81,7 +81,6 @@ class LkUserProfileService
 
     }
 
-
     public function checkPassword(string $pass): void
     {
         //TODO нужно будет перенести в common
@@ -90,19 +89,4 @@ class LkUserProfileService
             throw new BusinessException("Старый пароль введен не верно!");
         }
     }
-
-    /*
-     * Получение отсрочки для клиента
-     * */
-    public function takeBreak(int $uid): void
-    {
-
-    }
-
-    public function getStatusBreaks(int $uid): array
-    {
-
-        return [];
-    }
-
 }

@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityManagerInterface;
 class LkFreezeService
 {
     public function __construct(
+        protected EntityManagerInterface                    $em,
+
         protected FreezeService                             $freezeService,
         protected UserRepository                            $userRepo,
         protected FreezeReasonRepository                    $freezeReasonRepo,
@@ -25,7 +27,6 @@ class LkFreezeService
         protected CreateTaskOnFreezeUseCase                 $createTaskOnFreezeUseCase,
         protected UnfreezeInternetNoJuridicalUserUseCase    $unfreezeInternetNoJuridicalUserUseCase,
 
-        protected EntityManagerInterface                    $em
     ) {}
 
     public function getReasonForFreeze(): array

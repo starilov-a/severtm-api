@@ -2,32 +2,48 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Application\UseCase\Break\TakeBreakForOneDayUseCase;
 use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\ProdDiscountHistoryRepository;
+use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Service\BreakService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\BalanceService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\DebtService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\ReplenishmentService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\ProdDiscountHistoryService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
+use App\Modules\Common\Domain\Service\Rules\Chains\Break\ClientCanGetBreakRuleChain;
+use App\Modules\Common\Domain\Service\Rules\Contexts\UserContext;
+use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LkPaymentsService
 {
 
     public function __construct(
-        protected BalanceService                $balanceSerivce,
+        protected EntityManagerInterface        $em,
+
+        protected BalanceService                $balanceService,
         protected ProdDiscountHistoryService    $writeOffService,
         protected ReplenishmentService          $replenishmentService,
-        protected ReplenishmentRepository       $replenishmentRepository,
         protected DebtService                   $debtService,
         protected UserPaymentsService           $userPaymentsService,
+        protected BreakService                  $breakService,
+
+        protected ReplenishmentRepository       $replenishmentRepo,
         protected UserRepository                $userRepo,
         protected ProdDiscountHistoryRepository $writeOffRepo,
+        protected WebActionRepository           $webActionRepo,
+
+        protected ClientCanGetBreakRuleChain    $userCanGetBreakRuleChain,
+
+        protected TakeBreakForOneDayUseCase     $userCanTakeBreakForOneDayUseCase,
     ){}
 
     /*
@@ -44,7 +60,7 @@ class LkPaymentsService
     public function getBalance(int $uid): array
     {
         $user = $this->userRepo->find($uid);
-        $balance = $this->balanceSerivce->getUserBalance($user);
+        $balance = $this->balanceService->getUserBalance($user);
 
         return [
             'balance' => $balance->get()
@@ -88,7 +104,7 @@ class LkPaymentsService
      * */
     public function getReplenishments(int $uid, FilterDto $filter): ReplenishmentsCollectionDto
     {
-        $replenishments = $this->replenishmentRepository->findBy(
+        $replenishments = $this->replenishmentRepo->findBy(
             ['user' => $this->userRepo->find($uid)],
             ['dateTs' => 'DESC'],
             $filter->getLimit(),
@@ -116,5 +132,31 @@ class LkPaymentsService
     public function disableAutopayment(int $uid): bool
     {
         return false;
+    }
+
+    /*
+     * Получение отсрочки для клиента
+     * */
+    public function takeBreak(int $uid): bool
+    {
+        return $this->em->getConnection()->transactional(function () use (
+            $uid,
+        ) {
+            $user = $this->userRepo->find($uid);
+
+            $this->userCanTakeBreakForOneDayUseCase->handle($user);
+
+            return true;
+        });
+    }
+
+    /*
+     * Получение информации об отсрочках
+     * */
+    public function canTakeBreak(int $uid): array
+    {
+        $user = $this->userRepo->find($uid);
+        // проверка для клиента
+        return ['isAvailable' => $this->breakService->getBreakStatusForUser($user)['isAvailable']];
     }
 }
