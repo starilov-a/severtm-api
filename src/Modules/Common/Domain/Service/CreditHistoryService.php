@@ -2,36 +2,23 @@
 
 namespace App\Modules\Common\Domain\Service;
 
-use App\Modules\Common\Domain\Entity\CreditHistory;
 use App\Modules\Common\Domain\Repository\CreditHistoryRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreditHistoryLogDto;
-use Doctrine\ORM\EntityManagerInterface;
 
 class CreditHistoryService
 {
     public function __construct(
-        protected EntityManagerInterface $em,
-
         protected CreditHistoryRepository $creditHistoryRepo,
     ) {}
-    public function createCreditHistoryLog(CreditHistoryLogDto $creditHistoryLogDto): CreditHistory
+
+    /**
+     * Создать запись в истории кредитов (credits_history) без ORM-сущности.
+     *
+     * Таблица не имеет PK и использует datetime/date поля, которые неудобны для Doctrine identity map,
+     * поэтому пишем через DBAL insert.
+     */
+    public function createCreditHistoryLog(CreditHistoryLogDto $creditHistoryLogDto): int
     {
-        $creditHistoryLog = new CreditHistory();
-
-        $creditHistoryLog->setCreditDeadline($creditHistoryLogDto->getCreditDeadline());
-        $creditHistoryLog->setCreditDate($creditHistoryLogDto->getCreditDate());
-        $creditHistoryLog->setCreditBill($creditHistoryLogDto->getCreditBill());
-        $creditHistoryLog->setUser($creditHistoryLogDto->getUser());
-        $creditHistoryLog->setMaster($creditHistoryLogDto->getMaster());
-
-        return $this->update($creditHistoryLog);
-    }
-
-    public function update(CreditHistory $creditHistoryLog): CreditHistory
-    {
-        $this->em->persist($creditHistoryLog);
-        $this->em->flush();
-
-        return $creditHistoryLog;
+        return $this->creditHistoryRepo->insertLog($creditHistoryLogDto);
     }
 }

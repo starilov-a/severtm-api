@@ -24,12 +24,12 @@ class TakeBreakForOneDayUseCase
         $master = $this->userRepo->find(UserSessionService::getUserId());
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_GIVECREDIT');
 
-        $break = $this->breakService->takeBreakForUser($user, 1);
+        $this->breakService->takeBreakForUser($user, 1);
 
         $this->loggerService->businessLog(new BusinessLogDto(
             $master->getId(),
             $webAction->getId(),
-            "Для пользователя {$user->getId()} успешно применена отсрочка на 1 день (до {$break->getCreditDeadline()}).",
+            "Для пользователя {$user->getId()} успешно применена отсрочка на 1 день).",
             true
         ));
 

@@ -36,7 +36,7 @@ class BreakService
         protected CanGetBreakRuleChain      $canGetBreakRuleChain,
     ) {}
 
-    public function takeBreakForUser(User $user, int $countDays): CreditHistory
+    public function takeBreakForUser(User $user, int $countDays): bool
     {
         $master = $this->userRepo->find(UserSessionService::getUserId());
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_GIVECREDIT');
@@ -60,9 +60,9 @@ class BreakService
 
         // 3. добавление истории отсрочки
         $creditHistoryLogDto = new CreditHistoryLogDto($deadline, $user, $master, $user->getBill());
-        $creditHistoryLog = $this->creditHistoryService->createCreditHistoryLog($creditHistoryLogDto);
+        $this->creditHistoryService->createCreditHistoryLog($creditHistoryLogDto);
 
-        return $creditHistoryLog;
+        return true;
     }
 
     public function getBreakStatusForUser(User $user): array
