@@ -19,6 +19,7 @@ class CreditHistoryService
         $creditHistoryLog = new CreditHistory();
 
         $creditHistoryLog->setCreditDeadline($creditHistoryLogDto->getCreditDeadline());
+        $creditHistoryLog->setCreditDate($creditHistoryLogDto->getCreditDate());
         $creditHistoryLog->setCreditBill($creditHistoryLogDto->getCreditBill());
         $creditHistoryLog->setUser($creditHistoryLogDto->getUser());
         $creditHistoryLog->setMaster($creditHistoryLogDto->getMaster());

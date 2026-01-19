@@ -18,11 +18,11 @@ class CreditHistory
      * Используем составной ключ, достаточный для однозначной адресации записи.
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'credit_date', type: Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(name: 'credit_date', type: Types::DATETIME_MUTABLE)]
     private \DateTimeImmutable $creditDate;
 
     #[ORM\Id]
-    #[ORM\Column(name: 'credit_deadline', type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(name: 'credit_deadline', type: Types::DATE_MUTABLE)]
     private \DateTimeImmutable $creditDeadline;
 
     #[ORM\Id]

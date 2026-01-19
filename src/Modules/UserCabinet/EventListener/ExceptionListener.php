@@ -83,6 +83,7 @@ final class ExceptionListener
                     'userId'    => UserSessionService::getUserId(),
                     'query'     => $request->query->all() ? json_encode($request->query->all()) : null,
                     'request'   => $request->request->all() ? json_encode($request->request->all()) : null,
+                    'trace'     => $e->getTraceAsString()
                 ], fn($v) => $v !== null && $v !== [])
             ));
 

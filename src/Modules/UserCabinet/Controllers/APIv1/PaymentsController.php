@@ -17,7 +17,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-balance/',
+        '/get-balance',
         name: 'getBalance',
         methods: ['GET']
     )]
@@ -28,7 +28,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-write-offs/',
+        '/get-write-offs',
         name: 'getWriteOffs',
         methods: ['GET']
     )]
@@ -46,7 +46,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-replenishments/',
+        '/get-replenishments',
         name: 'getReplenishments',
         methods: ['GET']
     )]
@@ -65,7 +65,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-debt/',
+        '/get-debt',
         name: 'getDebt',
         methods: ['GET']
     )]
@@ -76,7 +76,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/can-take-break/',
+        '/can-take-break',
         name: 'canTakeBreak',
         methods: ['GET']
     )]
@@ -87,7 +87,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/take-break/',
+        '/take-break',
         name: 'takeBreak',
         methods: ['POST']
     )]
@@ -95,7 +95,7 @@ class PaymentsController extends Controller
     {
         $uid = UserSessionService::getUserId();
 
-        $paymentsService->canTakeBreak($uid);
+        $paymentsService->takeBreak($uid);
 
         return $this->responseMessage('Отсрочка на сутки успешно активирована!');
     }

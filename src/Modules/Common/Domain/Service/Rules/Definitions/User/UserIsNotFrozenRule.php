@@ -16,6 +16,7 @@ class UserIsNotFrozenRule extends Rule
     {
         if (!($context instanceof HasUser))
             throw new \LogicException('Wrong context passed to UserIsNotFrozenRule');
+
         if ($context->getUser()->getBlockState() === $this->blockStateRepo->findByCode('frozen'))
             return RuleResult::fail("Пользователь является замороженным");
 

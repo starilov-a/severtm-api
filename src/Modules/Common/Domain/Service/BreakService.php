@@ -12,6 +12,8 @@ use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreditHistoryLogDto;
 use App\Modules\Common\Domain\Service\Rules\Chains\Break\CanGetBreakRuleChain;
+use App\Modules\Common\Domain\Service\Rules\Contexts\BreakContext;
+use App\Modules\Common\Domain\Service\Rules\Contexts\OnlyBreakContext;
 use App\Modules\Common\Domain\Service\Rules\Contexts\OnlyUserContext;
 use App\Modules\Common\Domain\Service\Rules\Contexts\UserContext;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -40,7 +42,9 @@ class BreakService
         $webAction = $this->webActionRepo->findIdByCid('WA_USERS_GIVECREDIT');
 
         // 1. Бизнес-правила
-        $this->canGetBreakRuleChain->checkAll(new UserContext($webAction, $master, $user));
+        $countAvailableBreaks = $this->countAvailableBreaksForUser($user);
+
+        $this->canGetBreakRuleChain->checkAll(new BreakContext($webAction, $master, $user, $countAvailableBreaks));
 
         // 2. Изменение даты deadline
         if ($user->getBlockState() == $this->blockStateRepo->findByCode('blocked'))
@@ -63,8 +67,8 @@ class BreakService
 
     public function getBreakStatusForUser(User $user): array
     {
-        $isAvailable = $this->canGetBreakRuleChain->checkAllWithResult(new OnlyUserContext($user))->ok;
         $countAvailableBreaks = $this->countAvailableBreaksForUser($user);
+        $isAvailable = $this->canGetBreakRuleChain->checkAllWithResult(new OnlyBreakContext($user, $countAvailableBreaks))->ok;
 
         return [
             'isAvailable' => $isAvailable,
@@ -74,8 +78,8 @@ class BreakService
 
     public function countAvailableBreaksForUser(User $user): int
     {
-        $totalCountBreaks = $this->configRepo->findOneBy(['cid' => 'AdditionalCreditTimes']);
-        $totalCountUsedBreaks = $this->creditHistoryRepo->findBy(['user' => $user]);
+        $totalCountBreaks = (int) $this->configRepo->findOneBy(['cid' => 'StandardCreditTimes'])->getValue();
+        $totalCountUsedBreaks = $this->creditHistoryRepo->count(['user' => $user]);
 
         return ($totalCountBreaks - $totalCountUsedBreaks);
     }
