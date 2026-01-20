@@ -18,8 +18,8 @@ class TariffAvailabilityForClientPolicy extends Policy
             return false;
 
         // 2. Тариф должен иметь группу для переключения
-//        if (!$context->getTariff()->hasGroupCode('canBeChangeByClient'))
-//            return false;
+        if (!$context->getTariff()->hasGroupCode('canBeChangeByClient'))
+            return false;
 
         return true;
     }
