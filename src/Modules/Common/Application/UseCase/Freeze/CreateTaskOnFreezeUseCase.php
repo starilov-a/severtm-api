@@ -2,14 +2,14 @@
 
 namespace App\Modules\Common\Application\UseCase\Freeze;
 
+use App\Modules\Common\Domain\Contexts\Definitions\Freeze\CreateFreezeTaskContext;
 use App\Modules\Common\Domain\Entity\UserTask;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\Freeze\CreateFreezeTaskRuleChain;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\Freeze\CreateFreezeTaskRuleChain;
-use App\Modules\Common\Domain\Service\Rules\Contexts\CreateFreezeTaskContext;
 use App\Modules\Common\Domain\Service\TaskService;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;

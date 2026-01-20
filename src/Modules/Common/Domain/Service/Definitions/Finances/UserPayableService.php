@@ -2,14 +2,14 @@
 
 namespace App\Modules\Common\Domain\Service\Definitions\Finances;
 
+use App\Modules\Common\Domain\Contexts\Definitions\UserPayable\ShouldCreateUserPayableContext;
 use App\Modules\Common\Domain\Entity\UserPayable;
 use App\Modules\Common\Domain\Repository\UserPayableRepository;
 use App\Modules\Common\Domain\Repository\UserPayableTypeRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\UserPayable\ShouldMakeUserPayableRuleChain;
 use App\Modules\Common\Domain\Service\Definitions\Finances\Payables\CalculatedPayable;
-use App\Modules\Common\Domain\Service\Rules\Chains\UserPayable\ShouldMakeUserPayableRuleChain;
-use App\Modules\Common\Domain\Service\Rules\Contexts\ShouldCreateUserPayableContext;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class UserPayableService

@@ -2,11 +2,12 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Application\UseCase\ProdServMode\AddCurrentServiceModeUseCase;
+use App\Modules\Common\Application\UseCase\ProdServMode\DisableServiceModeUseCase;
 use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
-use App\Modules\Common\Domain\Service\Orchestrator\UserServModeOrchestrator;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use App\Modules\Common\Domain\Service\UserServService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
@@ -24,8 +25,9 @@ class LkClientServService
 
         protected UserServService          $clientServService,
         protected UserServModeService      $userServModeService,
-        protected UserServModeOrchestrator $userServModeOrchestratorService,
 
+        protected DisableServiceModeUseCase  $disableServiceModeUseCase,
+        protected AddCurrentServiceModeUseCase  $addCurrentServiceModeUseCase,
     ){}
 
     public function listAvailableServices(): array
@@ -87,7 +89,7 @@ class LkClientServService
             //Добавим комментарий, что пользователь сам активировал услугу
             $options->setComment('Активация услуги через личный кабинет');
 
-            $this->userServModeOrchestratorService->addCurrentServiceMode($user, $prodServMode, $options);
+            $this->addCurrentServiceModeUseCase->handle($user, $prodServMode, $options);
 
             return true;
         });
@@ -107,7 +109,7 @@ class LkClientServService
             if (!$userServMode)
                 throw new BusinessException('Эта услуга не привязана к вашему договору.');
 
-            $this->userServModeOrchestratorService->disableServiceMode($userServMode);
+            $this->disableServiceModeUseCase->handle($userServMode);
 
             return false;
         });

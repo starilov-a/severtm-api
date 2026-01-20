@@ -117,7 +117,7 @@ class Tariff
         return $this->hasGroupCode('canBeChangeByClient');
     }
 
-    private function hasGroupCode(string $code): bool
+    public function hasGroupCode(string $code): bool
     {
         // шаблон, который накладывается в указанную модель
         $criteria = Criteria::create()
