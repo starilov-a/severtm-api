@@ -155,6 +155,6 @@ class LkPaymentsService
     {
         $user = $this->userRepo->find($uid);
         // проверка для клиента
-        return ['isAvailable' => $this->breakService->getBreakStatusForUser($user)['isAvailable']];
+        return $this->breakService->getBreakStatusForUser($user);
     }
 }
