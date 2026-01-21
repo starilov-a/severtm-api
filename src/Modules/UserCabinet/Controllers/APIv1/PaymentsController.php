@@ -76,6 +76,17 @@ class PaymentsController extends Controller
     }
 
     #[Route(
+        'get-payment-link',
+        name: 'getPaymentLink',
+        methods: ['GET']
+    )]
+    public function getPaymentLink(LkPaymentsService $paymentsService): JsonResponse
+    {
+        $link = $paymentsService->getPaymentLink(UserSessionService::getDistrict());
+        return $this->responseData($link);
+    }
+
+    #[Route(
         '/can-take-break',
         name: 'canTakeBreak',
         methods: ['GET']

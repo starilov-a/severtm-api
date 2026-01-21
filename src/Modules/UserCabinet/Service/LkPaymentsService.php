@@ -23,33 +23,48 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LkPaymentsService
 {
+    const PAYMENT_LINK_BY_DISTRICT = [
+        '1001' => 'https://novtele.ru/oplata/',
+        '1013' => 'https://chetelecom.ru/oplata/',
+        '1022' => 'https://izet.ru/oplata/',
+        '1023' => 'https://izet.ru/oplata/',
+        '1024' => 'https://izet.ru/oplata/',
+        '1025' => 'https://izet.ru/oplata/',
+        '1026' => 'https://izet.ru/oplata/',
+        '1050' => 'https://yartele.com/oplata/',
+        '1051' => 'https://yartele.com/oplata/',
+        '1052' => 'https://yartele.com/oplata/',
+        '1053' => 'https://izet.ru/oplata/',
+    ];
 
     public function __construct(
-        protected EntityManagerInterface        $em,
+        protected EntityManagerInterface        $em,protected BalanceService          $balanceService,
+        protected ProdDiscountHistoryService         $writeOffService,
+        protected ReplenishmentService    $replenishmentService,
 
-        protected BalanceService                $balanceService,
-        protected ProdDiscountHistoryService    $writeOffService,
-        protected ReplenishmentService          $replenishmentService,
-        protected DebtService                   $debtService,
-        protected UserPaymentsService           $userPaymentsService,
-        protected BreakService                  $breakService,
+        protected DebtService             $debtService,
+        protected UserPaymentsService     $userPaymentsService,protected BreakService                  $breakService,
 
         protected ReplenishmentRepository       $replenishmentRepo,
-        protected UserRepository                $userRepo,
-        protected ProdDiscountHistoryRepository $writeOffRepo,
-        protected WebActionRepository           $webActionRepo,
+        protected UserRepository          $userRepo,
+        protected ProdDiscountHistoryRepository      $writeOffRepo,
+    protected WebActionRepository           $webActionRepo,
 
         protected ClientCanGetBreakRuleChain    $userCanGetBreakRuleChain,
 
-        protected TakeBreakForOneDayUseCase     $userCanTakeBreakForOneDayUseCase,
-    ){}
+        protected TakeBreakForOneDayUseCase     $userCanTakeBreakForOneDayUseCase,)
+    {
+    }
 
     /*
      * Оплата услуг
      * */
-    public function pay($uid, $cost): bool
+    public function getPaymentLink($district_id): string
     {
-        return false;
+        if (!isset(self::PAYMENT_LINK_BY_DISTRICT[$district_id])) {
+            throw new BusinessException('Регион пользователя не определен');
+        }
+        return self::PAYMENT_LINK_BY_DISTRICT[$district_id];
     }
 
     /*
