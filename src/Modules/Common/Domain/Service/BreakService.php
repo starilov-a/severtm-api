@@ -66,16 +66,12 @@ class BreakService
         $isAvailable = $this->canGetBreakRuleChain->checkAllWithResult(new OnlyBreakContext($user, $countAvailableBreaks))->ok;
         $isActive = $user->isCredit();
 
-        $statusData = [
+        return [
             'isAvailable' => $isAvailable,
             'isActive' => $isActive,
             'countAvailableBreaks' => $countAvailableBreaks,
+            'deadlineDate' => $user->getCreditDeadline()
         ];
-
-        if ($isActive)
-            $statusData['endDate'] = $user->getCreditDeadline();
-
-        return $statusData;
     }
 
     public function countAvailableBreaksForUser(User $user): int

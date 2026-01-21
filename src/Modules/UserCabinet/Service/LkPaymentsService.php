@@ -155,6 +155,17 @@ class LkPaymentsService
     {
         $user = $this->userRepo->find($uid);
         // проверка для клиента
-        return $this->breakService->getBreakStatusForUser($user);
+        $data = $this->breakService->getBreakStatusForUser($user);
+
+        $breakStatus = [
+            'isAvailable' => $data['isAvailable'],
+            'isActive' => $data['isActive'],
+            'count' => $data['countAvailableBreaks'] ,
+        ];
+
+        if ($data['isActive'])
+            $breakStatus['endDate'] = $data['deadlineDate'];
+
+        return $breakStatus;
     }
 }
