@@ -63,8 +63,7 @@ class FreezeController extends Controller
     public function getStatusFreeze(LkFreezeService $freezeService): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        $freezeService->unfreezeProfile($uid);
 
-        return $this->responseMessage('Аккаунт разморожен!');
+        return $this->response($freezeService->getFreezeStatus($uid), 'Информация о заморозке');
     }
 }

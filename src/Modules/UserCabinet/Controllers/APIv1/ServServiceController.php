@@ -70,23 +70,4 @@ class ServServiceController extends Controller
             'Услуга отключена.'
         );
     }
-
-
-    #[Route(
-        '/enable-serv',
-        name: 'enableServ',
-        methods: ['POST']
-    )]
-    public function enableServ(Request $request, LkClientServService $servService): JsonResponse
-    {
-        $uid = UserSessionService::getUserId();
-        $data = $request->toArray();
-
-        $servService->enableService($uid, $data['mode_id']);
-
-        return $this->response(
-            true,
-            'Услуга активирована.'
-        );
-    }
 }

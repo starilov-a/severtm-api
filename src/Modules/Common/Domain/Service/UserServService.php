@@ -2,7 +2,6 @@
 
 namespace App\Modules\Common\Domain\Service;
 
-use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\ServiceFilterDto;

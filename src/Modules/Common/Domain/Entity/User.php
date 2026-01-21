@@ -3,6 +3,8 @@
 namespace App\Modules\Common\Domain\Entity;
 
 use App\Modules\Common\Domain\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +16,20 @@ class User
     #[ORM\OneToOne(targetEntity: WebUser::class, mappedBy: 'user')]
     private ?WebUser $webUser;
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Discount::class)]
+    private ?Discount $discount = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserTask::class)]
+    private Collection $tasks;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ProdDiscountTemp::class)]
+    private Collection $prodDiscountTemps;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+        $this->prodDiscountTemps = new ArrayCollection();
+    }
 
     /* ---------- PK ---------- */
 
@@ -69,6 +85,10 @@ class User
 
     #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
     private int $isJuridical = 0;
+
+    #[ORM\ManyToOne(targetEntity: UserJurState::class)]
+    #[ORM\JoinColumn(name: 'is_juridical', referencedColumnName: 'entity_id', nullable: true)]
+    private ?UserJurState $jurState = null;
 
     #[ORM\Column(type: Types::FLOAT, precision: 16, scale: 4, options: ['default' => 0])]
     private float $bill = 0.0;
@@ -134,6 +154,11 @@ class User
     #[ORM\JoinColumn(name: 'tariff_next', referencedColumnName: 'id', nullable: true)]
     private ?Tariff $nextTariff = null;
 
+    #[ORM\Column(name: 'bw', type: Types::BIGINT, nullable: false, options: ['default' => 0])]
+    private string $bw;
+
+    #[ORM\Column(name: 'current_bw', type: Types::BIGINT, nullable: false, options: ['default' => 0])]
+    private string $currentBw;
     /* ---------- Отношения с другими справочниками ---------- */
 
 //    #[ORM\ManyToOne(targetEntity: Customer::class)]
@@ -285,14 +310,29 @@ class User
         return $this->credit;
     }
 
+    public function setCredit(bool $credit): void
+    {
+        $this->credit = $credit;
+    }
+
     public function getCreditDeadline(): ?\DateTimeInterface
     {
         return $this->creditDeadline;
     }
 
+    public function setCreditDeadline(\DateTimeInterface $creditDeadline): void
+    {
+        $this->creditDeadline = $creditDeadline;
+    }
+
     public function getBlockDate(): \DateTimeInterface
     {
         return $this->blockDate;
+    }
+
+    public function setBlockDate(\DateTimeInterface $blockDate): void
+    {
+        $this->blockDate = $blockDate;
     }
 
     public function getBlockComments(): string
@@ -311,9 +351,21 @@ class User
         return $this->abPstart;
     }
 
+    public function setAbPstart(\DateTimeImmutable $abPstart): self
+    {
+        $this->abPstart = $abPstart->getTimestamp();
+        return $this;
+    }
+
     public function getAbPend(): int
     {
         return $this->abPend;
+    }
+
+    public function setAbPend(\DateTimeImmutable $abPend): self
+    {
+        $this->abPend = $abPend->getTimestamp();
+        return $this;
     }
 
     public function getAbLdiscount(): int
@@ -354,6 +406,98 @@ class User
     public function setNextTariff(?Tariff $nextTariff): void
     {
         $this->nextTariff = $nextTariff;
+    }
+
+    public function getJurState(): ?UserJurState
+    {
+        return $this->jurState;
+    }
+
+    public function setJurState(?UserJurState $jurState): void
+    {
+        $this->jurState = $jurState;
+    }
+
+    public function getDiscount(): ?Discount
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(?Discount $discount): void
+    {
+        $this->discount = $discount;
+        if ($discount !== null && $discount->getUser() !== $this) {
+            $discount->setUser($this);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getBw(): string
+    {
+        return $this->bw;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentBw(): string
+    {
+        return $this->currentBw;
+    }
+
+    public function setBw(string $bw): self
+    {
+        $this->bw = $bw;
+        return $this;
+    }
+
+    public function setCurrentBw(string $currentBw): self
+    {
+        $this->currentBw = $currentBw;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserTask>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+//
+//    public function addTask(UserTask $task): void
+//    {
+//        if ($this->tasks->contains($task)) {
+//            return;
+//        }
+//
+//        $this->tasks->add($task);
+//        $task->setUser($this);
+//    }
+//
+//    public function removeTask(UserTask $task): void
+//    {
+//        $this->tasks->removeElement($task);
+//    }
+
+    /**
+     * @return Collection<int, UserTask>
+     */
+    public function getTasksByStateAndType(UserTaskState $state, UserTaskType $type): Collection
+    {
+        return $this->tasks->filter(
+            static fn(UserTask $task) => $task->getState() === $state && $task->getType() === $type
+        );
+    }
+
+    /**
+     * @return Collection<int, ProdDiscountTemp>
+     */
+    public function getProdDiscountTemps(): Collection
+    {
+        return $this->prodDiscountTemps;
     }
 
 }

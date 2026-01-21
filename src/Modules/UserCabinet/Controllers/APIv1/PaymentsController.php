@@ -17,7 +17,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-balance/',
+        '/get-balance',
         name: 'getBalance',
         methods: ['GET']
     )]
@@ -28,7 +28,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-write-offs/',
+        '/get-write-offs',
         name: 'getWriteOffs',
         methods: ['GET']
     )]
@@ -46,7 +46,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-replenishments/',
+        '/get-replenishments',
         name: 'getReplenishments',
         methods: ['GET']
     )]
@@ -65,7 +65,7 @@ class PaymentsController extends Controller
     }
 
     #[Route(
-        '/get-debt/',
+        '/get-debt',
         name: 'getDebt',
         methods: ['GET']
     )]
@@ -84,5 +84,30 @@ class PaymentsController extends Controller
     {
         $link = $paymentsService->getPaymentLink(UserSessionService::getDistrict());
         return $this->responseData($link);
+    }
+
+    #[Route(
+        '/can-take-break',
+        name: 'canTakeBreak',
+        methods: ['GET']
+    )]
+    public function canTakeBreak(LkPaymentsService $paymentsService): JsonResponse
+    {
+        $uid = UserSessionService::getUserId();
+        return $this->response($paymentsService->canTakeBreak($uid), 'Текущая возможность взять отсрочку');
+    }
+
+    #[Route(
+        '/take-break',
+        name: 'takeBreak',
+        methods: ['POST']
+    )]
+    public function takeBreak(LkPaymentsService $paymentsService): JsonResponse
+    {
+        $uid = UserSessionService::getUserId();
+
+        $paymentsService->takeBreak($uid);
+
+        return $this->responseMessage('Отсрочка на сутки успешно активирована!');
     }
 }

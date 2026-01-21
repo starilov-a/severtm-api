@@ -4,6 +4,7 @@ namespace App\Modules\Common\Domain\Service;
 
 use App\Modules\Common\Domain\Entity\UserTask;
 use App\Modules\Common\Domain\Repository\UserRepository;
+use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
@@ -16,6 +17,7 @@ class TaskService
         protected EntityManagerInterface $em,
         protected UserRepository $userRepo,
         protected WebActionRepository $webActionRepo,
+        protected UserTaskStateRepository $taskStateRepo,
     ){}
     public function createUserTask(CreateUserTaskDto $createUserTaskDto): UserTask
     {
@@ -48,6 +50,13 @@ class TaskService
         $userTask->setType($createUserTaskDto->getUserTaskType());
 
         return  $this->save($userTask);
+    }
+
+    public function updateUserTaskForCancel(UserTask $userTask): UserTask
+    {
+        //TODO сделать логирование отмены задачи
+        $userTask->setState($this->taskStateRepo->findOneBy(['code' => 'cancelled']));
+        return $this->update($userTask);
     }
 
     public function update(UserTask $userTask): UserTask

@@ -2,6 +2,8 @@
 
 namespace App\Modules\Common\Domain\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,9 @@ class Address
     #[ORM\Column(name: 'address_mail_index', type: Types::STRING, length: 6, nullable: true)]
     private ?string $postalIndex = null;
 
+    #[ORM\OneToMany(mappedBy: 'address', targetEntity: TariffBannedAddress::class)]
+    private Collection $bannedTariffs;
+
     public function __construct(
         int $id,
         string $name,
@@ -52,6 +57,7 @@ class Address
         $this->networks    = $networks;
         $this->unitId      = $unitId;
         $this->postalIndex = $postalIndex;
+        $this->bannedTariffs = new ArrayCollection();
     }
 
     public function getId(): int { return $this->id; }
@@ -76,5 +82,11 @@ class Address
 
     public function getPostalIndex(): ?string { return $this->postalIndex; }
     public function setPostalIndex(?string $index): self { $this->postalIndex = $index; return $this; }
+
+    /** @return Collection<int, TariffBannedAddress> */
+    public function getBannedTariffs(): Collection
+    {
+        return $this->bannedTariffs;
+    }
 
 }

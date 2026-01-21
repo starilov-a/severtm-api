@@ -2,20 +2,24 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Application\UseCase\Break\TakeBreakForOneDayUseCase;
+use App\Modules\Common\Domain\Repository\ProdDiscountHistoryRepository;
 use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WriteOffRepository;
-use App\Modules\Common\Domain\Service\BalanceService;
-use App\Modules\Common\Domain\Service\DebtService;
+use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\Break\ClientCanGetBreakRuleChain;
+use App\Modules\Common\Domain\Service\BreakService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\BalanceService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\DebtService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\ProdDiscountHistoryService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\ReplenishmentService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
-use App\Modules\Common\Domain\Service\ReplenishmentService;
-use App\Modules\Common\Domain\Service\UserPaymentsService;
-use App\Modules\Common\Domain\Service\WriteOffService;
-use App\Modules\Common\Infrastructure\Exception\BusinessException;
-use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
+use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LkPaymentsService
 {
@@ -34,15 +38,21 @@ class LkPaymentsService
     ];
 
     public function __construct(
-        protected BalanceService          $balanceSerivce,
-        protected WriteOffService         $writeOffService,
+        protected EntityManagerInterface        $em,protected BalanceService          $balanceService,
+        protected ProdDiscountHistoryService         $writeOffService,
         protected ReplenishmentService    $replenishmentService,
-        protected ReplenishmentRepository $replenishmentRepository,
+
         protected DebtService             $debtService,
-        protected UserPaymentsService     $userPaymentsService,
+        protected UserPaymentsService     $userPaymentsService,protected BreakService                  $breakService,
+
+        protected ReplenishmentRepository       $replenishmentRepo,
         protected UserRepository          $userRepo,
-        protected WriteOffRepository      $writeOffRepo,
-    )
+        protected ProdDiscountHistoryRepository      $writeOffRepo,
+    protected WebActionRepository           $webActionRepo,
+
+        protected ClientCanGetBreakRuleChain    $userCanGetBreakRuleChain,
+
+        protected TakeBreakForOneDayUseCase     $userCanTakeBreakForOneDayUseCase,)
     {
     }
 
@@ -63,7 +73,7 @@ class LkPaymentsService
     public function getBalance(int $uid): array
     {
         $user = $this->userRepo->find($uid);
-        $balance = $this->balanceSerivce->getUserBalance($user);
+        $balance = $this->balanceService->getUserBalance($user);
 
         return [
             'balance' => $balance->get()
@@ -107,7 +117,7 @@ class LkPaymentsService
      * */
     public function getReplenishments(int $uid, FilterDto $filter): ReplenishmentsCollectionDto
     {
-        $replenishments = $this->replenishmentRepository->findBy(
+        $replenishments = $this->replenishmentRepo->findBy(
             ['user' => $this->userRepo->find($uid)],
             ['dateTs' => 'DESC'],
             $filter->getLimit(),
@@ -135,5 +145,42 @@ class LkPaymentsService
     public function disableAutopayment(int $uid): bool
     {
         return false;
+    }
+
+    /*
+     * Получение отсрочки для клиента
+     * */
+    public function takeBreak(int $uid): bool
+    {
+        return $this->em->getConnection()->transactional(function () use (
+            $uid,
+        ) {
+            $user = $this->userRepo->find($uid);
+
+            $this->userCanTakeBreakForOneDayUseCase->handle($user);
+
+            return true;
+        });
+    }
+
+    /*
+     * Получение информации об отсрочках
+     * */
+    public function canTakeBreak(int $uid): array
+    {
+        $user = $this->userRepo->find($uid);
+        // проверка для клиента
+        $data = $this->breakService->getBreakStatusForUser($user);
+
+        $breakStatus = [
+            'isAvailable' => $data['isAvailable'],
+            'isActive' => $data['isActive'],
+            'count' => $data['countAvailableBreaks'] ,
+        ];
+
+        if ($data['isActive'])
+            $breakStatus['endDate'] = $data['deadlineDate'];
+
+        return $breakStatus;
     }
 }

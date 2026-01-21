@@ -20,8 +20,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LkUserProfileService
 {
-
-
     public function __construct(
         protected EntityManagerInterface    $em,
 
@@ -83,7 +81,6 @@ class LkUserProfileService
 
     }
 
-
     public function checkPassword(string $pass): void
     {
         //TODO нужно будет перенести в common
@@ -92,18 +89,4 @@ class LkUserProfileService
             throw new BusinessException("Старый пароль введен не верно!");
         }
     }
-
-    /*
-     * Получение отсрочки для клиента
-     * */
-    public function takeBreak(int $uid): bool
-    {
-        return false;
-    }
-
-    public function getCountAvailableBreaks(int $uid): int
-    {
-
-    }
-
 }

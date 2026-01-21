@@ -1,62 +1,56 @@
 ## Деплой проекта
 
-1. Настройка переменных среды **docker-compose**: 
-    ```sh
-    cp ./docker/.env.dist ./docker/.env
-    ```
-   - Укажите **NGINX_HOST_HTTP_PORT** внешний порт контейнера (по умолчанинию **80**)
+Папка `./docker` содержит все необходимые файлы для деплоя/локального запуска в Docker: `docker-compose.yml`, env-шаблон (`.env.dist`), Dockerfile'ы `php-fpm` и `nginx`, а также конфигурации `nginx` и `xdebug`.
 
-2. Настройка переменных **Xdebug**:
-    ```
-    cp ./docker/php-fpm/.xdebug.ini.example ./docker/php-fpm/.xdebug.ini
-    ```
-   - Укажите **xdebug.idekey** - этот ключ указывается в ide при настройке xdebug
-   - При необходимости измените **xdebug.client_port** для указания кастомного порта для xdebug
+### Быстрый старт (Docker)
 
-3. Настройка окружения **symfony**
-    ```sh
-    cp ./.env.example ./.env
-    ```
-4. Запуск docker-compose
-    ```sh
-    docker compose -f ./docker/docker-compose.yml up build
-    docker compose -f ./docker/docker-compose.yml up
-    ```
-   либо 
+1. Настройка переменных среды **docker-compose**:
    ```sh
-   docker compose -f ./docker/docker-compose.yml up --build -d
+   cp ./docker/.env.dist ./docker/.env
    ```
-5. Подтягивание зависимостей **composer**  
-    На **develop**:
-    ```sh
-    composer install
-    ```
-    На **production**:
-    ```sh
-    composer install --no-dev --optimize-autoloader
-    ```
+   - `NGINX_HOST_HTTP_PORT` — внешний HTTP-порт (по умолчанию `80`)
+   - `PUID/PGID` — uid/gid пользователя на хосте (чтобы файлы в volume не создавались от root)
+   - `INSTALL_XDEBUG` — ставить ли Xdebug в `php-fpm` (по умолчанию `false`)
+
+2. Настройка окружения **Symfony** (минимум):
+   ```sh
+   cp ./.env.example ./.env
+   ```
+
+3. Запуск контейнеров
+   - Рекомендуемый вариант (из корня репозитория):
+     ```sh
+     docker compose --env-file ./docker/.env -f ./docker/docker-compose.yml up -d --build
+     ```
+   - Альтернатива (перейти в `./docker` и запускать без `--env-file`):
+     ```sh
+     cd docker
+     docker compose up -d --build
+     ```
+
+4. Установка зависимостей Composer (внутри контейнера `php-fpm`)
+   - **develop**:
+     ```sh
+     docker compose --env-file ./docker/.env -f ./docker/docker-compose.yml exec -u www-data php-fpm composer install
+     ```
+   - **production**:
+     ```sh
+     docker compose --env-file ./docker/.env -f ./docker/docker-compose.yml exec -u www-data php-fpm composer install --no-dev --optimize-autoloader
+     ```
+
 ### Особенности настройки
 
-1. Настройки **Xdebug** в PHPstorm.
-При указании сервера в ide (Settings -> Languages&Frameworks -> PHP -> Servers) название сервера необходимо давать такое же, какое указано в ./docker/docker-compose.yml в переменной PHP_IDE_CONFIG
+1. Настройка **Xdebug** (опционально)
+   - Включите установку Xdebug: выставьте `INSTALL_XDEBUG=true` в `./docker/.env` и пересоберите контейнеры.
+   - Конфиг Xdebug: `./docker/php-fpm/xdebug.ini` (пример: `./docker/php-fpm/xdebug.ini.example`).
+   - PHPStorm: имя сервера должно совпадать с `PHP_IDE_CONFIG` в `./docker/docker-compose.yml` (сейчас `serverName=docker-symfony`).
 
-2. Установка из контейнера
+2. Проверка, что сервис поднялся
+   - Приложение доступно на `http://localhost:<NGINX_HOST_HTTP_PORT>` (порт задается в `./docker/.env`).
 
-   ```sh
-   docker compose -f ./docker/docker-compose.yml exec -u www-data php-fpm bash
-   ```
-   (https://symfony.com/doc/current/setup.html)  
-   В контейнере запускаем:
-  
-   ```
-   composer create-project symfony/skeleton:"7.2.x" my_project_directory
-   ```
-   
-   Переносим все файлы из my_project_directory/ в корневую директорию.
-   
 ### Особенности разработки
 
-1. По ссылке /_profiler в *dev* среде мы можем отобразить **Symfony Profiler**
+1. По ссылке `/_profiler` в *dev* среде мы можем отобразить **Symfony Profiler**
 
 ## Архитектурные особенности
 
@@ -76,12 +70,15 @@ src/Modules
 
 ### Слоистость приложения
 В проекте соблюдается последовательность:  
-`Модуль (например, UserCabinet)` → `Основные бизнес‑логики ядра (Common\Domain\Service)` → `Поддерживающие сервисы и инфраструктура (логирование, правила, задачи)` → `Сущности и репозитории`.
+`HTTP (контроллеры модуля)` → `сервисы модуля (транзакции/оркестрация)` → `UseCase (Application слой)` → `Domain сервисы/правила` → `сущности/репозитории` (+ инфраструктура как кросс‑срез).
 
-1. **Модульный слой** (`Modules/UserCabinet/Controllers|Service`). Контроллеры принимают HTTP‑запросы, подготавливают DTO и вызывают модульные сервисы.
-2. **Сервисы ядра** (`Modules/Common/Domain/Service`). Именно здесь стартуют транзакции, прикручиваются `RuleChain`, формируются доменные события и гарантируется консистентность.
-3. **Поддерживающие сервисы** (`Modules/Common/Infrastructure/Service`, вспомогательные сервисы модуля). Они не содержат бизнес‑решений, но помогают выдерживать инварианты: логирование (`LoggerService`), авторизация (`Auth`, `UserSessionService`), генерация задач, уведомления.
-4. **Сущности и репозитории** (`Modules/*/Entity`, `Modules/*/Repository`). Вся работа с БД завершается на этом уровне; репозитории наследуются от общего `BaseRepository`.
+1. **HTTP/Модульный слой** (`src/Modules/*/Controllers`). Контроллеры принимают HTTP‑запросы, валидируют входные данные/DTO и вызывают сервисы модуля.
+2. **Сервисы модуля** (`src/Modules/*/Service`). Здесь задается **граница транзакции** (обычно через `EntityManagerInterface->getConnection()->transactional()`), а также выполняется “склейка” шагов бизнес‑процесса: выбор нужного use-case, подготовка контекстов/DTO, обработка результата.
+3. **UseCases (Application слой)** (`src/Modules/Common/Application/UseCase`). Use-case группирует бизнес‑сценарий в одном месте, сохраняет инварианты и управляет порядком действий: применяет `RuleChain`, вызывает доменные сервисы, пишет бизнес‑лог, инициирует побочные эффекты (задачи/изменение тарифов/перерасчеты и т.п.).
+4. **Доменные сервисы (агрегируемые в use-cases)** (`src/Modules/Common/Domain/Service`). Переиспользуемые доменные операции без привязки к конкретному HTTP‑сценарию: работа с тарифами/задачами/пользователями и т.д. Use-case, как правило, собирается из нескольких таких сервисов.
+5. **Правила (Rules engine)** (`src/Modules/Common/Domain/Service/Rules`). `Rule` — атомарная проверка, возвращающая `RuleResult`; `RuleChain` — композиция правил с режимами `SOFT/HARD`, используемая use-case’ами для валидации бизнес‑условий до изменения данных.
+6. **Инфраструктура** (`src/Modules/Common/Infrastructure/Service`). Кросс‑доменные вещи: логирование (`LoggerService`), авторизация/сессия (`Auth`, `UserSessionService`), стандартные исключения, интеграции и техническая обвязка.
+7. **Сущности и репозитории** (`src/Modules/*/Entity`, `src/Modules/*/Repository`). Сущности и доступ к данным; репозитории инкапсулируют запросы к БД и не содержат orchestration‑логики.
 
 ### Common: доменный и инфраструктурный слои
 - `src/Modules/Common/Domain` — чистый домен: сущности, репозитории, сервисы и правила. Здесь нет зависимостей на внешние каналы.
@@ -111,7 +108,7 @@ src/Modules
 - `ExceptionListener` формирует тело ответа при ошибках. Благодаря этому контракт API остаётся стабильным независимо от внутренних изменений.
 
 ### Дополнительные функциональные моменты
-- **Движок бизнес‑правил** (`src/Modules/Common/Domain/Service/Rules`). Он позволяет собирать цепочки (`RuleChain`) из атомарных правил (`Rule`) и использовать их в сервисах ядра. Это обеспечивает повторное использование проверок и детальный аудит (см. `src/Modules/Common/Domain/Service/Rules/README.md`).
+- **Движок бизнес‑правил** (`src/Modules/Common/Domain/Service/Rules`). Он позволяет собирать цепочки (`RuleChain`) из атомарных правил (`Rule`) и использовать их в use-case’ах и сервисах. Это обеспечивает повторное использование проверок и детальный аудит (см. `src/Modules/Common/Domain/Service/Rules/README.md`).
 - **Бизнес‑/техническое логирование** (`Common/Infrastructure/Service/Logger`). Сервисы ядра автоматически прокидывают `BusinessLogDto`/`ErrorLogDto`, а `ExceptionListener` логирует критичные кейсы.
 - **Сессии и контекст пользователя** (`Common/Infrastructure/Service/Auth`). `UserSessionService` предоставляет ID пользователя для доменных сервисов, `Auth` управляет состоянием авторизации.
 - **Proxy/CI настройки** — в конце файла приведены команды для работы через корпоративный прокси; благодаря этому окружение разворачивается одинаково в локальной и CI‑среде.

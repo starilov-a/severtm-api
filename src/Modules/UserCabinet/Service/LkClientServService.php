@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Application\UseCase\ProdServMode\AddCurrentServiceModeUseCase;
+use App\Modules\Common\Application\UseCase\ProdServMode\DisableServiceModeUseCase;
 use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
@@ -9,16 +11,23 @@ use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use App\Modules\Common\Domain\Service\UserServService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LkClientServService
 {
 
     public function __construct(
-        protected UserServService $clientServService,
-        protected UserRepository  $userRepo,
-        protected ProdServModeRepository  $prodServModeRepo,
-        protected UserServModeService $userServModeService,
-        protected UserServModeRepository $userServModeRepo
+        protected EntityManagerInterface   $em,
+
+        protected UserRepository           $userRepo,
+        protected ProdServModeRepository   $prodServModeRepo,
+        protected UserServModeRepository   $userServModeRepo,
+
+        protected UserServService          $clientServService,
+        protected UserServModeService      $userServModeService,
+
+        protected DisableServiceModeUseCase  $disableServiceModeUseCase,
+        protected AddCurrentServiceModeUseCase  $addCurrentServiceModeUseCase,
     ){}
 
     public function listAvailableServices(): array
@@ -69,16 +78,21 @@ class LkClientServService
     * */
     public function enableService(int $uid, int $modeId): bool
     {
-        $user = $this->userRepo->find($uid);
-        $prodServMode = $this->prodServModeRepo->find($modeId);
-        $options = new OptionsUserServModeDto();
+        return $this->em->getConnection()->transactional(function () use (
+            $uid,
+            $modeId,
+        ) {
+            $user = $this->userRepo->find($uid);
+            $prodServMode = $this->prodServModeRepo->find($modeId);
+            $options = new OptionsUserServModeDto();
 
-        //Добавим комментарий, что пользователь сам активировал услугу
-        $options->setComment('Активация услуги через личный кабинет');
+            //Добавим комментарий, что пользователь сам активировал услугу
+            $options->setComment('Активация услуги через личный кабинет');
 
-        $this->userServModeService->addCurrentServiceMode($user, $prodServMode, $options);
+            $this->addCurrentServiceModeUseCase->handle($user, $prodServMode, $options);
 
-        return true;
+            return true;
+        });
     }
 
     /*
@@ -86,14 +100,18 @@ class LkClientServService
      * */
     public function disableService(int $uid, int $userModeId): bool
     {
-        $userServMode = $this->userServModeRepo->findOneBy(['id' => $userModeId, 'user' =>  $this->userRepo->find($uid)]);
+        return $this->em->getConnection()->transactional(function () use (
+            $uid,
+            $userModeId,
+        ) {
+            $userServMode = $this->userServModeRepo->findOneBy(['id' => $userModeId, 'user' =>  $this->userRepo->find($uid)]);
 
-        // Проверка
-        if (!$userServMode)
-            throw new BusinessException('Эта услуга не привязана к вашему договору.');
+            if (!$userServMode)
+                throw new BusinessException('Эта услуга не привязана к вашему договору.');
 
-        $this->userServModeService->disableServiceMode($userServMode);
+            $this->disableServiceModeUseCase->handle($userServMode);
 
-        return false;
+            return false;
+        });
     }
 }

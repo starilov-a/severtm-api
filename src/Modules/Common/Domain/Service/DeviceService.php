@@ -4,7 +4,6 @@ namespace App\Modules\Common\Domain\Service;
 
 use App\Modules\Common\Domain\Entity\Device;
 use App\Modules\Common\Domain\Entity\User;
-use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Repository\DeviceRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\DeviceDto;
 

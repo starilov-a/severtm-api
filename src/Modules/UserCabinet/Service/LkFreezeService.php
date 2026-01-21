@@ -2,23 +2,31 @@
 
 namespace App\Modules\UserCabinet\Service;
 
+use App\Modules\Common\Application\UseCase\Freeze\CreateTaskOnFreezeUseCase;
+use App\Modules\Common\Application\UseCase\Freeze\UnfreezeInternetNoJuridicalUserUseCase;
 use App\Modules\Common\Domain\Entity\FreezeReason;
 use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
-use App\Modules\Common\Domain\Repository\WebUserRepository;
+use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\Common\Domain\Service\FreezeService;
-use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LkFreezeService
 {
     public function __construct(
-        protected FreezeService             $freezeService,
-        protected UserRepository            $userRepo,
-        protected FreezeReasonRepository    $freezeReasonRepo,
-        protected UserTaskRepository        $userTaskRepo,
+        protected EntityManagerInterface                    $em,
+
+        protected FreezeService                             $freezeService,
+        protected UserRepository                            $userRepo,
+        protected FreezeReasonRepository                    $freezeReasonRepo,
+        protected UserTaskRepository                        $userTaskRepo,
+        protected UserTaskStateRepository                   $userTaskStateRepo,
+
+        protected CreateTaskOnFreezeUseCase                 $createTaskOnFreezeUseCase,
+        protected UnfreezeInternetNoJuridicalUserUseCase    $unfreezeInternetNoJuridicalUserUseCase,
+
     ) {}
 
     public function getReasonForFreeze(): array
@@ -38,15 +46,23 @@ class LkFreezeService
      * */
     public function freezeProfile(int $uid, string $startDate, int $reasonId): bool
     {
-        $taskDto = new CreateUserTaskDto(
-            $this->userRepo->find($uid),
-            new \DateTimeImmutable($startDate),
-            $this->freezeReasonRepo->find($reasonId)
-        );
+        return $this->em->getConnection()->transactional(function () use (
+            $uid,
+            $startDate,
+            $reasonId,
+        ) {
 
-        $this->freezeService->createFreezeUserTask($taskDto);
+            $taskDto = new CreateUserTaskDto(
+                $this->userRepo->find($uid),
+                new \DateTimeImmutable($startDate),
+                $this->freezeReasonRepo->find($reasonId)
+            );
 
-        return true;
+            $this->createTaskOnFreezeUseCase->handle($taskDto);
+
+            return true;
+
+        });
     }
 
     /*
@@ -54,19 +70,22 @@ class LkFreezeService
      * */
     public function unfreezeProfile(int $uid): bool
     {
-        throw new BusinessException('Обратитесь к менеджеру для разморозки');
+        return $this->em->getConnection()->transactional(function () use (
+            $uid,
+        ) {
+            $user = $this->userRepo->find($uid);
 
-        $taskDto = $this->userTaskRepo->findOneBy(['user' => $this->userRepo->find($uid)]);
+            $this->unfreezeInternetNoJuridicalUserUseCase->handle($user);
 
-        $this->freezeService->createUnfreezeUserTask($taskDto);
-
-        return true;
+            return true;
+        });
     }
 
     public function getFreezeStatus($uid): array
     {
         $user = $this->userRepo->find($uid);
 
-        return $this->freezeService->getUserFreezeStatus($user);
+        $freezeStatus = $this->freezeService->getUserFreezeStatus($user);
+        return $freezeStatus->toArray();
     }
 }

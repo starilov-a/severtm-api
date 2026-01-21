@@ -26,17 +26,21 @@ RUN apk add --no-cache \
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-ARG INSTALL_XDEBUG=false
-RUN if [ ${INSTALL_XDEBUG} = true ]; then \
-        pecl install xdebug && docker-php-ext-enable xdebug; \
-    fi
+ARG INSTALL_XDEBUG
+
+RUN if [ ${INSTALL_XDEBUG} = true ]; \
+    then \
+     pecl install xdebug && docker-php-ext-enable xdebug; \
+    fi;
 
 COPY ./docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Configure non-root user.
-ARG PUID=1000
-ARG PGID=1000
-RUN apk add --no-cache shadow && \
+
+ARG PGID
+ARG PUID
+
+RUN apk --no-cache add shadow && \
     groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
