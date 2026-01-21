@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service;
 
+use App\Modules\Common\Domain\Contexts\Definitions\UserServMode\AddServiceModeContext;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserServMode;
@@ -10,10 +11,9 @@ use App\Modules\Common\Domain\Repository\UserJurStateRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\UserServMode\AddServiceModeRuleChain;
+use App\Modules\Common\Domain\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\UserServMode\AddServiceModeRuleChain;
-use App\Modules\Common\Domain\Service\Rules\Contexts\AddServiceModeContext;
-use App\Modules\Common\Domain\Service\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;

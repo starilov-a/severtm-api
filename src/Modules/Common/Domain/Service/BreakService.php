@@ -2,22 +2,17 @@
 
 namespace App\Modules\Common\Domain\Service;
 
-use App\Modules\Common\Domain\Entity\BlockState;
-use App\Modules\Common\Domain\Entity\CreditHistory;
+use App\Modules\Common\Domain\Contexts\Definitions\Break\BreakContext;
+use App\Modules\Common\Domain\Contexts\Definitions\Break\OnlyBreakContext;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\BlockStateRepository;
 use App\Modules\Common\Domain\Repository\ConfigRepository;
 use App\Modules\Common\Domain\Repository\CreditHistoryRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\Break\CanGetBreakRuleChain;
 use App\Modules\Common\Domain\Service\Dto\Request\CreditHistoryLogDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\Break\CanGetBreakRuleChain;
-use App\Modules\Common\Domain\Service\Rules\Contexts\BreakContext;
-use App\Modules\Common\Domain\Service\Rules\Contexts\OnlyBreakContext;
-use App\Modules\Common\Domain\Service\Rules\Contexts\OnlyUserContext;
-use App\Modules\Common\Domain\Service\Rules\Contexts\UserContext;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
 class BreakService
@@ -78,9 +73,9 @@ class BreakService
 
     public function countAvailableBreaksForUser(User $user): int
     {
-        $totalCountBreaks = (int) $this->configRepo->findOneBy(['cid' => 'StandardCreditTimes'])->getValue();
-        $totalCountUsedBreaks = $this->creditHistoryRepo->count(['user' => $user]);
+        $totalCountBreaks = (int)($this->configRepo->findOneBy(['cid' => 'StandardCreditTimes'])?->getValue() ?? 0);
+        $totalCountUsedBreaks = $this->creditHistoryRepo->countByUser($user);
 
-        return ($totalCountBreaks - $totalCountUsedBreaks);
+        return max(0, $totalCountBreaks - $totalCountUsedBreaks);
     }
 }

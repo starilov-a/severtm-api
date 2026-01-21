@@ -3,20 +3,18 @@
 namespace App\Modules\UserCabinet\Service;
 
 use App\Modules\Common\Application\UseCase\Break\TakeBreakForOneDayUseCase;
+use App\Modules\Common\Domain\Repository\ProdDiscountHistoryRepository;
 use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\ProdDiscountHistoryRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\Break\ClientCanGetBreakRuleChain;
 use App\Modules\Common\Domain\Service\BreakService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\BalanceService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\DebtService;
+use App\Modules\Common\Domain\Service\Definitions\Finances\ProdDiscountHistoryService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\ReplenishmentService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
-use App\Modules\Common\Domain\Service\Definitions\Finances\ProdDiscountHistoryService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\Break\ClientCanGetBreakRuleChain;
-use App\Modules\Common\Domain\Service\Rules\Contexts\UserContext;
-use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;

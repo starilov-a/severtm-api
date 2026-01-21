@@ -4,6 +4,7 @@ namespace App\Modules\Common\Domain\Repository;
 
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\User;
+use App\Modules\Common\Domain\Service\Dto\Request\TariffFilterDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,31 +22,14 @@ class TariffRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t');
 
-//        if ($dto->getActiveStatus()) {
-//            $qb->leftJoin('')
-//        }
-
-        $minPrice = $dto->getMinPrice();
-        if ($minPrice) {
-            $qb->andWhere('t.price > :minPrice')
-                ->setParameter('minPrice', $minPrice);;
-        }
-
         $qb->leftJoin('t.groups', 'tg');
 
-        //TODO: вернуть проверку
-//        $codes = $dto->getGroupCodes();
-//        if (!empty($codes)) {
-//            $qb->andWhere('tg.code IN (:codes)')
-//                ->setParameter('codes', $codes);
-//        }
-//
-//        // может быть стоит убрать join я хз
-//        $regionCodes = $dto->getRegionGroupCodes();
-//        if (!empty($regionCodes)) {
-//            foreach ($regionCodes as $key => $code)
-//                $qb->andWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
-//        }
+        // 2. проверка наличия группы региона
+        $regionCodes = $dto->getRegionGroupCodes();
+        if (!empty($regionCodes)) {
+            foreach ($regionCodes as $key => $code)
+                $qb->orWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
+        }
 
         // Сортировка:
         $qb->orderBy('t.'.$dto->getOrderBy(), $dto->getOrderDir());

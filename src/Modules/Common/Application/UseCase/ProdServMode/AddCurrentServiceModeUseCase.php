@@ -2,13 +2,13 @@
 
 namespace App\Modules\Common\Application\UseCase\ProdServMode;
 
+use App\Modules\Common\Domain\Contexts\Definitions\User\OnlyUserContext;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\FinPeriodRepository;
+use App\Modules\Common\Domain\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
-use App\Modules\Common\Domain\Service\Rules\Contexts\OnlyUserContext;
-use App\Modules\Common\Domain\Service\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use Doctrine\ORM\EntityManagerInterface;
 

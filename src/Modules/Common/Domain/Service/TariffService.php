@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service;
 
+use App\Modules\Common\Domain\Contexts\Definitions\Tariff\ChangeTariffContext;
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\User;
@@ -11,24 +12,24 @@ use App\Modules\Common\Domain\Repository\TariffRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
+use App\Modules\Common\Domain\Rules\Chains\Tariff\ChangeTariffRuleChain;
 use App\Modules\Common\Domain\Service\Dto\Request\TariffFilterDto;
-use App\Modules\Common\Domain\Service\Rules\Chains\Tariff\ChangeTariffRuleChain;
-use App\Modules\Common\Domain\Service\Rules\Contexts\ChangeTariffContext;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class TariffService
 {
     public function __construct(
-        protected TariffRepository $tariffRepo,
-        protected FinPeriodRepository $finPeriodRepo,
-        protected UserServModeRepository $userServModeRepo,
-        protected UserRepository $userRepo,
-        protected WebActionRepository $webActionRepo,
+        protected TariffRepository          $tariffRepo,
+        protected FinPeriodRepository       $finPeriodRepo,
+        protected UserServModeRepository    $userServModeRepo,
+        protected UserRepository            $userRepo,
+        protected WebActionRepository       $webActionRepo,
 
-        protected UserService $userService,
-        protected UserServModeService $userServModeService,
+        protected UserService               $userService,
+        protected UserServModeService       $userServModeService,
+        protected TariffGroupService        $tariffGroupService,
 
-        protected ChangeTariffRuleChain $changeTariffRuleChain,
+        protected ChangeTariffRuleChain     $changeTariffRuleChain,
     ) {}
 
     /**
@@ -55,6 +56,7 @@ class TariffService
             $user,
             $newTariff,
             $oldTariff,
+            $user->getRegion()
         ));
 
         // запись в таблице users
@@ -69,22 +71,17 @@ class TariffService
         return true;
     }
 
-    public function getTariffsForClient(User $user, TariffFilterDto $dto = new TariffFilterDto()): array
+    public function getTariffsByUser(User $user, TariffFilterDto $dto = new TariffFilterDto()): array
     {
         //1. Тарифы активные
         $dto->setActiveStatus(true);
 
         //2. Тариф имеет группу, обозначающую необходимый регион
         $userRegion = $user->getRegion();
-        array_map(function ($region) use ($dto) {
-            $dto->addRegionGroupCodes($region);
-        }, [
-            1 => 'velikij_novgorod_tariffs',
-            2 => 'cherepevets_tariffs',
-            3 => 'chelyzbinsk_tariffs',
-            4 => 'yaroslavl_tariffs'
-        ]);
+        $regions = $this->tariffGroupService->getTariffGroupRegions();
+        $dto->addRegionGroupCodes($regions[$userRegion->getId()]);
 
+        //3. Тарифы по пользователю
         return $this->tariffRepo->getTariffs($dto);
     }
 

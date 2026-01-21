@@ -5,7 +5,6 @@ namespace App\Modules\Common\Domain\Service;
 use App\Modules\Common\Domain\Entity\Device;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserOwnDevice;
-use App\Modules\Common\Domain\Repository\UserOwnDeviceHistoryRepository;
 use App\Modules\Common\Domain\Repository\UserOwnDeviceRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
