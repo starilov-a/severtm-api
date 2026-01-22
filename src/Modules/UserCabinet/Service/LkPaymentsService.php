@@ -15,6 +15,7 @@ use App\Modules\Common\Domain\Service\Definitions\Finances\ProdDiscountHistorySe
 use App\Modules\Common\Domain\Service\Definitions\Finances\ReplenishmentService;
 use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
 use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;
@@ -38,21 +39,23 @@ class LkPaymentsService
     ];
 
     public function __construct(
-        protected EntityManagerInterface        $em,protected BalanceService          $balanceService,
-        protected ProdDiscountHistoryService         $writeOffService,
-        protected ReplenishmentService    $replenishmentService,
+        protected EntityManagerInterface            $em,
+        protected BalanceService                    $balanceService,
+        protected ProdDiscountHistoryService        $writeOffService,
+        protected ReplenishmentService              $replenishmentService,
 
-        protected DebtService             $debtService,
-        protected UserPaymentsService     $userPaymentsService,protected BreakService                  $breakService,
+        protected DebtService                       $debtService,
+        protected UserPaymentsService               $userPaymentsService,
+        protected BreakService                      $breakService,
 
-        protected ReplenishmentRepository       $replenishmentRepo,
-        protected UserRepository          $userRepo,
-        protected ProdDiscountHistoryRepository      $writeOffRepo,
-    protected WebActionRepository           $webActionRepo,
+        protected ReplenishmentRepository           $replenishmentRepo,
+        protected UserRepository                    $userRepo,
+        protected ProdDiscountHistoryRepository     $writeOffRepo,
+        protected WebActionRepository               $webActionRepo,
 
-        protected ClientCanGetBreakRuleChain    $userCanGetBreakRuleChain,
+        protected ClientCanGetBreakRuleChain        $userCanGetBreakRuleChain,
 
-        protected TakeBreakForOneDayUseCase     $userCanTakeBreakForOneDayUseCase,)
+        protected TakeBreakForOneDayUseCase         $userCanTakeBreakForOneDayUseCase,)
     {
     }
 

@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Service\Dto\Response;
 
 
 
-use App\Modules\Common\Domain\Entity\UserPayable;
+use App\Modules\Common\Domain\Entity\ProdDiscountHistory;
 
 use App\Modules\Common\Domain\Service\Dto\Dto;
 
@@ -21,8 +21,7 @@ class WriteOffDto extends Dto
      * @param string $payableId
      * @param string|null $date
      */
-    // ”казать
-    public function __construct($writeOff)
+    public function __construct(ProdDiscountHistory $writeOff)
     {
         $this->id = $writeOff->getId();
         $this->date = $writeOff->getChargedAt()->format('Y-m-d H:i:s');
