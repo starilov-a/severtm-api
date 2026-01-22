@@ -32,8 +32,6 @@ class LkClientTariffService
         protected ChangeNextTariffUseCase       $changeNextTariffUseCase,
         protected GetAvailableTariffsForClientUseCase $getAvailableTariffsForClientUseCase,
         protected ClientChangeNextTariffUseCase  $clientChangeNextTariffUseCase,
-
-        protected ClientChangeTariffRuleChain   $clientChangeTariffRuleChain,
     ) {}
     public function getCurrentTariff(int $uid): TariffDto
     {

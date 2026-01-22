@@ -6,6 +6,7 @@ class TariffFilterDto extends FilterDto
 {
     private ?bool $activeStatus = null;        // true → только активные сегодня
     private array $regionGroupCodes = [];
+    private array $requiredGroupCodes = [];
     private bool $excludeDisconnected = true;   // скипать тариф "отключен от сети"
     public function setExcludeDisconnected(bool $excludeDisconnected): void
     {
@@ -37,5 +38,14 @@ class TariffFilterDto extends FilterDto
         $this->regionGroupCodes[] = $regionGroupCode;
     }
 
+    public function addRequiredGroupCode(string $groupCode): void
+    {
+        $this->requiredGroupCodes[] = $groupCode;
+    }
+
+    public function getRequiredGroupCodes(): array
+    {
+        return $this->requiredGroupCodes;
+    }
 
 }

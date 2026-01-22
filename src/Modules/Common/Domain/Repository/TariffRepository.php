@@ -18,23 +18,26 @@ class TariffRepository extends ServiceEntityRepository
         parent::__construct($registry, Tariff::class);
     }
 
-    public function getTariffs(\App\Modules\Common\Domain\Service\Dto\Request\TariffFilterDto $dto)
+    public function getTariffs(TariffFilterDto $dto)
     {
         $qb = $this->createQueryBuilder('t');
 
-        $qb->leftJoin('t.groups', 'tg');
-
-        // 2. проверка наличия группы региона
-        $regionCodes = $dto->getRegionGroupCodes();
-        if (!empty($regionCodes)) {
-            foreach ($regionCodes as $key => $code)
-                $qb->orWhere('tg.code IN (:code'.$key.')')->setParameter('code'.$key, $code);
+        if ($regionCodes = $dto->getRegionGroupCodes()) {
+            $qb->andWhere($qb->expr()->exists(
+                'SELECT 1 FROM ' . Tariff::class . ' t_sub JOIN t_sub.groups tg_region WHERE t_sub = t AND tg_region.code IN (:regionCodes)'
+            ))->setParameter('regionCodes', $regionCodes);
         }
 
-        // Сортировка:
-        $qb->orderBy('t.'.$dto->getOrderBy(), $dto->getOrderDir());
+        if ($requiredCodes = $dto->getRequiredGroupCodes()) {
+            $qb->andWhere($qb->expr()->exists(
+                'SELECT 1 FROM ' . Tariff::class . ' t_sub2 JOIN t_sub2.groups tg_required WHERE t_sub2 = t AND tg_required.code IN (:requiredGroupCodes)'
+            ))->setParameter('requiredGroupCodes', $requiredCodes);
+        }
 
-        return $qb->getQuery()->getResult();
+        return $qb
+            ->orderBy('t.' . $dto->getOrderBy(), $dto->getOrderDir())
+            ->getQuery()
+            ->getResult();
     }
 
     public function getCurrentForUser(int $uid): ?Tariff

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Service;
 
+use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\TariffGroup;
 use App\Modules\Common\Domain\Repository\TariffGroupRepository;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
@@ -45,6 +46,21 @@ class TariffGroupService
         $group->setUserVisible((int)$userVisible);
 
         return $this->save($group);
+    }
+
+    public function linkTariffForGroup(Tariff $tariff, TariffGroup $tariffGroup): Tariff
+    {
+        if ($tariff->isInGroup($tariffGroup))
+            throw new BusinessException('Тариф уже относится к этой группе');
+
+        $this->em->getConnection()->insert('tariffs_belong_groups', [
+            'tc_id' => $tariff->getId(),
+            'tariffs_group_id' => $tariffGroup->getId(),
+        ]);
+
+        $tariff->addGroup($tariffGroup);
+
+        return $tariff;
     }
 
     private function save(TariffGroup $group): TariffGroup

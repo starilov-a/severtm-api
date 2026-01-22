@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TariffBannedAddress
 {
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\ManyToOne(targetEntity: Address::class, inversedBy: 'bannedTariffs')]
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'address_id', nullable: false)]
     private Address $address;
 
@@ -51,4 +51,3 @@ class TariffBannedAddress
         return $this;
     }
 }
-

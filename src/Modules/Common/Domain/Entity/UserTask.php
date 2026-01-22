@@ -27,7 +27,7 @@ class UserTask
     #[ORM\JoinColumn(name: 'state', referencedColumnName: 'task_state_id', nullable: false)]
     private UserTaskState $state;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'id', nullable: false)]
     private User $user;
 

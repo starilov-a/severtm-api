@@ -15,10 +15,13 @@ use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Rules\Chains\Tariff\ChangeTariffRuleChain;
 use App\Modules\Common\Domain\Service\Dto\Request\TariffFilterDto;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TariffService
 {
     public function __construct(
+        protected EntityManagerInterface    $em,
+
         protected TariffRepository          $tariffRepo,
         protected FinPeriodRepository       $finPeriodRepo,
         protected UserServModeRepository    $userServModeRepo,
@@ -135,5 +138,13 @@ class TariffService
             $user,
             $this->finPeriodRepo->findOneBy(['startDate' => new \DateTimeImmutable($user->getBlockDate()->format('Y-m-01 00:00:00'))])
         );
+    }
+
+    public function save(Tariff $tariff): Tariff
+    {
+        $this->em->persist($tariff);
+        $this->em->flush();
+
+        return $tariff;
     }
 }

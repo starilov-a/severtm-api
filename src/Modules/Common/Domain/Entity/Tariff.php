@@ -2,6 +2,7 @@
 
 namespace App\Modules\Common\Domain\Entity;
 
+use App\Modules\Common\Domain\Entity\TariffGroup;
 use App\Modules\Common\Domain\Repository\TariffRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -112,20 +113,39 @@ class Tariff
         return $this->groups->contains($group); // EXTRA_LAZY → SELECT 1 … LIMIT 1
     }
 
-    public function canBeChangedByClient(): bool // использую для теста - 12922
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(TariffGroup $group): void
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
+    }
+
+    public function removeGroup(TariffGroup $group): void
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+        }
+    }
+
+    public function canBeChangedByClient(): bool
     {
         return $this->hasGroupCode('canBeChangeByClient');
     }
 
     public function hasGroupCode(string $code): bool
     {
-        // шаблон, который накладывается в указанную модель
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('code', $code))
-            ->setMaxResults(1);
+        foreach ($this->groups as $group) {
+            if ($group->getCode() === $code) {
+                return true;
+            }
+        }
 
-        // Doctrine построит SQL с WHERE code = ? AND tc_id = ? LIMIT 1
-        return !$this->groups->matching($criteria)->isEmpty();
+        return false;
     }
 
     public function setDepType(int $depType): void

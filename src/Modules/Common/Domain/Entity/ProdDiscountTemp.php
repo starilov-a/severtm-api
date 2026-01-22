@@ -16,7 +16,7 @@ class ProdDiscountTemp
     protected int $id;
 
     /** Клиент, для которого создаётся запись */
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'prodDiscountTemps')]
     #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
