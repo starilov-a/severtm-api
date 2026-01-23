@@ -16,7 +16,7 @@ class ProdServModeCost
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private int $id;
 
-    #[ORM\OneToOne(targetEntity: ProdServMode::class)]
+    #[ORM\OneToOne(targetEntity: ProdServMode::class, inversedBy: 'prodServModeCost')]
     #[ORM\JoinColumn(name: 'srvmode_id', referencedColumnName: 'id', nullable: false)]
     private ProdServMode $mode;
 
@@ -93,4 +93,3 @@ class ProdServModeCost
         return $this;
     }
 }
-
