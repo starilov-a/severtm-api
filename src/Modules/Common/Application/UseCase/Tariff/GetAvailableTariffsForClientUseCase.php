@@ -26,7 +26,6 @@ class GetAvailableTariffsForClientUseCase
 
         // 1. Добавление фильтра только для клиентов
         $dto->addRequiredGroupCode('canBeChangeByClient');
-        $dto->setLimit();
         // 2. получение тарифов
         $tariffs = $this->tariffService->getTariffsByUser($client, $dto);
 
