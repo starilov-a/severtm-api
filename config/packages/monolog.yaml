@@ -61,7 +61,7 @@ when@prod:
                 formatter: monolog.formatter.json
             errors:
                 type: stream
-                path: "%kernel.logs_dir%/prod.errors.log"
+                path: php://stderr
                 level: error
                 channels: ["errors"]
                 formatter: monolog.formatter.json
