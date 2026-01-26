@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'web_log__uid', columns: ['uid'])]
 #[ORM\Index(name: 'web_log__act_id', columns: ['act_id'])]
 #[ORM\Index(name: 'idx_wlog_act_time', columns: ['act_time'])]
-final class WebHistory
+class WebHistory
 {
     /** Составной идентификатор: uid + act_time + act_id + ip */
     #[ORM\Id]

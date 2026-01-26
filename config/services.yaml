@@ -25,7 +25,9 @@ services:
     # Адаптеры
     App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
 
-    App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter: ~
+    App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter:
+        arguments:
+            $logger: '@monolog.logger.errors'
     # Привязка интерфейсов к конкретным адаптерам
 
     App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface:

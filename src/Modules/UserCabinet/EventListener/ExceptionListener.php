@@ -34,6 +34,7 @@ final class ExceptionListener
     {
         $e = $event->getThrowable();
         $request = $event->getRequest();
+        $requestId = $request->headers->get('X-Request-Id') ?? $request->headers->get('X-Request-ID');
 
         $status = match (true) {
             $e instanceof ImportantBusinessException        => Response::HTTP_BAD_REQUEST,
@@ -73,18 +74,26 @@ final class ExceptionListener
             return;
         }  elseif ($status >= 500) {
             $this->loggerService->errorLog(new ErrorLogDto(
-                $e->getMessage(),
-                array_filter([
-                    'file'      => $e->getFile(),
-                    'line'      => $e->getLine(),
-                    'route'     => $request->attributes->get('_route'),
-                    'method'    => $request->getMethod(),
-                    'path'      => $request->getPathInfo(),
-                    'userId'    => UserSessionService::getUserId(),
-                    'query'     => $request->query->all() ? json_encode($request->query->all()) : null,
-                    'request'   => $request->request->all() ? json_encode($request->request->all()) : null,
-                    'trace'     => $e->getTraceAsString()
-                ], fn($v) => $v !== null && $v !== [])
+                message: $e->getMessage(),
+                context: array_filter([
+                    'file'            => $e->getFile(),
+                    'line'            => $e->getLine(),
+                    'route'           => $request->attributes->get('_route'),
+                    'method'          => $request->getMethod(),
+                    'path'            => $request->getPathInfo(),
+                    'userId'          => UserSessionService::getUserId(),
+                    'requestId'       => $requestId,
+                    'status'          => $status,
+                    'exceptionClass'  => $e::class,
+                    'query'           => $request->query->all() ? json_encode($request->query->all()) : null,
+                    'request'         => $request->request->all() ? json_encode($request->request->all()) : null,
+                    'trace'           => $e->getTraceAsString()
+                ], static fn($v) => $v !== null && $v !== []),
+                labels: array_filter([
+                    'route' => $request->attributes->get('_route'),
+                    'env'   => getenv('APP_ENV') ?: null,
+                ], static fn($v) => $v !== null && $v !== ''),
+                throwable: $e
             ));
 
             $message = 'Ошибка сервера';

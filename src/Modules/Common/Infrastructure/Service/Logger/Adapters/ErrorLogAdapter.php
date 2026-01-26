@@ -16,7 +16,16 @@ class ErrorLogAdapter implements ErrorLoggerInterface
 
     public function logError(ErrorLogDto $log): void
     {
-        dd($log);
-        $this->logger->error($log->message, $log->context);
+        $context = $log->context;
+        if (!empty($log->labels)) {
+            $context['labels'] = $log->labels;
+        }
+        if ($log->throwable !== null) {
+            $context['exception_class'] = $log->throwable::class;
+            $context['exception_code'] = $log->throwable->getCode();
+        }
+        $context['logged_at'] = $log->when->format(DATE_ATOM);
+
+        $this->logger->log($log->level, $log->message, $context);
     }
 }

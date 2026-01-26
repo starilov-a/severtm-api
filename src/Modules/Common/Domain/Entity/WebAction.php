@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: \App\Modules\Common\Domain\Repository\WebActionRepository::class)]
 #[ORM\Table(name: 'web_actions')]
 #[ORM\Index(name: 'web_ac__visible', columns: ['visible'])]
-final class WebAction
+class WebAction
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
