@@ -19,6 +19,10 @@ abstract class TransactionalWebTestCase extends WebTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->client = static::createClient();
+        $this->client->disableReboot();
+        $this->em = static::getContainer()->get(EntityManagerInterface::class);
+        $this->em->getConnection()->beginTransaction();
     }
 
     protected function startTransaction(): void

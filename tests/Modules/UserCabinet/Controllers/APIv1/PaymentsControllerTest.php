@@ -12,7 +12,7 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
 
         $this->loginClient($client);
 
-        $client->request('GET', '/user-cabinet/get-balance/');
+        $client->request('GET', '/user-cabinet/get-balance');
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
@@ -30,7 +30,7 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
 
         $this->loginClient($client);
 
-        $client->request('GET', '/user-cabinet/get-write-offs/');
+        $client->request('GET', '/user-cabinet/get-write-offs');
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
@@ -64,7 +64,7 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
 
         $this->loginClient($client);
 
-        $client->request('GET', '/user-cabinet/get-replenishments/');
+        $client->request('GET', '/user-cabinet/get-replenishments');
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
@@ -107,7 +107,7 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
 
         $this->loginClient($client);
 
-        $client->request('GET', '/user-cabinet/get-debt/');
+        $client->request('GET', '/user-cabinet/get-debt');
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 

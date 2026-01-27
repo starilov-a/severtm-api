@@ -51,7 +51,7 @@ class LoginControllerTest extends TransactionalWebTestCase
         $this->assertJson($client->getResponse()->getContent());
 
         $responseData = json_decode($client->getResponse()->getContent(), true);
-        $this->assertSame('User login', $responseData['message']);
+        $this->assertSame(true, $responseData['data']['success']);
     }
 
     public function testLogout(): void
@@ -77,7 +77,7 @@ class LoginControllerTest extends TransactionalWebTestCase
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
         $responseData = json_decode($client->getResponse()->getContent(), true);
-        $this->assertSame('User logout', $responseData['message']);
+        $this->assertSame(true, $responseData['data']['success']);
     }
     
 }

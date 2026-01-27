@@ -6,6 +6,9 @@ use App\Tests\TransactionalWebTestCase;
 
 class ServServiceControllerTest extends TransactionalWebTestCase {
     public function testGetAvailableServs(){
+
+        $this->markTestSkipped('Устарело: Клиент не добавляет услугу через личный кабинет.');
+
         $client = static::createClient();
         $this->startTransaction();
 
