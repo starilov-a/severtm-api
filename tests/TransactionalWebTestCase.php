@@ -48,7 +48,7 @@ abstract class TransactionalWebTestCase extends WebTestCase
 
         $projectDir = getenv('PWD') ?: getcwd(); 
 
-        $envFile = $projectDir . '/.env.test.local';
+        $envFile = $projectDir . '/.env.test';
 
         if (file_exists($envFile)) {
             foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
@@ -62,8 +62,8 @@ abstract class TransactionalWebTestCase extends WebTestCase
 
         self::$testLogin    = getenv('TEST_LOGIN') ?: throw new \RuntimeException('TEST_LOGIN not set');
         self::$testPassword = getenv('TEST_PASSWORD') ?: throw new \RuntimeException('TEST_PASSWORD not set');
-        self::$testUserId   = getenv('TEST_USER_ID') ?: throw new \RuntimeException('TEST_USER_ID not set in .env.test.local');
-        self::$testModeId   = getenv('TEST_MODE_ID') ?: throw new \RuntimeException('TEST_MODE_ID not set in .env.test.local');
+        self::$testUserId   = getenv('TEST_USER_ID') ?: throw new \RuntimeException('TEST_USER_ID not set in .env.test');
+        self::$testModeId   = getenv('TEST_MODE_ID') ?: throw new \RuntimeException('TEST_MODE_ID not set in .env.test');
     }
 
     protected function getTestUserId():string      
