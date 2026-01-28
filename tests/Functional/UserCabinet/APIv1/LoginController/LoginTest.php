@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Tests\Functional\UserCabinet\APIv1;
+namespace App\Tests\Functional\UserCabinet\APIv1\LoginController;
 
 use App\Tests\Functional\TransactionalWebTestCase;
-use App\Tests\Support\Dto\TestUserCredentials;
 
-class LoginControllerTest extends TransactionalWebTestCase
+class LoginTest extends TransactionalWebTestCase
 {
     public function testLoginMissingData(): void
     {
@@ -49,22 +48,4 @@ class LoginControllerTest extends TransactionalWebTestCase
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertSame(true, $responseData['data']['success']);
     }
-
-    public function testLogout(): void
-    {
-        $this->loginClient($this->client);
-
-        $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('content-type', 'application/json');
-
-        // Логаут
-        $this->client->request('POST', '/user-cabinet/logout');
-
-        $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('content-type', 'application/json');
-
-        $responseData = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertSame(true, $responseData['data']['success']);
-    }
-    
 }

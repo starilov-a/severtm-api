@@ -115,6 +115,73 @@ src/Modules
 
 Итоговая картина: модульные контроллеры и сервисы описывают процессы конкретного домена, ядро `Common` хранит общие инварианты и транзакции, инфраструктура берёт на себя пересекающиеся задачи (логирование, авторизацию, формат ответов), а глобальные слушатели обеспечивают единообразное поведение HTTP‑слоя.
 
+# Функциональные тесты
+
+## Где лежат и как устроены
+Функциональные тесты находятся в `tests/Functional`.  
+Для модуля личного кабинета структура:
+
+```
+tests/Functional
+└─ UserCabinet
+   └─ APIv1
+      ├─ LoginControllerTest.php
+      ├─ PaymentsControllerTest.php
+      ├─ GetStatusFreezeTest.php
+      └─ ...
+```
+
+Каждый endpoint — отдельный файл. Это упрощает поддержку и поиск проблем.
+
+## Базовый механизм
+1. Используется базовый класс `tests/Functional/TransactionalWebTestCase.php`.
+2. В `setUp()` создаётся `KernelBrowser` и открывается транзакция.
+3. `disableReboot()` закрепляет один контейнер и одно соединение на весь тест.
+4. В `tearDown()` — `rollback` и закрытие EntityManager.
+
+Это означает:
+- все изменения в БД в рамках теста откатываются;
+- тесты изолированы друг от друга;
+- можно безопасно проверять создание/обновление сущностей.
+
+## Как добавить новый тест
+1. Создай файл `tests/Functional/<Module>/<Version>/<EndpointName>Test.php`.
+2. Наследуйся от `TransactionalWebTestCase`.
+3. Используй `$this->client` (не вызывай `createClient()` в тесте).
+4. Если нужен логин — вызывай `$this->loginClient($this->client, $user)`.
+
+Пример:
+```php
+class GetExampleTest extends TransactionalWebTestCase
+{
+    public function testGetExample(): void
+    {
+        $this->loginClient($this->client);
+        $this->client->request('GET', '/user-cabinet/example');
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+    }
+}
+```
+
+## Проверка результата
+- Минимум: статус и `content-type`.
+- Для JSON — валидировать структуру `data` и ключевые поля.
+- Для бизнес‑действий — проверять следы в БД (например, созданную задачу).
+
+## Подбор тестовых пользователей
+По умолчанию берётся последний пользователь с `blockState=0` и `isJuridical=0`.  
+Если нужен конкретный пользователь (например, frozen/blocked), ищем его внутри теста запросом в БД.
+
+## Запуск
+```
+php bin/phpunit --testsuite "Project Test Suite"
+```
+```
+php bin/phpunit --testdox
+```
+
 # Явно задать прокси для проблем с сестью
 composer config -g --unset http-proxy 2>/dev/null || true
 composer config -g --unset https-proxy 2>/dev/null || true

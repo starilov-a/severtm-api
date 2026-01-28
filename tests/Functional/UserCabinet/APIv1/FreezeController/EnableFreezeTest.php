@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Functional\UserCabinet\APIv1;
+namespace App\Tests\Functional\UserCabinet\APIv1\FreezeController;
 
 use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
