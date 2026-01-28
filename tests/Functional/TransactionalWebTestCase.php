@@ -51,10 +51,10 @@ abstract class TransactionalWebTestCase extends WebTestCase
         parent::tearDown();
     }
 
-    public function loginClient(KernelBrowser $client, User $testUser = null): void
+    public function loginClient(KernelBrowser $client, User|string|null $testUser = null): void
     {
         //Дефолтный пользак
-        $testUser ??= $this->userRepo->findOneBy(['blockState' => 0, 'isJuridical' => 0], ['id' => 'DESC']);
+        $testUser ??= $this->getDefaultUser();
         if (!$testUser)
             throw new \RuntimeException('No default test user found (blockState=0, isJuridical=0).');
 
@@ -67,6 +67,15 @@ abstract class TransactionalWebTestCase extends WebTestCase
             'login' => $creds->login,
             'password' => $creds->password,
         ]));
+    }
+
+    protected function getDefaultUser(): User
+    {
+        $user = $this->userRepo->findOneBy(['blockState' => 0, 'isJuridical' => 0], ['id' => 'DESC']);
+        if (!$user)
+            throw new \RuntimeException('No default test user found (blockState=0, isJuridical=0).');
+
+        return $user;
     }
 
     protected function createCredentials(User $user): TestUserCredentials
