@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Service\Dto\Validator;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PasswordValidatorDto
+class PasswordValidatorDto extends ValidatorDto
 {
 
     #[Assert\NotBlank(message: "Старый пароль не должен быть пустым")]

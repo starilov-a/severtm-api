@@ -3,6 +3,7 @@
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\UserCabinet\Service\Dto\Validator\EnableFreezeValidatorDto;
 use App\Modules\UserCabinet\Service\LkFreezeService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +33,9 @@ class FreezeController extends Controller
     )]
     public function enableFreeze(Request $request, LkFreezeService $freezeService): JsonResponse
     {
-        //TODO: сделать валидацию
         $data = $request->toArray();
+        $this->validate(new EnableFreezeValidatorDto(), $data);
+
         $uid = UserSessionService::getUserId();
 
         $freezeService->freezeProfile($uid, $data['startDate'], $data['reason_id']);

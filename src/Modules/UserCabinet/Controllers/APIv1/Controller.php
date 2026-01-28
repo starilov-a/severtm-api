@@ -2,14 +2,20 @@
 
 namespace App\Modules\UserCabinet\Controllers\APIv1;
 
+use App\Modules\Common\Infrastructure\Exception\ValidationException;
+use App\Modules\UserCabinet\Service\Dto\Validator\ValidatorDto;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 //use App\Modules\UserCabinet\Service\Dto\FilterDto;
 
 class Controller extends AbstractController
 {
+    public function __construct(
+        protected ValidatorInterface $validator
+    ) {}
 
     public function responseMessage(string $message, $status = 200): JsonResponse
     {
@@ -42,13 +48,21 @@ class Controller extends AbstractController
         return false;
     }
 
-    #[Route(
-        '/index',
-        name: 'api_v1_index',
-        methods: ['GET']
-    )]
-    public function index(): JsonResponse
+    protected function validate(object $dto, array $data): void
     {
-        return $this->json([1, 2, 3, 4]);
+        if (!($dto instanceof ValidatorDto))
+            throw new \LogicException('Wrong validate DTO');
+
+        foreach ($data as $key => $val)
+            $dto->{$key} = $val;
+
+        $errors = $this->validator->validate($dto);
+        if ($errors->count()) {
+            $errorsArr = [];
+            foreach ($errors as $error)
+                $errorsArr[] = $error->getMessage();
+
+            throw new ValidationException($errorsArr, 'Ошибка валидации');
+        }
     }
 }

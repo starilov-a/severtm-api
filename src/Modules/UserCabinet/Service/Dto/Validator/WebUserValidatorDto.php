@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Service\Dto\Validator;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class WebUserValidatorDto
+class WebUserValidatorDto extends ValidatorDto
 {
     #[Assert\NotBlank(message: "Email не должен быть пустым")]
     #[Assert\Email(message: "Некорректный формат email")]

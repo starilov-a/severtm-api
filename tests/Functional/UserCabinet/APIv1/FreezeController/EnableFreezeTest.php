@@ -33,7 +33,7 @@ class EnableFreezeTest extends TransactionalWebTestCase
 
         if ($this->client->getResponse()->getStatusCode() !== Response::HTTP_OK) {
             $payload = json_decode($this->client->getResponse()->getContent(), true);
-            $message = is_array($payload) ? ($payload['message'] ?? '') : '';
+            $message = is_array($payload) ? (implode(',', $payload['message']) ?? '') : '';
             self::markTestIncomplete('Заморозка недоступна для тестового пользователя: ' . $message);
         }
 
@@ -98,5 +98,77 @@ class EnableFreezeTest extends TransactionalWebTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $this->assertResponseHeaderSame('content-type', 'application/json');
+    }
+
+    public function testEnableFreezeMissingFields(): void
+    {
+        $this->loginClient($this->client);
+
+        $this->client->request('POST', '/user-cabinet/enable-freeze', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([]));
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $payload = json_decode((string)$this->client->getResponse()->getContent(), true);
+        $this->assertIsArray($payload);
+        $this->assertArrayHasKey('data', $payload);
+        $this->assertArrayHasKey('message', $payload);
+        $this->assertIsString($payload['message']);
+        $this->assertIsArray($payload['data']);
+    }
+
+    public function testEnableFreezeInvalidDateFormat(): void
+    {
+        $this->loginClient($this->client);
+
+
+        $reasonRepo = static::getContainer()->get(FreezeReasonRepository::class);
+        $reason = $reasonRepo->findOneBy(['isAdmin' => false]);
+        if (!$reason) {
+            self::markTestIncomplete('Нет доступных причин для заморозки в БД.');
+        }
+
+        $this->client->request('POST', '/user-cabinet/enable-freeze', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'startDate' => 'not-a-date',
+            'reason_id' => $reason->getId(),
+        ]));
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $payload = json_decode((string)$this->client->getResponse()->getContent(), true);
+
+        $this->assertIsArray($payload);
+        $this->assertArrayHasKey('data', $payload);
+        $this->assertArrayHasKey('message', $payload);
+        $this->assertIsString($payload['message']);
+        $this->assertIsArray($payload['data']);
+    }
+
+    public function testEnableFreezeReasonNotFound(): void
+    {
+        $this->loginClient($this->client);
+
+        $this->client->request('POST', '/user-cabinet/enable-freeze', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'startDate' => (new \DateTimeImmutable('+1 day'))->format('Y-m-d'),
+            'reason_id' => 999999999,
+        ]));
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+
+        $payload = json_decode((string)$this->client->getResponse()->getContent(), true);
+
+        $this->assertIsArray($payload);
+        $this->assertArrayHasKey('data', $payload);
+        $this->assertArrayHasKey('message', $payload);
+        $this->assertIsString($payload['message']);
+        $this->assertIsArray($payload['data']);
     }
 }
