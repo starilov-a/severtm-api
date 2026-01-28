@@ -5,7 +5,6 @@ namespace App\Modules\Common\Domain\Service\Dto\Request;
 use App\Modules\Common\Domain\Entity\Device;
 use App\Modules\Common\Domain\Entity\FinPeriod;
 use App\Modules\Common\Domain\Entity\User;
-use App\Modules\Common\Domain\Entity\UserPayable;
 use App\Modules\Common\Domain\Entity\UserPayableType;
 use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Service\Dto\Dto;

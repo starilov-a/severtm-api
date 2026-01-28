@@ -8,7 +8,5 @@ class TestUserCredentials
         public readonly int $uid,
         public readonly string $login,
         public readonly string $password
-    ) {
-
-    }
+    ) {}
 }

@@ -2,12 +2,10 @@
 
 namespace App\Tests\Functional\UserCabinet\APIv1;
 
-use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
 use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Tests\Functional\TransactionalWebTestCase;
-use App\Tests\Support\Dto\TestUserCredentials;
 use Symfony\Component\HttpFoundation\Response;
 
 class FreezeControllerTest extends TransactionalWebTestCase
@@ -27,7 +25,7 @@ class FreezeControllerTest extends TransactionalWebTestCase
         $this->assertIsArray($payload['data']);
     }
 
-    public function testFreezeAndUnfreezeFlow(): void
+    public function testFreezeFisicalUser(): void
     {
         $container = static::getContainer();
 
@@ -71,6 +69,12 @@ class FreezeControllerTest extends TransactionalWebTestCase
 
         $freezeTasks = $taskRepo->findBy(['user' => $testUser, 'type' => $freezeTaskType]);
         $this->assertNotEmpty($freezeTasks, 'Задача на заморозку должна быть создана.');
+    }
+
+    public function testUnfreezeFisicalUser(): void
+    {
+        $testUser = $this->userRepo->findOneBy(['blockState' => 2, 'isJuridical' => 0], ['id' => 'DESC']);
+        $this->loginClient($this->client, $testUser);
 
         // 3. Снимаем заморозку
         $this->client->request('POST', '/user-cabinet/disable-freeze');

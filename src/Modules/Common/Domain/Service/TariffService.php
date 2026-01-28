@@ -91,6 +91,16 @@ class TariffService
     public function disableTariffByUserServMode(UserServMode $userServMode): UserServMode
     {
         $userServMode->setIsActive(false);
+
+        // выставление скорости у пользователя в таблице users
+        $user = $userServMode->getUser();
+        $disableTariff = $this->tariffRepo->find(1);
+        $user->setCurrentTariff($disableTariff);
+        $user->setBw($disableTariff->getMaxBw());
+        $user->setCurrentBw($disableTariff->getBw());
+
+        $this->userService->save($user);
+
         return $this->userServModeService->save($userServMode);
 
     }

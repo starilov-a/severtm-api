@@ -25,6 +25,7 @@ class CalculatedPayable
     protected int $prodCost;
     protected int $units;
     protected \DateTimeImmutable $createdAt;
+    protected ?Device $device = null;
 
     public function getCurrentFinPeriod(): FinPeriod
     {

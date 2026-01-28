@@ -13,17 +13,15 @@ abstract class TransactionalWebTestCase extends WebTestCase
 {
     protected ?EntityManagerInterface $em = null;
     protected ?KernelBrowser $client = null;
-
     protected ?UserRepository $userRepo = null;
-
     protected ?TestUserCredentials $defaultUser = null;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->client = static::createClient();
         $this->startTransaction($this->client);
 
+        // Инициализация
         $this->userRepo = static::getContainer()->get(UserRepository::class);
     }
 
@@ -56,8 +54,9 @@ abstract class TransactionalWebTestCase extends WebTestCase
     public function loginClient(KernelBrowser $client, User $testUser = null): void
     {
         //Дефолтный пользак
+        $testUser ??= $this->userRepo->findOneBy(['blockState' => 0, 'isJuridical' => 0], ['id' => 'DESC']);
         if (!$testUser)
-            $testUser = $this->userRepo->findOneBy(['blockState' => 0, 'isJuridical' => 0], ['id' => 'DESC']);
+            throw new \RuntimeException('No default test user found (blockState=0, isJuridical=0).');
 
         $creds = $this->createCredentials($testUser);
 
@@ -70,7 +69,7 @@ abstract class TransactionalWebTestCase extends WebTestCase
         ]));
     }
 
-    protected function createCredentials($user): TestUserCredentials
+    protected function createCredentials(User $user): TestUserCredentials
     {
         $sql = 'SELECT regions_UTM.f_get_passwd_hash_encrypt(wu.passwd_hash_encrypt)
                 FROM web_users wu WHERE wu.uid = :uid';
@@ -78,6 +77,9 @@ abstract class TransactionalWebTestCase extends WebTestCase
         $password =  (string) $this->em->getConnection()->fetchOne($sql, [
             'uid' => $user->getId(),
         ]);
+
+        if ($password === false || $password === null || $password === '')
+            throw new \RuntimeException('Password not found in web_users for uid=' . $user->getId());
 
         return new TestUserCredentials(
             $user->getId(),

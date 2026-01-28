@@ -21,25 +21,4 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
-    public function changeNextTariff(int $userId, int $tariffId): int
-    {
-        $conn = $this->getEntityManager()->getConnection();
-
-        //TODO: добавление лога
-
-        // обновим пользователя
-        return $conn->executeStatement(<<<SQL
-            UPDATE users
-            SET tariff_next = :tid,
-                next_servpack_id = 0
-            WHERE id = :uid
-        SQL, [
-            'tid' => $tariffId,
-            'uid' => $userId,
-        ], [
-            'tid' => ParameterType::INTEGER,
-            'uid' => ParameterType::INTEGER,
-        ]);
-    }
 }
