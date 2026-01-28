@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Tests\Modules\UserCabinet\Controllers\APIv1;
+namespace App\Tests\Functional\UserCabinet\APIv1;
 
-use App\Tests\TransactionalWebTestCase;
+use App\Tests\Functional\TransactionalWebTestCase;
+use App\Tests\Support\Dto\TestUserCredentials;
 
 class LoginControllerTest extends TransactionalWebTestCase
 {
     public function testLoginMissingData(): void
     {
-        $client = static::createClient();
-        $this->startTransaction();
+        $this->loginClient($this->client);
 
-        $client->request('POST', '/user-cabinet/login', [], [], [
+        $this->client->request('POST', '/user-cabinet/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([]));
 
@@ -20,10 +20,7 @@ class LoginControllerTest extends TransactionalWebTestCase
 
     public function testLoginWrongCredentials(): void
     {
-        $client = static::createClient();
-        $this->startTransaction();
-
-        $client->request('POST', '/user-cabinet/login', [], [], [
+        $this->client->request('POST', '/user-cabinet/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
             'login' => 'несуществующий_логин',
@@ -35,48 +32,38 @@ class LoginControllerTest extends TransactionalWebTestCase
 
     public function testSuccessfulLogin(): void
     {
-        $client = static::createClient();
+        $testUser = $this->userRepo->findOneBy(['blockState' => 0, 'isJuridical' => 0], ['id' => 'DESC']);
+        $creds = $this->createCredentials($testUser);
 
-        $this->startTransaction();
-
-        $client->request('POST', '/user-cabinet/login', [], [], [
+        $this->client->request('POST', '/user-cabinet/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
-            'login' => self::$testLogin ?: '',
-            'password' => self::$testPassword ?: '',
+            'login' => $creds->login,
+            'password' => $creds->password,
         ]));
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
-        $this->assertJson($client->getResponse()->getContent());
+        $this->assertJson($this->client->getResponse()->getContent());
 
-        $responseData = json_decode($client->getResponse()->getContent(), true);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertSame(true, $responseData['data']['success']);
     }
 
     public function testLogout(): void
     {
-        $client = static::createClient();
-        $this->startTransaction();
-
-        // Логинимся
-        $client->request('POST', '/user-cabinet/login', [], [], [
-            'CONTENT_TYPE' => 'application/json',
-        ], json_encode([
-            'login' => self::$testLogin ?: '',
-            'password' => self::$testPassword ?: '',
-        ]));
+        $this->loginClient($this->client);
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
         // Логаут
-        $client->request('POST', '/user-cabinet/logout');
+        $this->client->request('POST', '/user-cabinet/logout');
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $responseData = json_decode($client->getResponse()->getContent(), true);
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertSame(true, $responseData['data']['success']);
     }
     

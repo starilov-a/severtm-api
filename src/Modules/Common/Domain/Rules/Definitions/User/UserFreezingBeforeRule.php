@@ -21,7 +21,7 @@ class UserFreezingBeforeRule extends Rule
 
         $oldTask = $this->userTaskRepo->findOneBy([
             'user' => $context->getUser(),
-            'state' => $this->userTaskTypeRepo->findOneBy(['code' => 'freeze'])
+            'type' => $this->userTaskTypeRepo->findOneBy(['code' => 'freeze'])
         ]);
 
         if (!$oldTask)

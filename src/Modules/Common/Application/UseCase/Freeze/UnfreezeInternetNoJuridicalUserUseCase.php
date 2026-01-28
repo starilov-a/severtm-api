@@ -11,6 +11,7 @@ use App\Modules\Common\Domain\Repository\BlockHistoryRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
 use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
+use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Rules\Chains\Freeze\UnfreezeUserChain;
 use App\Modules\Common\Domain\Service\BlockHistoryService;
@@ -35,7 +36,7 @@ class UnfreezeInternetNoJuridicalUserUseCase
         protected ChangeCurrentTariffUseCase    $changeCurrentTariffUseCase,
         protected ChangeNextTariffUseCase       $changeNextTariffUseCase,
 
-        protected UserTaskStateRepository       $taskStateRepo,
+        protected UserTaskTypeRepository        $taskTypeRepo,
         protected UserTaskRepository            $userTaskRepo,
         protected UserRepository                $userRepo,
         protected WebActionRepository           $webActionRepo,
@@ -69,7 +70,7 @@ class UnfreezeInternetNoJuridicalUserUseCase
         // обновляем таску на заморозку если есть активная - делаем неактивной
         $task = $this->userTaskRepo->findOneBy([
             'user' => $user,
-            'state' => $this->taskStateRepo->findOneBy(['code' => 'freeze'])
+            'type' => $this->taskTypeRepo->findOneBy(['code' => 'freeze'])
         ]);
 
         if($task)

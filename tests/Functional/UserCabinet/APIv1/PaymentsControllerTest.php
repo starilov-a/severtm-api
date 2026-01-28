@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Tests\Modules\UserCabinet\Controllers\APIv1;
+namespace App\Tests\Functional\UserCabinet\APIv1;
 
-use App\Tests\TransactionalWebTestCase;
+use App\Tests\Functional\TransactionalWebTestCase;
+use App\Tests\Support\Dto\TestUserCredentials;
 
 class PaymentsControllerTest extends TransactionalWebTestCase {
     public function testGetBalance(): void
     {
-        $client = static::createClient();
-        $this->startTransaction();
+        $this->loginClient($this->client);
 
-        $this->loginClient($client);
 
-        $client->request('GET', '/user-cabinet/get-balance');
+        $this->client->request('GET', '/user-cabinet/get-balance');
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $data = json_decode($client->getResponse()->getContent(), true);
+        $data = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertIsArray($data);
         $this->assertArrayHasKey('balance', $data['data']);
@@ -25,16 +24,13 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
     }
     
     public function testGetWriteOffs(){
-        $client = static::createClient();
-        $this->startTransaction();
+        $this->loginClient($this->client);
 
-        $this->loginClient($client);
-
-        $client->request('GET', '/user-cabinet/get-write-offs');
+        $this->client->request('GET', '/user-cabinet/get-write-offs');
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $responseContent = $client->getResponse()->getContent();
+        $responseContent = $this->client->getResponse()->getContent();
         $data = json_decode($responseContent, true);
 
         $this->assertIsArray($data);
@@ -59,17 +55,14 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
     }
 
     public function testGetReplenishments(){
-        $client= static::createClient();
-        $this->startTransaction();
+        $this->loginClient($this->client);
 
-        $this->loginClient($client);
-
-        $client->request('GET', '/user-cabinet/get-replenishments');
+        $this->client->request('GET', '/user-cabinet/get-replenishments');
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $data = json_decode($client->getResponse()->getContent(), true);
+        $data = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertIsArray($data);
         $this->assertArrayHasKey('data', $data);
@@ -102,16 +95,13 @@ class PaymentsControllerTest extends TransactionalWebTestCase {
     }
 
     public function testGetDebt(){
-        $client= static::createClient();
-        $this->startTransaction();
+        $this->loginClient($this->client);
 
-        $this->loginClient($client);
-
-        $client->request('GET', '/user-cabinet/get-debt');
+        $this->client->request('GET', '/user-cabinet/get-debt');
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $data = json_decode(($client->getResponse()->getContent()),true);
+        $data = json_decode(($this->client->getResponse()->getContent()),true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('debt', $data['data']);
         $this->assertIsInt($data['data']['debt']);
