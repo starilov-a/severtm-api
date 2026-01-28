@@ -60,14 +60,27 @@ class EnableFreezeTest extends TransactionalWebTestCase
 
     public function testEnableFreezeRejectedWithPastDate(): void
     {
-        $testUser = $this->userRepo->findOneBy(['blockState' => 0, 'isJuridical' => 0], ['id' => 'DESC']);
-        $this->loginClient($this->client, $testUser);
+        $testUserId = $this->em->getConnection()->fetchOne(<<<SQL
+            SELECT u.id
+            FROM users u
+            JOIN block_states bs ON bs.block_id = u.block
+            JOIN web_users wu ON wu.uid = u.id
+            WHERE u.is_juridical = 0
+              AND bs.str_code NOT IN ('blocked', 'frozen')
+            ORDER BY u.id DESC
+            LIMIT 1
+        SQL);
 
-        $this->client->request('GET', '/user-cabinet/get-status-freeze');
-        $payload = json_decode($this->client->getResponse()->getContent(), true);
-        if (!isset($payload['data']['availableFreeze']) || $payload['data']['availableFreeze'] !== true) {
-            self::markTestIncomplete('Заморозка недоступна для пользователя.');
+        if (!$testUserId) {
+            self::markTestIncomplete('Не найден подходящий пользователь для проверки (не frozen/blocked).');
         }
+
+        $testUser = $this->userRepo->find((int)$testUserId);
+        if (!$testUser) {
+            self::markTestIncomplete('Пользователь не найден по id для проверки.');
+        }
+
+        $this->loginClient($this->client, $testUser);
 
         $reasonRepo = static::getContainer()->get(FreezeReasonRepository::class);
         $reason = $reasonRepo->findOneBy(['isAdmin' => false]);

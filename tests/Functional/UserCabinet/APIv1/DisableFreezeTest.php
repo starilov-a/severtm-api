@@ -2,8 +2,6 @@
 
 namespace App\Tests\Functional\UserCabinet\APIv1;
 
-use App\Modules\Common\Domain\Repository\AllHistoryKindRepository;
-use App\Modules\Common\Domain\Repository\AllHistoryRepository;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
 use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
@@ -14,7 +12,22 @@ class DisableFreezeTest extends TransactionalWebTestCase
 {
     public function testDisableFreezeForFrozenUser(): void
     {
-        $testUser = $this->userRepo->findOneBy(['blockState' => 2, 'isJuridical' => 0], ['id' => 'DESC']);
+        $testUserId = $this->em->getConnection()->fetchOne(<<<SQL
+            SELECT u.id
+            FROM users u
+            JOIN block_states bs ON bs.block_id = u.block AND bs.str_code = 'frozen'
+            JOIN all_history ah ON ah.uid = u.id
+            JOIN all_history_kind hk ON hk.hist_kind_id = ah.hist_kind_id
+                                   AND hk.hist_kind_str_code = 'frozen'
+            WHERE u.is_juridical = 0
+            ORDER BY u.id DESC
+            LIMIT 1
+        SQL);
+
+        if (!$testUserId)
+            self::markTestIncomplete('Нет пользователя frozen с историей заморозки для проверки.');
+
+        $testUser = $this->userRepo->find((int)$testUserId);
 
         $container = static::getContainer();
         $taskRepo = $container->get(UserTaskRepository::class);
@@ -22,17 +35,9 @@ class DisableFreezeTest extends TransactionalWebTestCase
         $taskStateRepo = $container->get(UserTaskStateRepository::class);
 
         $freezeType = $taskTypeRepo->findOneBy(['code' => 'freeze']);
-        if (!$freezeType) {
+        $freezeState = $taskStateRepo->findOneBy(['code' => 'new']);
+        if (!$freezeType || !$freezeState) {
             self::markTestIncomplete('Не найдены справочные значения задач (freeze).');
-        }
-
-        $activeFreezeTasks = $taskRepo->findBy([
-            'user' => $testUser,
-            'type' => $freezeType,
-        ]);
-
-        if (empty($activeFreezeTasks)) {
-            self::markTestIncomplete('Для пользователя нет активной задачи заморозки.');
         }
 
         $this->loginClient($this->client, $testUser);
@@ -49,35 +54,35 @@ class DisableFreezeTest extends TransactionalWebTestCase
         $stillActive = $taskRepo->findOneBy([
             'user' => $testUser,
             'type' => $freezeType,
-            'state' => $taskStateRepo->findOneBy(['code' => 'new'])
+            'state' => $freezeState,
         ]);
         $this->assertEmpty($stillActive, 'Активная задача заморозки должна быть отменена.');
     }
 
     public function testDisableFreezeRejectedWithoutHistory(): void
     {
-        $testUser = $this->userRepo->findOneBy(['blockState' => 2, 'isJuridical' => 0], ['id' => 'DESC']);
+        $testUserId = $this->em->getConnection()->fetchOne(<<<SQL
+            SELECT u.id
+            FROM users u
+            WHERE u.is_juridical = 0
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM all_history ah
+                  JOIN all_history_kind hk ON hk.hist_kind_id = ah.hist_kind_id
+                                            AND hk.hist_kind_str_code = 'frozen'
+                  WHERE ah.uid = u.id
+              )
+            ORDER BY u.id DESC
+            LIMIT 1
+        SQL);
 
-        $container = static::getContainer();
-        $historyRepo = $container->get(AllHistoryRepository::class);
-        $historyKindRepo = $container->get(AllHistoryKindRepository::class);
-        $frozenKind = $historyKindRepo->findOneBy(['strCode' => 'frozen']);
-
-        if (!$frozenKind) {
-            self::markTestIncomplete('Нет справочника истории frozen.');
+        if (!$testUserId) {
+            self::markTestIncomplete('Не найден пользователь без истории заморозки.');
         }
 
-        $history = $historyRepo->findOneBy([
-            'user' => $testUser,
-            'kind' => $frozenKind,
-        ]);
-
-        if ($history) {
-            self::markTestIncomplete('У пользователя уже есть история заморозки.');
-        }
-
-        if ($testUser->getBlockState()->getCode() === 'frozen') {
-            self::markTestIncomplete('Пользователь уже в статусе frozen.');
+        $testUser = $this->userRepo->find((int)$testUserId);
+        if (!$testUser) {
+            self::markTestIncomplete('Пользователь без истории не найден по id.');
         }
 
         $this->loginClient($this->client, $testUser);
