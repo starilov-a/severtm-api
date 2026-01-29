@@ -33,7 +33,7 @@ class FreezeController extends Controller
     )]
     public function enableFreeze(Request $request, LkFreezeService $freezeService): JsonResponse
     {
-        $data = $request->toArray();
+        $data = !empty($request->getContent()) ? $request->toArray() : [];
         $this->validate(new EnableFreezeValidatorDto(), $data);
 
         $uid = UserSessionService::getUserId();

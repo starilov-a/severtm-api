@@ -23,7 +23,7 @@ class EnableFreezeTest extends TransactionalWebTestCase
         $testUser = $this->getDefaultUser();
         $this->loginClient($this->client);
 
-        $startDate = (new \DateTimeImmutable('+1 day'))->format('Y-m-d');
+        $startDate = (new \DateTimeImmutable('+1 day'))->format('d.m.Y');
         $this->client->request('POST', '/user-cabinet/enable-freeze', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
@@ -33,7 +33,7 @@ class EnableFreezeTest extends TransactionalWebTestCase
 
         if ($this->client->getResponse()->getStatusCode() !== Response::HTTP_OK) {
             $payload = json_decode($this->client->getResponse()->getContent(), true);
-            $message = is_array($payload) ? (implode(',', $payload['message']) ?? '') : '';
+            $message = is_array($payload) ? (implode(',', $payload['data']) ?? '') : '';
             self::markTestIncomplete('Заморозка недоступна для тестового пользователя: ' . $message);
         }
 
