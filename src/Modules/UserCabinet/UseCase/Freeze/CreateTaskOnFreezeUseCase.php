@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Freeze;
+namespace App\Modules\UserCabinet\UseCase\Freeze;
 
 use App\Modules\Common\Domain\Contexts\Definitions\Freeze\CreateFreezeTaskContext;
 use App\Modules\Common\Domain\Entity\UserTask;

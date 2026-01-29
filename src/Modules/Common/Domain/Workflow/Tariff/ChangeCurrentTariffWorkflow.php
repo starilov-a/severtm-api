@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Tariff;
+namespace App\Modules\Common\Domain\Workflow\Tariff;
 
-use App\Modules\Common\Application\UseCase\ProdServMode\AddCurrentServiceModeUseCase;
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\BlockStateRepository;
@@ -12,11 +11,12 @@ use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\TariffService;
 use App\Modules\Common\Domain\Service\UserService;
 use App\Modules\Common\Domain\Service\UserServModeService;
+use App\Modules\Common\Domain\Workflow\ProdServMode\AddCurrentServiceModeWorkflow;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
-class ChangeCurrentTariffUseCase
+class ChangeCurrentTariffWorkflow
 {
     public function __construct(
         protected UserRepository                $userRepo,
@@ -29,11 +29,11 @@ class ChangeCurrentTariffUseCase
         protected UserServModeService           $userServModeService,
         protected TariffService                 $tariffService,
 
-        protected AddCurrentServiceModeUseCase  $addCurrentServiceModeUseCase,
+        protected AddCurrentServiceModeWorkflow $addCurrentServiceModeUseCase,
     ) {}
 
     /**
-     * UseCase: Изменение текущего тарифа
+     * Workflow: Изменение текущего тарифа
      *
      * @param User $user
      * @param Tariff $newCurrentTariff

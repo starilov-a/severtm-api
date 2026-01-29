@@ -2,8 +2,6 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Application\UseCase\ProdServMode\AddCurrentServiceModeUseCase;
-use App\Modules\Common\Application\UseCase\ProdServMode\DisableServiceModeUseCase;
 use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
@@ -11,6 +9,7 @@ use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use App\Modules\Common\Domain\Service\UserServService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
+use App\Modules\UserCabinet\UseCase\ProdServMode\DisableServiceModeUseCase;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LkClientServService
@@ -27,7 +26,6 @@ class LkClientServService
         protected UserServModeService      $userServModeService,
 
         protected DisableServiceModeUseCase  $disableServiceModeUseCase,
-        protected AddCurrentServiceModeUseCase  $addCurrentServiceModeUseCase,
     ){}
 
     public function listAvailableServices(): array
@@ -71,28 +69,6 @@ class LkClientServService
                 },  $serv->getUserModes()),
             ];
         }, $currentServs);
-    }
-
-    /*
-    * Активация услуги клиентом
-    * */
-    public function enableService(int $uid, int $modeId): bool
-    {
-        return $this->em->getConnection()->transactional(function () use (
-            $uid,
-            $modeId,
-        ) {
-            $user = $this->userRepo->find($uid);
-            $prodServMode = $this->prodServModeRepo->find($modeId);
-            $options = new OptionsUserServModeDto();
-
-            //Добавим комментарий, что пользователь сам активировал услугу
-            $options->setComment('Активация услуги через личный кабинет');
-
-            $this->addCurrentServiceModeUseCase->handle($user, $prodServMode, $options);
-
-            return true;
-        });
     }
 
     /*

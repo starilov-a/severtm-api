@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\ProdServMode;
+namespace App\Modules\Common\Domain\Workflow\ProdServMode;
 
 use App\Modules\Common\Domain\Contexts\Definitions\User\OnlyUserContext;
 use App\Modules\Common\Domain\Entity\ProdServMode;
@@ -12,7 +12,7 @@ use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\UserServModeService;
 use Doctrine\ORM\EntityManagerInterface;
 
-class AddCurrentServiceModeUseCase
+class AddCurrentServiceModeWorkflow
 {
     public function __construct(
         protected EntityManagerInterface $em,
@@ -25,7 +25,7 @@ class AddCurrentServiceModeUseCase
         protected UserIsNotNotActivatedRule $userIsNotNotActivatedRule,
     ) {}
     /**
-     * UseCase: Добавление опции на текущий месяц
+     * Workflow: Добавление опции на текущий месяц
      *
      * 1. Добавление опций
      * 2. Списание (если не неактивированный юрик)

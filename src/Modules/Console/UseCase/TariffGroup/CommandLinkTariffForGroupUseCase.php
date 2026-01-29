@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\TariffGroup;
+namespace App\Modules\Console\UseCase\TariffGroup;
 
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\TariffGroup;
@@ -8,7 +8,6 @@ use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\TariffGroupService;
 use App\Modules\Common\Domain\Service\TariffService;
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 
 class CommandLinkTariffForGroupUseCase

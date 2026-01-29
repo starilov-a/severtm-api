@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\ProdServMode;
+namespace App\Modules\Common\Domain\Workflow\ProdServMode;
 
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Entity\User;
@@ -8,7 +8,7 @@ use App\Modules\Common\Domain\Repository\FinPeriodRepository;
 use App\Modules\Common\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\Common\Domain\Service\UserServModeService;
 
-class AddNextServiceModeUseCase
+class AddNextServiceModeWorkflow
 {
     public function __construct(
         protected FinPeriodRepository $finPeriodRepo,
@@ -16,7 +16,7 @@ class AddNextServiceModeUseCase
     ) {}
 
     /**
-     * UseCase: Добавление опции на следующий месяц
+     * Workflow: Добавление опции на следующий месяц
      *
      * 1. Добавление опций
      *

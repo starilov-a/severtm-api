@@ -3,18 +3,14 @@
 namespace App\Modules\UserCabinet\Service;
 
 use App\Modules\Common\Application\UseCase\Tariff\ChangeNextTariffUseCase;
-use App\Modules\Common\Application\UseCase\Tariff\ClientChangeNextTariffUseCase;
-use App\Modules\Common\Application\UseCase\Tariff\GetAvailableTariffsForClientUseCase;
-use App\Modules\Common\Domain\Contexts\Definitions\Tariff\TariffContext;
 use App\Modules\Common\Domain\Repository\TariffRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Rules\Chains\Tariff\ClientChangeTariffRuleChain;
 use App\Modules\Common\Domain\Service\TariffService;
-use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Service\Dto\Response\TariffDto;
+use App\Modules\UserCabinet\UseCase\Tariff\ClientChangeNextTariffUseCase;
+use App\Modules\UserCabinet\UseCase\Tariff\GetAvailableTariffsForClientUseCase;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LkClientTariffService
@@ -29,7 +25,6 @@ class LkClientTariffService
         protected LoggerService                 $loggerService,
         protected TariffService                 $tariffService,
 
-        protected ChangeNextTariffUseCase       $changeNextTariffUseCase,
         protected GetAvailableTariffsForClientUseCase $getAvailableTariffsForClientUseCase,
         protected ClientChangeNextTariffUseCase  $clientChangeNextTariffUseCase,
     ) {}

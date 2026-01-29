@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Tariff;
+namespace App\Modules\UserCabinet\UseCase\Tariff;
 
 use App\Modules\Common\Domain\Contexts\Definitions\Tariff\TariffContext;
 use App\Modules\Common\Domain\Entity\Tariff;
@@ -8,6 +8,7 @@ use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Rules\Chains\Tariff\ClientChangeTariffRuleChain;
+use App\Modules\Common\Domain\Workflow\Tariff\ChangeNextTariffWorkflow;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
@@ -20,13 +21,13 @@ class ClientChangeNextTariffUseCase
 
         protected LoggerService                 $loggerService,
 
-        protected ChangeNextTariffUseCase       $changeNextTariffUseCase,
+        protected ChangeNextTariffWorkflow      $changeNextTariffWorkflow,
 
         protected ClientChangeTariffRuleChain   $clientChangeTariffRuleChain,
     ) {}
 
     /**
-     * UseCase: Самостоятельно изменение тарифа клиентом
+     * Workflow: Самостоятельно изменение тарифа клиентом
      *
      */
     public function handle(User $client, Tariff $newNextTariff): bool
@@ -43,7 +44,7 @@ class ClientChangeNextTariffUseCase
         ));
 
         // 2 Подвязка нового тарифа
-        $this->changeNextTariffUseCase->handle($client, $newNextTariff);
+        $this->changeNextTariffWorkflow->handle($client, $newNextTariff);
 
         // 3 Запись истории
         $this->loggerService->businessLog(new BusinessLogDto(

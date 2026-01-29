@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Break;
+namespace App\Modules\UserCabinet\UseCase\Break;
 
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\UserRepository;

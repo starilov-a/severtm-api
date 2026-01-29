@@ -2,11 +2,7 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Domain\Entity\FreezeReason;
-use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\UserTaskRepository;
-use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\Common\Domain\Service\FreezeService;
 use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;

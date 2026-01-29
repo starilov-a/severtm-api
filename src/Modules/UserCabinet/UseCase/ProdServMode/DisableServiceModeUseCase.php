@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\ProdServMode;
+namespace App\Modules\UserCabinet\UseCase\ProdServMode;
 
 use App\Modules\Common\Domain\Entity\UserServMode;
 use App\Modules\Common\Domain\Repository\UserRepository;
@@ -23,7 +23,7 @@ class DisableServiceModeUseCase
     ) {}
 
     /**
-     * UseCase: Отключение активной опции
+     * Workflow: Отключение активной опции
      *
      * 1. Выставление статуса isActive=false
      * 2. Отвязка устройств

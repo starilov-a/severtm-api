@@ -2,7 +2,7 @@
 
 namespace App\Modules\Console\Command\Tariff;
 
-use App\Modules\Common\Application\UseCase\TariffGroup\CommandCreateTariffGroupUseCase;
+use App\Modules\Console\UseCase\TariffGroup\CommandCreateTariffGroupUseCase;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

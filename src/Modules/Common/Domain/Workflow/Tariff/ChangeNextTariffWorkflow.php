@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Tariff;
+namespace App\Modules\Common\Domain\Workflow\Tariff;
 
-use App\Modules\Common\Application\UseCase\ProdServMode\AddCurrentServiceModeUseCase;
-use App\Modules\Common\Application\UseCase\ProdServMode\AddNextServiceModeUseCase;
+
 use App\Modules\Common\Domain\Entity\Tariff;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Repository\FinPeriodRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Service\TariffService;
+use App\Modules\Common\Domain\Workflow\ProdServMode\AddNextServiceModeWorkflow;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
@@ -18,25 +18,25 @@ use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
  *
  *
  */
-class ChangeNextTariffUseCase
+class ChangeNextTariffWorkflow
 {
     public function __construct(
-        protected UserRepository $userRepo,
-        protected FinPeriodRepository $finPeriodRepo,
-        protected WebActionRepository $webActionRepo,
+        protected UserRepository             $userRepo,
+        protected FinPeriodRepository        $finPeriodRepo,
+        protected WebActionRepository        $webActionRepo,
 
-        protected LoggerService $loggerService,
-        protected TariffService $tariffService,
+        protected LoggerService              $loggerService,
+        protected TariffService              $tariffService,
 
-        protected AddNextServiceModeUseCase $addNextServiceModeUseCase,
+        protected AddNextServiceModeWorkflow $addNextServiceModeUseCase,
     ) {}
 
     /**
-     * UseCase: Изменение следующего тарифа
+     * Workflow: Изменение следующего тарифа
      *
      *  1. Меняем тариф в таблице
      *  2. Чистим все будущие тарифы
-     *  3. UseCase: Добавление user_serv_modes на след. месяц
+     *  3. Workflow: Добавление user_serv_modes на след. месяц
      *
      * @param User $user
      * @param Tariff $newNextTariff

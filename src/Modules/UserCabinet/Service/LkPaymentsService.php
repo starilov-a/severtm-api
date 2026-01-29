@@ -2,7 +2,6 @@
 
 namespace App\Modules\UserCabinet\Service;
 
-use App\Modules\Common\Application\UseCase\Break\TakeBreakForOneDayUseCase;
 use App\Modules\Common\Domain\Repository\ProdDiscountHistoryRepository;
 use App\Modules\Common\Domain\Repository\ReplenishmentRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
@@ -20,6 +19,7 @@ use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentDto;
 use App\Modules\UserCabinet\Service\Dto\Response\ReplenishmentsCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffCollectionDto;
 use App\Modules\UserCabinet\Service\Dto\Response\WriteOffDto;
+use App\Modules\UserCabinet\UseCase\Break\TakeBreakForOneDayUseCase;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LkPaymentsService
@@ -55,9 +55,8 @@ class LkPaymentsService
 
         protected ClientCanGetBreakRuleChain        $userCanGetBreakRuleChain,
 
-        protected TakeBreakForOneDayUseCase         $userCanTakeBreakForOneDayUseCase,)
-    {
-    }
+        protected TakeBreakForOneDayUseCase         $userCanTakeBreakForOneDayUseCase,
+    ) {}
 
     /*
      * Оплата услуг

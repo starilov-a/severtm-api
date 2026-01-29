@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\TariffGroup;
+namespace App\Modules\Console\UseCase\TariffGroup;
 
 use App\Modules\Common\Domain\Entity\TariffGroup;
-use App\Modules\Common\Domain\Repository\TariffGroupRepository;
 use App\Modules\Common\Domain\Service\TariffGroupService;
-use App\Modules\Common\Infrastructure\Exception\BusinessException;
 
 class CommandCreateTariffGroupUseCase
 {

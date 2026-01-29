@@ -2,8 +2,6 @@
 
 namespace App\Modules\Console\Command\Tariff;
 
-use App\Modules\Common\Application\UseCase\TariffGroup\CommandCreateTariffGroupUseCase;
-use App\Modules\Common\Application\UseCase\TariffGroup\CommandLinkTariffForGroupUseCase;
 use App\Modules\Common\Domain\Entity\ProdServMode;
 use App\Modules\Common\Domain\Repository\ProdServModeRepository;
 use App\Modules\Common\Domain\Repository\TariffGroupRepository;
@@ -11,6 +9,7 @@ use App\Modules\Common\Domain\Repository\TariffRepository;
 use App\Modules\Common\Domain\Repository\UserServModeRepository;
 use App\Modules\Common\Domain\Service\TariffGroupService;
 use App\Modules\Common\Domain\Service\UserServModeService;
+use App\Modules\Console\UseCase\TariffGroup\CommandLinkTariffForGroupUseCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

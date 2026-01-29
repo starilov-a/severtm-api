@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Freeze;
+namespace App\Modules\UserCabinet\UseCase\Freeze;
 
-use App\Modules\Common\Application\UseCase\Tariff\ChangeCurrentTariffUseCase;
-use App\Modules\Common\Application\UseCase\Tariff\ChangeNextTariffUseCase;
+
 use App\Modules\Common\Domain\Contexts\Definitions\User\UserContext;
 use App\Modules\Common\Domain\Entity\User;
 use App\Modules\Common\Domain\Entity\UserTask;
 use App\Modules\Common\Domain\Repository\BlockHistoryRepository;
 use App\Modules\Common\Domain\Repository\UserRepository;
 use App\Modules\Common\Domain\Repository\UserTaskRepository;
-use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
 use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
 use App\Modules\Common\Domain\Repository\WebActionRepository;
 use App\Modules\Common\Domain\Rules\Chains\Freeze\UnfreezeUserChain;
@@ -19,6 +17,7 @@ use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
 use App\Modules\Common\Domain\Service\TariffService;
 use App\Modules\Common\Domain\Service\TaskService;
 use App\Modules\Common\Domain\Service\UserService;
+use App\Modules\Common\Domain\Workflow\Tariff\ChangeCurrentTariffWorkflow;
 use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
@@ -33,8 +32,7 @@ class UnfreezeInternetNoJuridicalUserUseCase
         protected UserPaymentsService           $userPaymentsService,
         protected UserService                   $userService,
 
-        protected ChangeCurrentTariffUseCase    $changeCurrentTariffUseCase,
-        protected ChangeNextTariffUseCase       $changeNextTariffUseCase,
+        protected ChangeCurrentTariffWorkflow    $changeCurrentTariffWorkflow,
 
         protected UserTaskTypeRepository        $taskTypeRepo,
         protected UserTaskRepository            $userTaskRepo,
@@ -46,14 +44,14 @@ class UnfreezeInternetNoJuridicalUserUseCase
 
     ) {}
     /**
-     * UseCase: разморозка интернета физических лиц
+     * Workflow: разморозка интернета физических лиц
      *
      * 1. Бизнес проверки
      * 2. Поиск активной задачи на заморозку и её отмена
      * 3. Получаем тариф, который будет подключен после разморозки
      * 4. Поиск активного тарифа (*user_serv_mode*) на период блокировки и рефаунд до конца месяца того же фин периода
      * 5. Поиск и отключение всех предыдущих активных тарифов
-     * 6. UseCase: Изменение текущего тарифа
+     * 6. Workflow: Изменение текущего тарифа
      * 7. Запись о изменении статуса блокировки в историю блокировок (*BlockHistory*)
      *
      * @param User $user
@@ -92,7 +90,7 @@ class UnfreezeInternetNoJuridicalUserUseCase
         }
 
         // включаем интернет на текущий(+ списание)
-        $this->changeCurrentTariffUseCase->handle($user, $tariffForActivate);
+        $this->changeCurrentTariffWorkflow->handle($user, $tariffForActivate);
 
         // Обновляем историю блокировки
         $this->blockHistoryService->writeBlockLog($user);

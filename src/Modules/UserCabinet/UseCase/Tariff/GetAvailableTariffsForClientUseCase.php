@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Common\Application\UseCase\Tariff;
+namespace App\Modules\UserCabinet\UseCase\Tariff;
 
 use App\Modules\Common\Domain\Contexts\Definitions\Tariff\OnlyAvailableTariffsForClientContext;
 use App\Modules\Common\Domain\Entity\User;
@@ -17,7 +17,7 @@ class GetAvailableTariffsForClientUseCase
     ) {}
 
     /**
-     * UseCase: Получение тарифов доступных для смены клиентом
+     * Workflow: Получение тарифов доступных для смены клиентом
      *
      */
     public function handle(User $client): array
