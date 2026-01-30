@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 
+#[OA\Tag(name: 'ЛК / Услугами')]
 class ServServiceController extends Controller
 {
     public function authenticate(): bool
