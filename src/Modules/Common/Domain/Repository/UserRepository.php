@@ -21,4 +21,12 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function findAllContractIds(User $user): array
+    {
+        //если есть связка с инн, то все
+        //если нет связки с инн то только 1д
+        return [$user->getId()];
+    }
+
 }

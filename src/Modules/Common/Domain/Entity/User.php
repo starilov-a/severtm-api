@@ -161,9 +161,9 @@ class User
     private string $currentBw;
     /* ---------- Отношения с другими справочниками ---------- */
 
-//    #[ORM\ManyToOne(targetEntity: Customer::class)]
-//    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'customer_id', nullable: true)]
-//    private ?Customer $customer = null;
+    #[ORM\ManyToOne(targetEntity: CustomerInn::class)]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'customer_id', nullable: true)]
+    private ?CustomerInn $customerInn = null;
 //
 //    #[ORM\ManyToOne(targetEntity: Unit::class)]
 //    #[ORM\JoinColumn(name: 'unit_id', referencedColumnName: 'id', nullable: false)]
@@ -500,4 +500,13 @@ class User
         return $this->prodDiscountTemps;
     }
 
+    public function getCustomerInn(): ?CustomerInn
+    {
+        return $this->customerInn;
+    }
+
+    public function setCustomerInn(?CustomerInn $customerInn): void
+    {
+        $this->customerInn = $customerInn;
+    }
 }
