@@ -15,7 +15,8 @@ class BalanceMustBePositiveRule extends Rule
             throw new \LogicException('Wrong context passed to IsNotIssetNewFreezeTaskRule');
 
         // Баланс + скидка
-        $availableAmount = $context->getUser()->getBill() + $context->getUser()->getDiscount()->getQuantity();
+        $discount = !empty($context->getUser()->getDiscount()) ? $context->getUser()->getDiscount()->getQuantity() : 0;
+        $availableAmount = $context->getUser()->getBill() + $discount;
         if ($availableAmount <= 0)
             return RuleResult::fail('Отрицательный баланс(с учетом скидок)');
 
