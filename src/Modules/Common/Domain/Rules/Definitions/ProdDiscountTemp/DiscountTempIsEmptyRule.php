@@ -14,7 +14,7 @@ class DiscountTempIsEmptyRule extends Rule
         if (!($context instanceof HasUser)) throw new \LogicException('Wrong context passed to DiscountTempIsEmptyRule');
 
         $temps = $context->getUser()->getProdDiscountTemps();
-        if ($temps->isEmpty())
+        if (!$temps->isEmpty())
             return RuleResult::fail('Пользователь имеет активные задолженности');
 
         return RuleResult::ok();

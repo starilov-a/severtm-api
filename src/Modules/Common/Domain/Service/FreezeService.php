@@ -46,9 +46,9 @@ class FreezeService
         );
 
         return new FreezeUserStatusDto(
+            $user->getBlockState()->getCode() === 'frozen',
             $freezeUserRuleResult->ok,
             $unfreezeUserRuleResult->ok,
-            $user->getBlockState()->getCode() === 'frozen',
             $freezeUserRuleResult->message,
             $unfreezeUserRuleResult->message
         );

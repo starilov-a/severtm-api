@@ -76,9 +76,10 @@ class LkPaymentsService
     {
         $user = $this->userRepo->find($uid);
         $balance = $this->balanceService->getUserBalance($user);
+        $debt = $this->debtService->getUserDebt($user);
 
         return [
-            'balance' => $balance->get()
+            'balance' => $balance->get() - $debt
         ];
     }
 
@@ -177,11 +178,11 @@ class LkPaymentsService
         $breakStatus = [
             'isAvailable' => $data['isAvailable'],
             'isActive' => $data['isActive'],
-            'count' => $data['countAvailableBreaks'] ,
+            'count' => $data['countAvailableBreaks'],
         ];
 
         if ($data['isActive'])
-            $breakStatus['endDate'] = $data['deadlineDate'];
+            $breakStatus['endDate'] = $data['deadlineDate']->format('Y-m-d');
 
         return $breakStatus;
     }
