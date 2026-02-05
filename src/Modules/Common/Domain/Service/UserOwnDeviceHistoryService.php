@@ -12,7 +12,6 @@ use App\Modules\Common\Infrastructure\Service\Auth\Service\UserSessionService;
 class UserOwnDeviceHistoryService
 {
     public function __construct(
-        protected UserOwnDeviceHistory $userOwnDeviceHistory,
         protected UserOwnDeviceHistoryRepository $userOwnDeviceHistoryRepo,
         protected UserRepository $userRepo
     ){}
