@@ -22,7 +22,9 @@ RUN apk add --no-cache \
     g++ \
     make \
     libtool \
-    linux-headers
+    linux-headers \
+    icu-dev \
+    libxml2-dev
 
 RUN docker-php-ext-install pdo pdo_mysql
 
