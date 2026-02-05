@@ -30,8 +30,10 @@ ARG INSTALL_XDEBUG
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
     then \
-     pecl install xdebug && docker-php-ext-enable xdebug && COPY ./docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini; \
+     pecl install xdebug && docker-php-ext-enable xdebug; \
     fi;
+
+COPY ./docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Configure non-root user.
 
