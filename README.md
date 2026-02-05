@@ -20,7 +20,7 @@
 3. Запуск контейнеров
    - Рекомендуемый вариант (из корня репозитория):
      ```sh
-     docker compose --env-file ./docker/.env -f ./docker/docker-compose.yml up -d --build
+     sudo docker compose --env-file ./docker/.env -f ./docker/docker-compose.yml up -d --build
      ```
    - Альтернатива (перейти в `./docker` и запускать без `--env-file`):
      ```sh
