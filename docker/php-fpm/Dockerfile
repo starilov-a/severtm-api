@@ -54,6 +54,6 @@ WORKDIR /var/www
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-interaction
 
-CMD php-fpm
+CMD ["php-fpm"]
 
 EXPOSE 9000

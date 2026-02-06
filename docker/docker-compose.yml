@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   php-fpm:
     container_name: php-fpm
@@ -12,7 +10,8 @@ services:
         INSTALL_XDEBUG: ${INSTALL_XDEBUG}
     volumes:
       - ./../:/var/www/
-      - ./php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php-fpm/z-overrides.conf:/usr/local/etc/php-fpm.d/z-overrides.conf
+      - ./php-fpm/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
