@@ -13,7 +13,7 @@ services:
     volumes:
       - ./../:/var/www/
       - ./php-fpm/conf.d/99-app.ini:/usr/local/etc/php/conf.d/99-app.ini:ro
-      - ./php-fpm/pool.d/www.conf:/usr/local/etc/php-fpm.d/zz-www.conf:ro
+      - ./php-fpm/pool.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
