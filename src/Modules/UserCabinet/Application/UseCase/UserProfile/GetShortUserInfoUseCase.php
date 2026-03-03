@@ -3,12 +3,12 @@
 namespace App\Modules\UserCabinet\Application\UseCase\UserProfile;
 
 use App\Modules\UserCabinet\Application\Dto\Response\WebUserDto;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class GetShortUserInfoUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
+        protected UserRepositoryInterface $userRepo,
     ) {}
 
     public function handle(int $uid): array

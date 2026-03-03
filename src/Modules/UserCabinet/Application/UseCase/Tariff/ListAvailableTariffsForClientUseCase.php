@@ -2,12 +2,12 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class ListAvailableTariffsForClientUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
+        protected UserRepositoryInterface $userRepo,
         protected GetAvailableTariffsForClientUseCase $getAvailableTariffsForClientUseCase,
     ) {}
 

@@ -2,13 +2,12 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\ProductServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProductServiceRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'products_services')]
 #[ORM\UniqueConstraint(name: 'uidx_prod_serv_code', columns: ['str_code'])]
 class ProductService

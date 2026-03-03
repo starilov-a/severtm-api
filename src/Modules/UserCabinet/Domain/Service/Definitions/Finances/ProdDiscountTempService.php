@@ -4,15 +4,17 @@ namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
 use App\Modules\UserCabinet\Domain\Entity\ProdDiscountTemp;
 use App\Modules\UserCabinet\Domain\Entity\UserPayable;
-use App\Modules\UserCabinet\Domain\Repository\ProdDiscountTempRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountTempRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class ProdDiscountTempService
 {
     public function __construct(
-        protected ProdDiscountTempRepository $discountTempRepo,
-        protected UserRepository $userRepo,
+        protected UnitOfWorkInterface $uow,
+        protected ProdDiscountTempRepositoryInterface $discountTempRepo,
+        protected UserRepositoryInterface $userRepo,
     ) {}
 
 
@@ -33,18 +35,8 @@ class ProdDiscountTempService
         $discountTemp->setMaster($this->userRepo->find(UserSessionService::getUserId())->getLogin());
         $discountTemp->setProdComments($comment);
 
-        $this->save($discountTemp);
-
-        return $discountTemp;
-    }
-
-    protected function save(ProdDiscountTemp $discountTemp): ProdDiscountTemp
-    {
-        $em = $this->discountTempRepo->getEntityManager();
-        $em->persist($discountTemp);
-        $em->flush();
+        $this->discountTempRepo->save($discountTemp);
 
         return $discountTemp;
     }
 }
-

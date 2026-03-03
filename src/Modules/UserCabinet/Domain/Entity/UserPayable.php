@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserPayableRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserPayableRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user_payables')]
 class UserPayable
 {

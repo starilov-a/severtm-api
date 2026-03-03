@@ -2,18 +2,18 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Payment;
 
-use App\Modules\UserCabinet\Domain\Repository\BalanceRepository;
-use App\Modules\UserCabinet\Domain\Repository\DebtRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\BalanceRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\DebtRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\BalanceService;
 
 class GetBalanceUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
+        protected UserRepositoryInterface $userRepo,
         protected BalanceService $balanceService,
-        protected DebtRepository $debtRepo,
-        protected BalanceRepository $balanceRepo,
+        protected DebtRepositoryInterface $debtRepo,
+        protected BalanceRepositoryInterface $balanceRepo,
     ) {}
 
     /*

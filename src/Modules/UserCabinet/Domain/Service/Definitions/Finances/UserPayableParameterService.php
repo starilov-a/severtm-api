@@ -5,14 +5,16 @@ namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 use App\Modules\UserCabinet\Domain\Entity\Device;
 use App\Modules\UserCabinet\Domain\Entity\UserPayable;
 use App\Modules\UserCabinet\Domain\Entity\UserPayableParameter;
-use App\Modules\UserCabinet\Domain\Repository\EnumParameterRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserPayableParameterRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\EnumParameterRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableParameterRepositoryInterface;
 
 class UserPayableParameterService
 {
     public function __construct(
-        protected UserPayableParameterRepository $userPayableParameterRepo,
-        protected EnumParameterRepository $enumParameterRepo
+        protected UnitOfWorkInterface $uow,
+        protected UserPayableParameterRepositoryInterface $userPayableParameterRepo,
+        protected EnumParameterRepositoryInterface $enumParameterRepo
     ){}
 
     public function addLinkToDevice(UserPayable $userPayable, Device $device)
@@ -23,15 +25,6 @@ class UserPayableParameterService
         $userPayableParameter->setParameter($this->enumParameterRepo->findOneBy(['code' => 'device_id']));
         $userPayableParameter->setValue($device->getId());
 
-        return $this->save($userPayableParameter);
-    }
-
-    protected function save(UserPayableParameter $userPayableParameter): UserPayableParameter
-    {
-        $em = $this->userPayableParameterRepo->getEntityManager();
-        $em->persist($userPayableParameter);
-        $em->flush();
-
-        return $userPayableParameter;
+        return $this->userPayableParameterRepo->save($userPayableParameter);
     }
 }

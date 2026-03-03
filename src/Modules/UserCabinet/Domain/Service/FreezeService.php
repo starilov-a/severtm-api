@@ -4,9 +4,9 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\CanFreezeUserRuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\CanUnfreezeUserRuleChain;
 use App\Modules\UserCabinet\Domain\Service\Dto\Response\FreezeUserStatusDto;
@@ -16,9 +16,9 @@ class FreezeService
 {
     protected const GET_FREEZE_ACTION_CID = 'WA_FREEZE_INFO';
     public function __construct(
-        protected UserRepository $userRepo,
-        protected FreezeReasonRepository $freezeReasonRepo,
-        protected WebActionRepository $webActionRepo,
+        protected UserRepositoryInterface $userRepo,
+        protected FreezeReasonRepositoryInterface $freezeReasonRepo,
+        protected WebActionRepositoryInterface $webActionRepo,
 
         protected CanFreezeUserRuleChain $canFreezeUserRuleChain,
         protected CanUnfreezeUserRuleChain $canUnfreezeUserRuleChain,

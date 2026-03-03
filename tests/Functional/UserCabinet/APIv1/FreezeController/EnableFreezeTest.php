@@ -2,10 +2,10 @@
 
 namespace App\Tests\Functional\UserCabinet\APIv1\FreezeController;
 
-use App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 use App\Tests\Functional\TransactionalWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +14,7 @@ class EnableFreezeTest extends TransactionalWebTestCase
     public function testEnableFreezeCreatesTask(): void
     {
         $container = static::getContainer();
-        $reasonRepo = $container->get(FreezeReasonRepository::class);
+        $reasonRepo = $container->get(FreezeReasonRepositoryInterface::class);
         $reason = $reasonRepo->findOneBy(['isAdmin' => false]);
         if (!$reason) {
             self::markTestIncomplete('Нет доступных причин для заморозки в БД.');
@@ -39,9 +39,9 @@ class EnableFreezeTest extends TransactionalWebTestCase
 
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $taskRepo = $container->get(UserTaskRepository::class);
-        $taskTypeRepo = $container->get(UserTaskTypeRepository::class);
-        $taskStateRepo = $container->get(UserTaskStateRepository::class);
+        $taskRepo = $container->get(UserTaskRepositoryInterface::class);
+        $taskTypeRepo = $container->get(UserTaskTypeRepositoryInterface::class);
+        $taskStateRepo = $container->get(UserTaskStateRepositoryInterface::class);
 
         $freezeType = $taskTypeRepo->findOneBy(['code' => 'freeze']);
         $newState = $taskStateRepo->findOneBy(['code' => 'new']);
@@ -82,7 +82,7 @@ class EnableFreezeTest extends TransactionalWebTestCase
 
         $this->loginClient($this->client, $testUser);
 
-        $reasonRepo = static::getContainer()->get(FreezeReasonRepository::class);
+        $reasonRepo = static::getContainer()->get(FreezeReasonRepositoryInterface::class);
         $reason = $reasonRepo->findOneBy(['isAdmin' => false]);
         if (!$reason) {
             self::markTestIncomplete('Нет доступных причин для заморозки в БД.');
@@ -124,7 +124,7 @@ class EnableFreezeTest extends TransactionalWebTestCase
         $this->loginClient($this->client);
 
 
-        $reasonRepo = static::getContainer()->get(FreezeReasonRepository::class);
+        $reasonRepo = static::getContainer()->get(FreezeReasonRepositoryInterface::class);
         $reason = $reasonRepo->findOneBy(['isAdmin' => false]);
         if (!$reason) {
             self::markTestIncomplete('Нет доступных причин для заморозки в БД.');

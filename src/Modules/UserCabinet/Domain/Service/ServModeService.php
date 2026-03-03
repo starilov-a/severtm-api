@@ -2,13 +2,13 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
-use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServModeFilterDto;
 
 class ServModeService
 {
     public function __construct(
-        protected ProdServModeRepository $servModeRepo,
+        protected ProdServModeRepositoryInterface $servModeRepo,
     ) {}
     /*
      * return @ProdServMode[]

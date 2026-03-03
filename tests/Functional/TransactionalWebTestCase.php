@@ -3,7 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Tests\Support\Dto\TestUserCredentials;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -13,7 +13,7 @@ abstract class TransactionalWebTestCase extends WebTestCase
 {
     protected ?EntityManagerInterface $em = null;
     protected ?KernelBrowser $client = null;
-    protected ?UserRepository $userRepo = null;
+    protected ?UserRepositoryInterface $userRepo = null;
     protected ?TestUserCredentials $defaultUser = null;
     protected function setUp(): void
     {
@@ -22,7 +22,7 @@ abstract class TransactionalWebTestCase extends WebTestCase
         $this->startTransaction($this->client);
 
         // Инициализация
-        $this->userRepo = static::getContainer()->get(UserRepository::class);
+        $this->userRepo = static::getContainer()->get(UserRepositoryInterface::class);
     }
 
     protected function startTransaction(?KernelBrowser $client = null): void

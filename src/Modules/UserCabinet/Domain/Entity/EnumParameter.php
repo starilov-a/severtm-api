@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\EnumParameterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EnumParameterRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'enum_parameters')]
 class EnumParameter
 {

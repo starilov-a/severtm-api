@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Application\UseCase\Service;
 
 use App\Modules\UserCabinet\Application\UseCase\ProdServMode\DisableServiceModeUseCase;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -12,8 +12,8 @@ class DisableServiceUseCase
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected UserRepository $userRepo,
-        protected UserServModeRepository $userServModeRepo,
+        protected UserRepositoryInterface $userRepo,
+        protected UserServModeRepositoryInterface $userServModeRepo,
         protected DisableServiceModeUseCase $disableServiceModeUseCase,
     ) {}
 

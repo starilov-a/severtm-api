@@ -5,14 +5,14 @@ namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Break;
 use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Repository\CreditHistoryRepository;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
 
 class FirstBreakInCurrentMonthRule extends Rule
 {
     public function __construct(
-        protected FinPeriodRepository       $finPeriodRepo,
-        protected CreditHistoryRepository   $creditHistoryRepo,
+        protected FinPeriodRepositoryInterface       $finPeriodRepo,
+        protected CreditHistoryRepositoryInterface   $creditHistoryRepo,
     ) {}
     public function check(object $context = null): RuleResult
     {

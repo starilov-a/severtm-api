@@ -6,11 +6,11 @@ namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
-use App\Modules\UserCabinet\Domain\Repository\BlockHistoryRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockHistoryRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\UnfreezeUserChain;
 use App\Modules\UserCabinet\Domain\Service\BlockHistoryService;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\UserPaymentsService;
@@ -34,11 +34,11 @@ class UnfreezeInternetNoJuridicalUserUseCase
 
         protected ChangeCurrentTariffWorkflow    $changeCurrentTariffWorkflow,
 
-        protected UserTaskTypeRepository        $taskTypeRepo,
-        protected UserTaskRepository            $userTaskRepo,
-        protected UserRepository                $userRepo,
-        protected WebActionRepository           $webActionRepo,
-        protected BlockHistoryRepository        $blockHistoryRepo,
+        protected UserTaskTypeRepositoryInterface        $taskTypeRepo,
+        protected UserTaskRepositoryInterface            $userTaskRepo,
+        protected UserRepositoryInterface                $userRepo,
+        protected WebActionRepositoryInterface           $webActionRepo,
+        protected BlockHistoryRepositoryInterface        $blockHistoryRepo,
 
         protected UnfreezeUserChain             $unfreezeUserChain,
 

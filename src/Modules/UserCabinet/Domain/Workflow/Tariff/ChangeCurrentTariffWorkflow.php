@@ -4,10 +4,10 @@ namespace App\Modules\UserCabinet\Domain\Workflow\Tariff;
 
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\BlockStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Domain\Service\UserService;
 use App\Modules\UserCabinet\Domain\Service\UserServModeService;
@@ -19,10 +19,10 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class ChangeCurrentTariffWorkflow
 {
     public function __construct(
-        protected UserRepository                $userRepo,
-        protected FinPeriodRepository           $finPeriodRepo,
-        protected WebActionRepository           $webActionRepo,
-        protected BlockStateRepository          $blockStateRepo,
+        protected UserRepositoryInterface                $userRepo,
+        protected FinPeriodRepositoryInterface           $finPeriodRepo,
+        protected WebActionRepositoryInterface           $webActionRepo,
+        protected BlockStateRepositoryInterface          $blockStateRepo,
 
         protected LoggerService                 $loggerService,
         protected UserService                   $userService,

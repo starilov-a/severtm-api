@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\BlockHistoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BlockHistoryRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'block_history')]
 #[ORM\Index(name: 'block_uid', columns: ['block_uid'])]
 #[ORM\Index(name: 'block_date', columns: ['block_date'])]

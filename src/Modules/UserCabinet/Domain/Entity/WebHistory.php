@@ -5,7 +5,7 @@ namespace App\Modules\UserCabinet\Domain\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: \App\Modules\UserCabinet\Domain\Repository\WebHistoryRepository::class, readOnly: true)]
+#[ORM\Entity(readOnly: true)]
 #[ORM\Table(name: 'web_log')]
 #[ORM\Index(name: 'web_log__uid', columns: ['uid'])]
 #[ORM\Index(name: 'web_log__act_id', columns: ['act_id'])]

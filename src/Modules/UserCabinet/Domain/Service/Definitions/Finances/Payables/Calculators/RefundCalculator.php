@@ -3,16 +3,16 @@
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\Calculators;
 
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserPayableTypeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\CalculatedPayable;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\PayableCalculatorInterface;
 
 class RefundCalculator extends DefaultCalculator implements PayableCalculatorInterface
 {
     public function __construct(
-        protected UserPayableTypeRepository $userPayableTypeRepo,
-        protected FinPeriodRepository $finPeriodRepo,
+        protected UserPayableTypeRepositoryInterface $userPayableTypeRepo,
+        protected FinPeriodRepositoryInterface $finPeriodRepo,
     ) {}
     public function calculate(UserServMode $userServMode): CalculatedPayable
     {

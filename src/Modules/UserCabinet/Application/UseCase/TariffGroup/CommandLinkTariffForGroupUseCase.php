@@ -4,8 +4,8 @@ namespace App\Modules\UserCabinet\Application\UseCase\TariffGroup;
 
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\TariffGroup;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\TariffGroupService;
 use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
@@ -13,8 +13,8 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class CommandLinkTariffForGroupUseCase
 {
     public function __construct(
-        protected WebActionRepository $webActionRepo,
-        protected UserRepository $userRepo,
+        protected WebActionRepositoryInterface $webActionRepo,
+        protected UserRepositoryInterface $userRepo,
 
         protected LoggerService $loggerService,
         protected TariffService $tariffService,

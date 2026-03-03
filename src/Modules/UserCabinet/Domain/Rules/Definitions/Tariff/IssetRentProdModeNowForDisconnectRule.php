@@ -6,7 +6,7 @@ use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
 
 /**
  * Есть ли активная услуга аренды в текущем фин периоде
@@ -16,7 +16,7 @@ use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
 class IssetRentProdModeNowForDisconnectRule extends Rule
 {
     public function __construct(
-        protected UserServModeRepository $userServModeRepo,
+        protected UserServModeRepositoryInterface $userServModeRepo,
     ) {}
 
     public function check(object $context = null): RuleResult

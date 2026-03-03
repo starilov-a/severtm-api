@@ -6,8 +6,8 @@ use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasWebAction;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
 
 /**
  * Бизнес-правило:
@@ -17,8 +17,8 @@ use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
 class NoActiveMultiMonthModesInCurrentPeriodRule extends Rule
 {
     public function __construct(
-        protected UserServModeRepository $userServModeRepo,
-        protected FinPeriodRepository $finPeriodRepo,
+        protected UserServModeRepositoryInterface $userServModeRepo,
+        protected FinPeriodRepositoryInterface $finPeriodRepo,
     ) {}
 
     /** @var HasWebAction & HasUser $context */

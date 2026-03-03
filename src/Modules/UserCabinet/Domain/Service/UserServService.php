@@ -2,21 +2,21 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServiceFilterDto;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServModeFilterDto;
 use App\Modules\UserCabinet\Service\Dto;
 
 class UserServService
 {
-    protected UserRepository $userRepo;
+    protected UserRepositoryInterface $userRepo;
     protected ServModeService $servModeService;
     protected ServService $servService;
     protected UserServModeService $userServModeService;
     public function __construct(
-        UserRepository $userRepository,
-        UserServModeRepository $userSer,
+        UserRepositoryInterface $userRepository,
+        UserServModeRepositoryInterface $userSer,
         ServModeService $servModeService,
         ServService $servService,
         UserServModeService $userServModeService

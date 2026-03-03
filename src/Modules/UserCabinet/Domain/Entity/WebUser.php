@@ -2,10 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\WebUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: WebUserRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "web_users")]
 class WebUser
 {

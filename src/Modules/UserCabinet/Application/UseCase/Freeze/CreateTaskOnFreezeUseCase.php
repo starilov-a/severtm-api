@@ -4,10 +4,10 @@ namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Freeze\CreateFreezeTaskContext;
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\CreateFreezeTaskRuleChain;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\UserCabinet\Domain\Service\TaskService;
@@ -21,10 +21,10 @@ class CreateTaskOnFreezeUseCase
         protected LoggerService           $loggerService,
         protected TaskService             $taskService,
 
-        protected UserTaskStateRepository $taskStateRepo,
-        protected UserTaskTypeRepository  $taskTypeRepo,
-        protected UserRepository          $userRepo,
-        protected WebActionRepository     $webActionRepo,
+        protected UserTaskStateRepositoryInterface $taskStateRepo,
+        protected UserTaskTypeRepositoryInterface  $taskTypeRepo,
+        protected UserRepositoryInterface          $userRepo,
+        protected WebActionRepositoryInterface     $webActionRepo,
 
         protected CreateFreezeTaskRuleChain $createFreezeTaskRuleChain,
 

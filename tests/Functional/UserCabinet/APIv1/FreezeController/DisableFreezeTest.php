@@ -2,9 +2,9 @@
 
 namespace App\Tests\Functional\UserCabinet\APIv1\FreezeController;
 
-use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 use App\Tests\Functional\TransactionalWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,9 +30,9 @@ class DisableFreezeTest extends TransactionalWebTestCase
         $testUser = $this->userRepo->find((int)$testUserId);
 
         $container = static::getContainer();
-        $taskRepo = $container->get(UserTaskRepository::class);
-        $taskTypeRepo = $container->get(UserTaskTypeRepository::class);
-        $taskStateRepo = $container->get(UserTaskStateRepository::class);
+        $taskRepo = $container->get(UserTaskRepositoryInterface::class);
+        $taskTypeRepo = $container->get(UserTaskTypeRepositoryInterface::class);
+        $taskStateRepo = $container->get(UserTaskStateRepositoryInterface::class);
 
         $freezeType = $taskTypeRepo->findOneBy(['code' => 'freeze']);
         $freezeState = $taskStateRepo->findOneBy(['code' => 'new']);

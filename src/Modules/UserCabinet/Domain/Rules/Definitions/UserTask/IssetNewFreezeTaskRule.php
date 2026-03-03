@@ -5,14 +5,14 @@ namespace App\Modules\UserCabinet\Domain\Rules\Definitions\UserTask;
 use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 
 class IssetNewFreezeTaskRule extends Rule
 {
     public function __construct(
-        protected UserTaskStateRepository $taskStateRepo,
-        protected UserTaskTypeRepository $taskTypeRepo,
+        protected UserTaskStateRepositoryInterface $taskStateRepo,
+        protected UserTaskTypeRepositoryInterface $taskTypeRepo,
     ) {}
     public function check(object $context = null): RuleResult
     {

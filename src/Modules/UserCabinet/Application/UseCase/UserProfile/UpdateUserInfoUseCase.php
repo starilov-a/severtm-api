@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\UserProfile;
 
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebUserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebUserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -11,8 +11,8 @@ class UpdateUserInfoUseCase
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected UserRepository $userRepo,
-        protected WebUserRepository $webUserRepo,
+        protected UserRepositoryInterface $userRepo,
+        protected WebUserRepositoryInterface $webUserRepo,
     ) {}
 
     public function handle(int $uid, WebUserRequestDto $dto): int

@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\SemaphoreRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SemaphoreRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: '__semaphores')]
 #[ORM\UniqueConstraint(name: 'uidx_semaphores_procedure_name', columns: ['procedure_name'])]
 class Semaphore

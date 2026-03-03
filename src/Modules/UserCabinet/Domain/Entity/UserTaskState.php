@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserTaskStateRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user_task_states')]
 #[ORM\UniqueConstraint(name: 'uidx_user_task_states_str_code', columns: ['str_code'])]
 class UserTaskState

@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\AllHistoryKindRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AllHistoryKindRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'all_history_kind')]
 class AllHistoryKind
 {

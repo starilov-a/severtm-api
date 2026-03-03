@@ -6,12 +6,12 @@ use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasRegion;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
-use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeRepositoryInterface;
 
 class TariffAllowedForRegionGroupRule extends Rule
 {
 
-    public function __construct(protected ProdServModeRepository $prodServModeRepository){}
+    public function __construct(protected ProdServModeRepositoryInterface $prodServModeRepository){}
 
     public function check(object $context = null): RuleResult
     {

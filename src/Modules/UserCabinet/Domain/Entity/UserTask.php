@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserTaskRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user_tasks')]
 #[ORM\Index(name: 'users__id', columns: ['uid'])]
 #[ORM\Index(name: 'wu__uid', columns: ['who'])]

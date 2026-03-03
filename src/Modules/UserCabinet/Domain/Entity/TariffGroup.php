@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\TariffGroupRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TariffGroupRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'tariffs_groups')]
 #[ORM\UniqueConstraint(name: 'uidx_tg_grp_code', columns: ['tariffs_grp_code'])]
 class TariffGroup

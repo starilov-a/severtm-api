@@ -6,12 +6,12 @@ use App\Modules\UserCabinet\Application\Dto\Response\AddressDto;
 use App\Modules\UserCabinet\Application\Dto\Response\UserDto;
 use App\Modules\UserCabinet\Application\Dto\Response\UserFullInfoDto;
 use App\Modules\UserCabinet\Application\Dto\Response\WebUserDto;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class GetFullUserInfoUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
+        protected UserRepositoryInterface $userRepo,
     ) {}
 
     public function handle(int $uid): array

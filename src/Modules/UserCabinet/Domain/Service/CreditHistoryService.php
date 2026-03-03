@@ -2,13 +2,13 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
-use App\Modules\UserCabinet\Domain\Repository\CreditHistoryRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreditHistoryLogDto;
 
 class CreditHistoryService
 {
     public function __construct(
-        protected CreditHistoryRepository $creditHistoryRepo,
+        protected CreditHistoryRepositoryInterface $creditHistoryRepo,
     ) {}
 
     /**

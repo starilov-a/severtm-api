@@ -6,7 +6,7 @@ use App\Modules\UserCabinet\Repository\DistrictRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: DistrictRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'districts')]
 #[ORM\Index(name: 'fk_dst_ref_regs', columns: ['region_id'])]
 class District

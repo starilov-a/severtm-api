@@ -2,13 +2,13 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Break;
 
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\BreakService;
 
 class CanTakeBreakUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
+        protected UserRepositoryInterface $userRepo,
         protected BreakService $breakService,
     ) {}
     public function handle(int $uid)

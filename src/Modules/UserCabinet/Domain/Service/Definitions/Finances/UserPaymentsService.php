@@ -5,10 +5,10 @@ namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\FinPeriod\OnlyFinPeriod;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Repository\ProdDiscountHistoryRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserPayableTypeRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountHistoryRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\FinPeriod\IsCurrentFinPeriodRule;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\Calculators\NoPacketCalculator;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\Calculators\RefundCalculator;
@@ -24,10 +24,10 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class UserPaymentsService
 {
     public function __construct(
-        protected ProdDiscountHistoryRepository $writeOffRepo,
-        protected UserRepository                $userRepo,
-        protected WebActionRepository           $webActionRepo,
-        protected UserPayableTypeRepository     $userPayableTypeRepo,
+        protected ProdDiscountHistoryRepositoryInterface $writeOffRepo,
+        protected UserRepositoryInterface                $userRepo,
+        protected WebActionRepositoryInterface           $webActionRepo,
+        protected UserPayableTypeRepositoryInterface     $userPayableTypeRepo,
 
         protected LoggerService                 $loggerService,
         protected UserPayableService            $userPayableService,

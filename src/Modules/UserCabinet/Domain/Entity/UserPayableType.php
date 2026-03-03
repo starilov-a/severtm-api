@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserPayableTypeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserPayableTypeRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user_payables_types')]
 #[ORM\UniqueConstraint(name: 'uidx_upt_type_code', columns: ['type_code'])]
 class UserPayableType

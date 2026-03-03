@@ -4,16 +4,14 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\TariffGroup;
-use App\Modules\UserCabinet\Domain\Repository\TariffGroupRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffGroupRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
-use Doctrine\ORM\EntityManagerInterface;
 
 class TariffGroupService
 {
     public function __construct(
-        protected EntityManagerInterface    $em,
-
-        protected TariffGroupRepository    $tariffGroupRepo,
+        protected TariffGroupRepositoryInterface    $tariffGroupRepo,
     ) {}
     public function getTariffGroupRegions(): array
     {
@@ -45,7 +43,7 @@ class TariffGroupService
         $group->setName($name);
         $group->setUserVisible((int)$userVisible);
 
-        return $this->save($group);
+        return $this->tariffGroupRepo->save($group);
     }
 
     public function linkTariffForGroup(Tariff $tariff, TariffGroup $tariffGroup): Tariff
@@ -53,21 +51,10 @@ class TariffGroupService
         if ($tariff->isInGroup($tariffGroup))
             throw new BusinessException('Тариф уже относится к этой группе');
 
-        $this->em->getConnection()->insert('tariffs_belong_groups', [
-            'tc_id' => $tariff->getId(),
-            'tariffs_group_id' => $tariffGroup->getId(),
-        ]);
+        $this->tariffGroupRepo->linkTariffForGroup($tariff, $tariffGroup);
 
         $tariff->addGroup($tariffGroup);
 
         return $tariff;
-    }
-
-    private function save(TariffGroup $group): TariffGroup
-    {
-        $this->em->persist($group);
-        $this->em->flush();
-
-        return $group;
     }
 }

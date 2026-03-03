@@ -6,31 +6,31 @@ use App\Modules\UserCabinet\Domain\Contexts\Definitions\UserServMode\AddServiceM
 use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserJurStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserJurStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\UserServMode\AddServiceModeRuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
-use Doctrine\ORM\EntityManagerInterface;
 
 class UserServModeService
 {
     public function __construct(
-        protected EntityManagerInterface    $em,
-        protected UserServModeRepository    $userServModeRepo,
+        protected UnitOfWorkInterface       $uow,
+        protected UserServModeRepositoryInterface    $userServModeRepo,
         protected DeviceService             $deviceService,
         protected LoggerService             $loggerService,
-        protected WebActionRepository       $webActionRepo,
-        protected UserRepository            $userRepo,
-        protected FinPeriodRepository       $finPeriodRepo,
+        protected WebActionRepositoryInterface       $webActionRepo,
+        protected UserRepositoryInterface            $userRepo,
+        protected FinPeriodRepositoryInterface       $finPeriodRepo,
         protected UserOwnDeviceService      $userOwnDeviceService,
-        protected UserJurStateRepository    $jurStateRepo,
+        protected UserJurStateRepositoryInterface    $jurStateRepo,
         protected UserIsNotNotActivatedRule $userIsNotNotActivatedRule,
 
         protected AddServiceModeRuleChain   $addServiceModeRuleChain,
@@ -98,7 +98,7 @@ class UserServModeService
         }
 
         // фиксируем $userServMode
-        $this->save($userServMode);
+        $this->userServModeRepo->save($userServMode);
 
         // 4. Логирование
         $comment = $optionsUserServModeDto->getComment();
@@ -124,23 +124,6 @@ class UserServModeService
         $userServMode->setIsActive(true);
         $userServMode->setUseCost(true);
 
-        return $this->save($userServMode);
-    }
-
-    public function delete(ProdServMode $prodServMode): bool
-    {
-        $this->em->remove($prodServMode);
-        $this->em->flush();
-
-        return true;
-    }
-
-    // Конечное применение userServMode
-    public function save(UserServMode $userServMode): UserServMode
-    {
-        $this->em->persist($userServMode);
-        $this->em->flush();
-
-        return $userServMode;
+        return $this->userServModeRepo->save($userServMode);
     }
 }

@@ -3,13 +3,13 @@
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\ReplenishmentRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ReplenishmentRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 
 class ReplenishmentService
 {
     public function __construct(
-        protected ReplenishmentRepository $replenishmentRepo
+        protected ReplenishmentRepositoryInterface $replenishmentRepo
     ){}
     /*
      * Пополнения пользователя

@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\CreditHistoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CreditHistoryRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'credits_history', options: ['charset' => 'cp1251'])]
 #[ORM\Index(name: 'master', columns: ['credit_master'])]
 #[ORM\Index(name: 'date', columns: ['credit_date'])]

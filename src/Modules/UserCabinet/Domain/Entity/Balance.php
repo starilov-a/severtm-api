@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\BalanceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BalanceRepository::class, readOnly: true)]
+#[ORM\Entity(readOnly: true)]
 #[ORM\Table(name: 'users')]
 class Balance
 {

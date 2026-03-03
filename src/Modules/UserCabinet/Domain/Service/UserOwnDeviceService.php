@@ -5,8 +5,8 @@ namespace App\Modules\UserCabinet\Domain\Service;
 use App\Modules\UserCabinet\Domain\Entity\Device;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserOwnDevice;
-use App\Modules\UserCabinet\Domain\Repository\UserOwnDeviceRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserOwnDeviceRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
@@ -14,12 +14,11 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class UserOwnDeviceService
 {
     public function __construct(
-        protected UserOwnDeviceRepository $userOwnDeviceRepo,
-        protected UserRepository $userRepo,
+        protected UserOwnDeviceRepositoryInterface $userOwnDeviceRepo,
+        protected UserRepositoryInterface $userRepo,
         protected LoggerService $loggerService,
         protected UserOwnDeviceHistoryService $userOwnDeviceHistoryRepo,
-    ) {
-    }
+    ) {}
 
     public function attachDeviceToUser(User $user, Device $device, $comment = ''): UserOwnDevice
     {
@@ -34,7 +33,7 @@ class UserOwnDeviceService
         $own->setDeviceComment($comment);
         $own->setTimeStamp(new \DateTime());
 
-        return $this->save($own);
+        return $this->userOwnDeviceRepo->save($own);
     }
 
     public function removeDeviceFromUser(Device $device, $comment = ''): void
@@ -43,7 +42,7 @@ class UserOwnDeviceService
         $deviceOwn = $device->getOwnDevice();
         $owner = $deviceOwn->getUser();
 
-        $this->delete($deviceOwn);
+        $this->userOwnDeviceRepo->remove($deviceOwn);
 
         //Запись в историю изменений владельцев устройств
         $this->userOwnDeviceHistoryRepo->addHistoryLog($device, $owner, $comment, 'D');
@@ -56,21 +55,4 @@ class UserOwnDeviceService
             true
         ));
     }
-
-    protected function save(UserOwnDevice $own): UserOwnDevice
-    {
-        $em = $this->userOwnDeviceRepo->getEntityManager();
-        $em->persist($own);
-        $em->flush();
-
-        return $own;
-    }
-
-    protected function delete(UserOwnDevice $own): void
-    {
-        $em = $this->userOwnDeviceRepo->getEntityManager();
-        $em->remove($own);
-        $em->flush();
-    }
 }
-

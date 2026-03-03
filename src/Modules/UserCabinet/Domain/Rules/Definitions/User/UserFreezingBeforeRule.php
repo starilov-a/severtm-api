@@ -5,14 +5,14 @@ namespace App\Modules\UserCabinet\Domain\Rules\Definitions\User;
 use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 
 class UserFreezingBeforeRule extends Rule
 {
     public function __construct(
-        protected UserTaskRepository $userTaskRepo,
-        protected UserTaskTypeRepository $userTaskTypeRepo,
+        protected UserTaskRepositoryInterface $userTaskRepo,
+        protected UserTaskTypeRepositoryInterface $userTaskTypeRepo,
     ) {}
 
     public function check(object $context = null): RuleResult

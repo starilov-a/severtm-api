@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
-use App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -11,8 +11,8 @@ class FreezeProfileUseCase
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected UserRepository $userRepo,
-        protected FreezeReasonRepository $freezeReasonRepo,
+        protected UserRepositoryInterface $userRepo,
+        protected FreezeReasonRepositoryInterface $freezeReasonRepo,
         protected CreateTaskOnFreezeUseCase $createTaskOnFreezeUseCase,
     ) {}
 

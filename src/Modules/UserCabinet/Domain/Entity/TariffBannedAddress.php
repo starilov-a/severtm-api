@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\TariffBannedAddressRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TariffBannedAddressRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'tariff_banned_addresses', options: ['charset' => 'cp1251'])]
 #[ORM\Index(name: 'fk_t_ban_addr_ref_t_cur', columns: ['tariff_id'])]
 class TariffBannedAddress

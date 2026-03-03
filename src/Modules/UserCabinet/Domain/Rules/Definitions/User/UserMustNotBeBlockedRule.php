@@ -5,7 +5,7 @@ namespace App\Modules\UserCabinet\Domain\Rules\Definitions\User;
 use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Repository\BlockStateRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface;
 
 /**
  * Бизнес-правило:
@@ -14,7 +14,7 @@ use App\Modules\UserCabinet\Domain\Repository\BlockStateRepository;
 class UserMustNotBeBlockedRule extends Rule
 {
     public function __construct(
-        protected BlockStateRepository $blockStateRepo,
+        protected BlockStateRepositoryInterface $blockStateRepo,
     ){}
 
     public function check(object $context = null): RuleResult

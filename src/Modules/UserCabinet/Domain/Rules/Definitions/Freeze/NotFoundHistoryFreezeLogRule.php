@@ -5,14 +5,14 @@ namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze;
 use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Repository\AllHistoryKindRepository;
-use App\Modules\UserCabinet\Domain\Repository\AllHistoryRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\AllHistoryKindRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\AllHistoryRepositoryInterface;
 
 class NotFoundHistoryFreezeLogRule extends Rule
 {
     public function __construct(
-        protected AllHistoryRepository $allHistoryRepo,
-        protected AllHistoryKindRepository $allHistoryKindRepo,
+        protected AllHistoryRepositoryInterface $allHistoryRepo,
+        protected AllHistoryKindRepositoryInterface $allHistoryKindRepo,
     ) {}
     public function check(object $context = null): RuleResult
     {

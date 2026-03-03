@@ -3,11 +3,11 @@
 namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
-use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeRepositoryInterface;
 
 class ProdServModeService
 {
-    public function __construct(private ProdServModeRepository $repo) {}
+    public function __construct(private ProdServModeRepositoryInterface $repo) {}
 
     public function isJuridical(ProdServMode $mode): bool
     {

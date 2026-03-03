@@ -3,12 +3,12 @@
 namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
 use App\Modules\UserCabinet\Application\Dto\Response\TariffDto;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class GetCurrentTariffForClientUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
+        protected UserRepositoryInterface $userRepo,
     ) {}
 
     public function handle(int $uid): TariffDto

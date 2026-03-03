@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FreezeReasonRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'freez_reason')]
 class FreezeReason
 {

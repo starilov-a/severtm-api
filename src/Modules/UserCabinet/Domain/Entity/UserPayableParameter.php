@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserPayableParameterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserPayableParameterRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'upid_parameters')]
 #[ORM\UniqueConstraint(name: 'uidx_up_upid_pc', columns: ['upid', 'param_code'])]
 class UserPayableParameter

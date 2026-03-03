@@ -3,8 +3,9 @@
 namespace App\Modules\UserCabinet\Application\UseCase\ProdServMode;
 
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\UserOwnDeviceService;
 use App\Modules\UserCabinet\Domain\Service\UserServModeService;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -14,8 +15,9 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class DisableServiceModeUseCase
 {
     public function __construct(
-        protected WebActionRepository       $webActionRepo,
-        protected UserRepository            $userRepo,
+        protected WebActionRepositoryInterface       $webActionRepo,
+        protected UserRepositoryInterface            $userRepo,
+        protected UserServModeRepositoryInterface    $userServModeRepo,
 
         protected LoggerService             $loggerService,
         protected UserOwnDeviceService      $userOwnDeviceService,
@@ -42,7 +44,7 @@ class DisableServiceModeUseCase
         if ($userServMode->getDevice())
             $this->userOwnDeviceService->removeDeviceFromUser($userServMode->getDevice());
 
-        $this->userServModeService->save($userServMode);
+        $this->userServModeRepo->save($userServMode);
 
         $this->loggerService->businessLog(new BusinessLogDto(
             $master->getId(),

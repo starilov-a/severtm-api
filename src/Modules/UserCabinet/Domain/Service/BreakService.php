@@ -5,11 +5,11 @@ namespace App\Modules\UserCabinet\Domain\Service;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Break\BreakContext;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Break\OnlyBreakContext;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\BlockStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\ConfigRepository;
-use App\Modules\UserCabinet\Domain\Repository\CreditHistoryRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ConfigRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Break\CanGetBreakRuleChain;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreditHistoryLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -22,11 +22,11 @@ class BreakService
         protected UserService               $userService,
         protected CreditHistoryService      $creditHistoryService,
 
-        protected WebActionRepository       $webActionRepo,
-        protected ConfigRepository          $configRepo,
-        protected UserRepository            $userRepo,
-        protected CreditHistoryRepository   $creditHistoryRepo,
-        protected BlockStateRepository      $blockStateRepo,
+        protected WebActionRepositoryInterface       $webActionRepo,
+        protected ConfigRepositoryInterface          $configRepo,
+        protected UserRepositoryInterface            $userRepo,
+        protected CreditHistoryRepositoryInterface   $creditHistoryRepo,
+        protected BlockStateRepositoryInterface      $blockStateRepo,
 
         protected CanGetBreakRuleChain      $canGetBreakRuleChain,
     ) {}
@@ -51,7 +51,7 @@ class BreakService
         $deadline = $now->modify('+' . $countDays . ' days');
         $user->setCreditDeadline($deadline);
 
-        $this->userService->save($user);
+        $this->userRepo->save($user);
 
         // 3. добавление истории отсрочки
         $creditHistoryLogDto = new CreditHistoryLogDto($deadline, $user, $master, $user->getBill());

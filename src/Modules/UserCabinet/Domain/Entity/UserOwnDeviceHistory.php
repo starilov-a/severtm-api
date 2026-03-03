@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserOwnDeviceHistoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserOwnDeviceHistoryRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user_own_devices_history')]
 class UserOwnDeviceHistory
 {

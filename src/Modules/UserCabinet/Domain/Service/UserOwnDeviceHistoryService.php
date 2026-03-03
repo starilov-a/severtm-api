@@ -5,15 +5,17 @@ namespace App\Modules\UserCabinet\Domain\Service;
 use App\Modules\UserCabinet\Domain\Entity\Device;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserOwnDeviceHistory;
-use App\Modules\UserCabinet\Domain\Repository\UserOwnDeviceHistoryRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserOwnDeviceHistoryRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class UserOwnDeviceHistoryService
 {
     public function __construct(
-        protected UserOwnDeviceHistoryRepository $userOwnDeviceHistoryRepo,
-        protected UserRepository $userRepo
+        protected UnitOfWorkInterface $uow,
+        protected UserOwnDeviceHistoryRepositoryInterface $userOwnDeviceHistoryRepo,
+        protected UserRepositoryInterface $userRepo
     ){}
     public function addHistoryLog(
         Device $device,
@@ -31,15 +33,6 @@ class UserOwnDeviceHistoryService
         $log->setDeviceComment($comment);
         $log->setMasterUser($this->userRepo->find(UserSessionService::getUserId()));
         $log->setDeviceNum($device->getSerialNumber());
-
-        return $this->save($log);
-    }
-
-    protected function save(UserOwnDeviceHistory $log): UserOwnDeviceHistory
-    {
-        $em = $this->userOwnDeviceHistoryRepo->getEntityManager();
-        $em->persist($log);
-        $em->flush();
 
         return $this->userOwnDeviceHistoryRepo->save($log);
     }

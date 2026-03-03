@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\ProdServModeCostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProdServModeCostRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'prod_serv_mode_costs')]
 #[ORM\UniqueConstraint(name: 'psmc_srvmode_id__srvcost_id', columns: ['srvmode_id', 'srvcost_id'])]
 class ProdServModeCost

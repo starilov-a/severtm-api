@@ -5,7 +5,7 @@ namespace App\Modules\UserCabinet\Domain\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: \App\Modules\UserCabinet\Domain\Repository\WebActionRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'web_actions')]
 #[ORM\Index(name: 'web_ac__visible', columns: ['visible'])]
 class WebAction

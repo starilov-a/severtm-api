@@ -2,16 +2,16 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
-use App\Modules\UserCabinet\Domain\Repository\TariffRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ChangeNextTariffForClientUseCase
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected TariffRepository $tariffRepo,
-        protected UserRepository $userRepo,
+        protected TariffRepositoryInterface $tariffRepo,
+        protected UserRepositoryInterface $userRepo,
         protected ClientChangeNextTariffUseCase $clientChangeNextTariffUseCase,
     ) {}
 

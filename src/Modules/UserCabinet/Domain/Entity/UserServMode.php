@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserServModeRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'user_serv_modes')]
 #[ORM\Index(name: 'idx_usm_fid_uid', columns: ['fid', 'uid'])]
 class UserServMode

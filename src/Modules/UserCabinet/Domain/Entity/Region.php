@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\RegionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RegionRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'regions')]
 #[ORM\UniqueConstraint(name: 'ux_str_code', columns: ['str_code'])]
 class Region

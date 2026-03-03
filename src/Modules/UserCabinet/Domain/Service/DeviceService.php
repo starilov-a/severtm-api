@@ -4,13 +4,13 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\Device;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\DeviceRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\DeviceRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\DeviceDto;
 
 class DeviceService
 {
     public function __construct(
-        protected DeviceRepository $repo,
+        protected DeviceRepositoryInterface $repo,
         protected UserOwnDeviceService $userOwnDeviceService
     ){}
 
@@ -26,21 +26,11 @@ class DeviceService
 
             //Наполнение
             $device->setSerialNumber($deviceDto->getSerialNumber());
-            $device = $this->save($device);
+            $device = $this->repo->save($device);
         }
 
         // 2. Привязка устройства к Пользователю
         $this->userOwnDeviceService->attachDeviceToUser($user, $device, $deviceDto->getComment());
-
-        return $device;
-    }
-
-
-    protected function save(Device $device)
-    {
-        $em = $this->repo->getEntityManager();
-        $em->persist($device);
-        $em->flush();
 
         return $device;
     }

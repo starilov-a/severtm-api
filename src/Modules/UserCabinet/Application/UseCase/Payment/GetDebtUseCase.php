@@ -2,14 +2,14 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Payment;
 
-use App\Modules\UserCabinet\Domain\Repository\DebtRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\DebtRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class GetDebtUseCase
 {
     public function __construct(
-        protected UserRepository $userRepo,
-        protected DebtRepository $debtRepo
+        protected UserRepositoryInterface $userRepo,
+        protected DebtRepositoryInterface $debtRepo
     ) {}
     /*
      * Получение задолжности

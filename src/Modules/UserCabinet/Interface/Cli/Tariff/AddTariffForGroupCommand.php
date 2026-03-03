@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Interface\Cli\Tariff;
 
 use App\Modules\UserCabinet\Application\UseCase\TariffGroup\CommandLinkTariffForGroupUseCase;
-use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
-use App\Modules\UserCabinet\Domain\Repository\TariffGroupRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffGroupRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -23,8 +23,8 @@ class AddTariffForGroupCommand extends Command
         protected EntityManagerInterface        $em,
 
         protected CommandLinkTariffForGroupUseCase  $commandLinkTariffForGroupUseCase,
-        protected TariffGroupRepository             $tariffGroupRepo,
-        protected ProdServModeRepository            $prodServModeRepo,
+        protected TariffGroupRepositoryInterface             $tariffGroupRepo,
+        protected ProdServModeRepositoryInterface            $prodServModeRepo,
     ) {
         parent::__construct();
     }

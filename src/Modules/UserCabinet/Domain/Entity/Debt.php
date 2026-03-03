@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\DebtRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: DebtRepository::class, readOnly: true)]
+#[ORM\Entity(readOnly: true)]
 #[ORM\Table(name: 'prod_discount_temp')]
 class Debt
 {

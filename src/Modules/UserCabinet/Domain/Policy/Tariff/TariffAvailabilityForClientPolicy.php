@@ -5,13 +5,13 @@ namespace App\Modules\UserCabinet\Domain\Policy\Tariff;
 use App\Modules\Common\Policy\Policy;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasOldTariff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
-use App\Modules\UserCabinet\Domain\Repository\TariffGroupRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffGroupRepositoryInterface;
 
 class TariffAvailabilityForClientPolicy extends Policy
 {
 
     public function __construct(
-        protected TariffGroupRepository $tariffGroupRepo,
+        protected TariffGroupRepositoryInterface $tariffGroupRepo,
     ) {}
     public function isAllowed(object $context): bool
     {

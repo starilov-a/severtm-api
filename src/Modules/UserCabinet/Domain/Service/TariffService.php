@@ -7,26 +7,24 @@ use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\TariffRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Tariff\ChangeTariffRuleChain;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use Doctrine\ORM\EntityManagerInterface;
 
 class TariffService
 {
     public function __construct(
-        protected EntityManagerInterface    $em,
-
-        protected TariffRepository          $tariffRepo,
-        protected FinPeriodRepository       $finPeriodRepo,
-        protected UserServModeRepository    $userServModeRepo,
-        protected UserRepository            $userRepo,
-        protected WebActionRepository       $webActionRepo,
+        protected TariffRepositoryInterface          $tariffRepo,
+        protected FinPeriodRepositoryInterface       $finPeriodRepo,
+        protected UserServModeRepositoryInterface    $userServModeRepo,
+        protected UserRepositoryInterface            $userRepo,
+        protected WebActionRepositoryInterface       $webActionRepo,
 
         protected UserService               $userService,
         protected UserServModeService       $userServModeService,
@@ -69,7 +67,7 @@ class TariffService
         $user->setBw($newTariff->getMaxBw());
         $user->setCurrentBw($newTariff->getBw());
 
-        $this->userService->save($user);
+        $this->userRepo->save($user);
 
         return true;
     }
@@ -99,9 +97,9 @@ class TariffService
         $user->setBw($disableTariff->getMaxBw());
         $user->setCurrentBw($disableTariff->getBw());
 
-        $this->userService->save($user);
+        $this->userRepo->save($user);
 
-        return $this->userServModeService->save($userServMode);
+        return $this->userServModeRepo->save($userServMode);
 
     }
 
@@ -115,7 +113,7 @@ class TariffService
         ]);
 
         $userServMode->setIsActive(false);
-        $this->userServModeService->save($userServMode);
+        $this->userServModeRepo->save($userServMode);
 
         return true;
     }
@@ -131,7 +129,7 @@ class TariffService
 
         if ($userServMode) {
             $userServMode->setIsActive(false);
-            $this->userServModeService->save($userServMode);
+            $this->userServModeRepo->save($userServMode);
         }
 
         return true;
@@ -148,13 +146,5 @@ class TariffService
             $user,
             $this->finPeriodRepo->findOneBy(['startDate' => new \DateTimeImmutable($user->getBlockDate()->format('Y-m-01 00:00:00'))])
         );
-    }
-
-    public function save(Tariff $tariff): Tariff
-    {
-        $this->em->persist($tariff);
-        $this->em->flush();
-
-        return $tariff;
     }
 }

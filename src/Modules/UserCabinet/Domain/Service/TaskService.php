@@ -3,21 +3,22 @@
 namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use Doctrine\ORM\EntityManagerInterface;
 
 class TaskService
 {
     public function __construct(
-        protected EntityManagerInterface $em,
-        protected UserRepository $userRepo,
-        protected WebActionRepository $webActionRepo,
-        protected UserTaskStateRepository $taskStateRepo,
+        protected UserRepositoryInterface $userRepo,
+        protected WebActionRepositoryInterface $webActionRepo,
+        protected UserTaskStateRepositoryInterface $taskStateRepo,
+        protected UserTaskRepositoryInterface $userTaskRepo,
     ){}
     public function createUserTask(CreateUserTaskDto $createUserTaskDto): UserTask
     {
@@ -49,26 +50,13 @@ class TaskService
         $userTask->setState($createUserTaskDto->getUserTaskState());
         $userTask->setType($createUserTaskDto->getUserTaskType());
 
-        return  $this->save($userTask);
+        return  $this->userTaskRepo->save($userTask);
     }
 
     public function updateUserTaskForCancel(UserTask $userTask): UserTask
     {
         //TODO сделать логирование отмены задачи
         $userTask->setState($this->taskStateRepo->findOneBy(['code' => 'cancelled']));
-        return $this->update($userTask);
-    }
-
-    public function update(UserTask $userTask): UserTask
-    {
-        return $this->save($userTask);
-    }
-
-    protected function save(UserTask $userTask): UserTask
-    {
-        $this->em->persist($userTask);
-        $this->em->flush();
-
-        return $userTask;
+        return $this->userTaskRepo->save($userTask);
     }
 }

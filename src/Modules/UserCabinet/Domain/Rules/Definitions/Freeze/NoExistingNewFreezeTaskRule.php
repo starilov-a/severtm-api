@@ -6,9 +6,9 @@ use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasWebAction;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 
 /**
  * Бизнес-правило:
@@ -17,9 +17,9 @@ use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
 class NoExistingNewFreezeTaskRule extends Rule
 {
     public function __construct(
-        protected UserTaskRepository $userTaskRepo,
-        protected UserTaskStateRepository $taskStateRepo,
-        protected UserTaskTypeRepository $taskTypeRepo,
+        protected UserTaskRepositoryInterface $userTaskRepo,
+        protected UserTaskStateRepositoryInterface $taskStateRepo,
+        protected UserTaskTypeRepositoryInterface $taskTypeRepo,
     ) {}
 
     /** @var HasUser & HasWebAction $context */

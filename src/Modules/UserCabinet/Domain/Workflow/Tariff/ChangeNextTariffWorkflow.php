@@ -5,9 +5,9 @@ namespace App\Modules\UserCabinet\Domain\Workflow\Tariff;
 
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Domain\Workflow\ProdServMode\AddNextServiceModeWorkflow;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -21,9 +21,9 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class ChangeNextTariffWorkflow
 {
     public function __construct(
-        protected UserRepository             $userRepo,
-        protected FinPeriodRepository        $finPeriodRepo,
-        protected WebActionRepository        $webActionRepo,
+        protected UserRepositoryInterface             $userRepo,
+        protected FinPeriodRepositoryInterface        $finPeriodRepo,
+        protected WebActionRepositoryInterface        $webActionRepo,
 
         protected LoggerService              $loggerService,
         protected TariffService              $tariffService,

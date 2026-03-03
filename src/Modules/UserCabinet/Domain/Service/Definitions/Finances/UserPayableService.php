@@ -4,10 +4,11 @@ namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\UserPayable\ShouldCreateUserPayableContext;
 use App\Modules\UserCabinet\Domain\Entity\UserPayable;
-use App\Modules\UserCabinet\Domain\Repository\UserPayableRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserPayableTypeRepository;
-use App\Modules\UserCabinet\Domain\Repository\UserRepository;
-use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\UserPayable\ShouldMakeUserPayableRuleChain;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\CalculatedPayable;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -15,14 +16,15 @@ use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionServi
 class UserPayableService
 {
     public function __construct(
-        protected UserRepository                 $userRepo,
-        protected WebActionRepository            $webActionRepo,
-        protected UserPayableRepository          $userPayableRepo,
-        protected UserPayableTypeRepository      $userPayableTypeRepo,
+        protected UserPayableRepositoryInterface          $repo,
+        protected UserRepositoryInterface                 $userRepo,
+        protected WebActionRepositoryInterface            $webActionRepo,
+        protected UserPayableRepositoryInterface          $userPayableRepo,
+        protected UserPayableTypeRepositoryInterface      $userPayableTypeRepo,
 
-        protected UserPayableParameterService    $userPayableParameterService,
+        protected UserPayableParameterService             $userPayableParameterService,
 
-        protected ShouldMakeUserPayableRuleChain $shouldMakeUserPayableRuleChain,
+        protected ShouldMakeUserPayableRuleChain          $shouldMakeUserPayableRuleChain,
     ) {}
 
     /**
@@ -75,20 +77,11 @@ class UserPayableService
         $userPayable->setIsReal($calculatedPayable->isReal());
         $userPayable->setIsApplied($calculatedPayable->isApplied());
 
-        $userPayable = $this->save($userPayable);
+        $userPayable = $this->repo->save($userPayable);
 
         // Наполнение доп. параметров
         if (!empty($calculatedPayable->getDevice()))
             $this->userPayableParameterService->addLinkToDevice($userPayable, $calculatedPayable->getDevice());
-
-        return $userPayable;
-    }
-
-    protected function save(UserPayable $userPayable): UserPayable
-    {
-        $em = $this->userPayableRepo->getEntityManager();
-        $em->persist($userPayable);
-        $em->flush();
 
         return $userPayable;
     }

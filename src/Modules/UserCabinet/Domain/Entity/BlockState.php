@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\BlockStateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BlockStateRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'block_states')]
 #[ORM\UniqueConstraint(name: 'uidx_block_states_str_code', columns: ['str_code'])]
 class BlockState

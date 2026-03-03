@@ -4,26 +4,18 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\BlockState;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Repository\FinPeriodRepository;
-use App\Modules\UserCabinet\Domain\Repository\TariffRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class UserService
 {
     public function __construct(
-        protected EntityManagerInterface    $em,
-
-        protected FinPeriodRepository       $finPeriodRepo,
-        protected TariffRepository          $tariffRepo,
+        protected UserRepositoryInterface           $repo,
+        protected FinPeriodRepositoryInterface      $finPeriodRepo,
+        protected TariffRepositoryInterface         $tariffRepo,
     ) {}
-
-    public function save(User $user): User
-    {
-        $this->em->persist($user);
-        $this->em->flush();
-
-        return $user;
-    }
 
     /**
      * Обновление даты учетного периода на 1 месяц
@@ -37,8 +29,7 @@ class UserService
         $user->setAbPstart($startDate);
         $user->setAbPend($startDate->modify('+1 month'));
 
-        $this->save($user);
-        return $this->save($user);
+        return $this->repo->save($user);
     }
 
     /**
@@ -50,8 +41,7 @@ class UserService
     public function updatingBlockState(User $user, BlockState $blockState): User
     {
         $user->setBlockState($blockState);
-        $this->save($user);
-        return $this->save($user);
+        return $this->repo->save($user);
     }
 
     public function disconnectCurrentTariff(User $user): User
@@ -59,6 +49,6 @@ class UserService
         $disconnectedTariff = $this->tariffRepo->find(1);
         $user->setCurrentTariff($disconnectedTariff);
 
-        return $this->save($user);
+        return $this->repo->save($user);
     }
 }

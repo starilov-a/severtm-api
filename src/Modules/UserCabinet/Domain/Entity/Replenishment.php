@@ -2,11 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Entity;
 
-use App\Modules\UserCabinet\Domain\Repository\ReplenishmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReplenishmentRepository::class, readOnly: true)]
+#[ORM\Entity(readOnly: true)]
 #[ORM\Table(name: 'bills_history')]
 class Replenishment
 {
@@ -48,7 +47,6 @@ class Replenishment
     private int $realPayDateTs;
 
     /** users.id */
-    private int $userId;
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'uid', referencedColumnName: 'id', nullable: false)]
@@ -69,7 +67,7 @@ class Replenishment
 
     public function getId(): int { return $this->id; }
     public function getLogin(): string { return $this->login; }
-    public function getUserId(): int { return $this->userId; }
+    public function getUser(): User { return $this->user; }
 
     public function getAmount(): float { return $this->amount; }
     public function getAmountCurrency(): float { return $this->amountCurrency; }

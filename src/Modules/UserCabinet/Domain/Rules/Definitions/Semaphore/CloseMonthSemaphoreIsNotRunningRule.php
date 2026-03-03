@@ -4,13 +4,13 @@ namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Semaphore;
 
 use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\Common\Rules\Rule;
-use App\Modules\UserCabinet\Domain\Repository\SemaphoreRepository;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\SemaphoreRepositoryInterface;
 
 class CloseMonthSemaphoreIsNotRunningRule extends Rule
 {
 
     public function __construct(
-        protected SemaphoreRepository $semaphoreRepo,
+        protected SemaphoreRepositoryInterface $semaphoreRepo,
     ) {}
     public function check(object $context = null): RuleResult
     {
