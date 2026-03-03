@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Rules;
+namespace App\Modules\Common\Rules;
 
+use App\Modules\Common\Rules\Interfaces\RuleChainInterface;
+use App\Modules\Common\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Rules\Results\RuleMode;
+use App\Modules\Common\Rules\Results\RuleResult;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasMaster;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasWebAction;
-use App\Modules\UserCabinet\Domain\Rules\Interfaces\RuleChainInterface;
-use App\Modules\UserCabinet\Domain\Rules\Results\ChainRuleItem;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleMode;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
 use App\Modules\UserCabinet\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;

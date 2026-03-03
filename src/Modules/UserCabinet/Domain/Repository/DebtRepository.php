@@ -3,6 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\Repository;
 
 use App\Modules\UserCabinet\Domain\Entity\Debt;
+use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,12 +25,12 @@ class DebtRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function sumByUser(int $uid): float
+    public function sumByUser(User $user): float
     {
         $sql = 'SELECT COALESCE(SUM(qnt), 0) FROM prod_discount_temp WHERE uid = :uid AND qnt > 0';
 
         $params = [
-            'uid' => $uid
+            'uid' => $user->getId()
         ];
 
         return (float) $this->getEntityManager()->getConnection()->fetchOne($sql, $params);

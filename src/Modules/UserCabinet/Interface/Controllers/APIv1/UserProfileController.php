@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers\APIv1;
+namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
-use App\Modules\Common\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Application\Dto\Validator\PasswordValidatorDto;
 use App\Modules\UserCabinet\Application\Dto\Validator\WebUserValidatorDto;
 use App\Modules\UserCabinet\Application\LkUserProfileService;
+use App\Modules\UserCabinet\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;

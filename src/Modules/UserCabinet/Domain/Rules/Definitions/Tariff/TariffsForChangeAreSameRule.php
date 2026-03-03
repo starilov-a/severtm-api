@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff;
 
+use App\Modules\Common\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasOldTariff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
-use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class TariffsForChangeAreSameRule extends Rule
 {

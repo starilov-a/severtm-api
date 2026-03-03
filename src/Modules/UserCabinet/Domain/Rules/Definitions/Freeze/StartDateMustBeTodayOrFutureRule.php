@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze;
 
+use App\Modules\Common\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasStartFreezeDate;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasWebAction;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
-use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 /**
  * Бизнес-правило:

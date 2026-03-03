@@ -2,6 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\Freeze;
 
+use App\Modules\Common\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Rules\Results\RuleMode;
+use App\Modules\Common\Rules\RuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\ProdDiscountTemp\DiscountTempIsEmptyRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff\TariffForOneMonthRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotFrozenRule;
@@ -9,9 +12,6 @@ use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotJuridicalRule
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserMustNotBeBlockedRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\UserBalance\BalanceMustBePositiveRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\UserTask\IsNotIssetNewFreezeTaskRule;
-use App\Modules\UserCabinet\Domain\Rules\Results\ChainRuleItem;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleMode;
-use App\Modules\UserCabinet\Domain\Rules\RuleChain;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class CanFreezeUserRuleChain extends RuleChain

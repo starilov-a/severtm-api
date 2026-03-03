@@ -2,12 +2,12 @@
 
 namespace App\Modules\UserCabinet\Application;
 
-use App\Modules\Common\Domain\Repository\ProdServModeRepository;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\UserServModeRepository;
-use App\Modules\Common\Domain\Service\UserServModeService;
-use App\Modules\Common\Domain\Service\UserServService;
 use App\Modules\UserCabinet\Application\UseCase\ProdServMode\DisableServiceModeUseCase;
+use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserServModeRepository;
+use App\Modules\UserCabinet\Domain\Service\UserServModeService;
+use App\Modules\UserCabinet\Domain\Service\UserServService;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 use Doctrine\ORM\EntityManagerInterface;
 

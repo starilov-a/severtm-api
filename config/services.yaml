@@ -20,21 +20,21 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     # Сервис
 
-    App\Modules\Common\Infrastructure\Service\Logger\LoggerService: ~
-    App\Modules\Common\Infrastructure\Service\Auth\Service\Auth: ~
+    App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService: ~
+    App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\Auth: ~
     # Адаптеры
-    App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
+    App\Modules\UserCabinet\Infrastructure\Service\Logger\Adapters\WebLogAdapter: ~
 
-    App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter:
+    App\Modules\UserCabinet\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter:
         arguments:
             $logger: '@monolog.logger.errors'
     # Привязка интерфейсов к конкретным адаптерам
 
-    App\Modules\Common\Infrastructure\Service\Logger\BusinessLoggerInterface:
-        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\WebLogAdapter
+    App\Modules\UserCabinet\Infrastructure\Service\Logger\BusinessLoggerInterface:
+        alias: App\Modules\UserCabinet\Infrastructure\Service\Logger\Adapters\WebLogAdapter
 
-    App\Modules\Common\Infrastructure\Service\Logger\ErrorLoggerInterface:
-        alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter
+    App\Modules\UserCabinet\Infrastructure\Service\Logger\ErrorLoggerInterface:
+        alias: App\Modules\UserCabinet\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\Console\UseCase\TariffGroup;
+namespace App\Modules\UserCabinet\Application\UseCase\TariffGroup;
 
-use App\Modules\Common\Domain\Entity\Tariff;
-use App\Modules\Common\Domain\Entity\TariffGroup;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Service\TariffGroupService;
-use App\Modules\Common\Domain\Service\TariffService;
+use App\Modules\UserCabinet\Domain\Entity\Tariff;
+use App\Modules\UserCabinet\Domain\Entity\TariffGroup;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Service\TariffGroupService;
+use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class CommandLinkTariffForGroupUseCase

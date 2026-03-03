@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Modules\UserCabinet\UseCase\Tariff;
+namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
-use App\Modules\Common\Domain\Contexts\Definitions\Tariff\TariffContext;
-use App\Modules\Common\Domain\Entity\Tariff;
-use App\Modules\Common\Domain\Entity\User;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Rules\Chains\Tariff\ClientChangeTariffRuleChain;
-use App\Modules\Common\Domain\Workflow\Tariff\ChangeNextTariffWorkflow;
+use App\Modules\UserCabinet\Domain\Contexts\Definitions\Tariff\TariffContext;
+use App\Modules\UserCabinet\Domain\Entity\Tariff;
+use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Rules\Chains\Tariff\ClientChangeTariffRuleChain;
+use App\Modules\UserCabinet\Domain\Workflow\Tariff\ChangeNextTariffWorkflow;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;

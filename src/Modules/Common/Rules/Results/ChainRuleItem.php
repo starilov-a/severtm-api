@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Rules\Results;
+namespace App\Modules\Common\Rules\Results;
 
-use App\Modules\UserCabinet\Domain\Rules\Interfaces\RuleInterface;
+use App\Modules\Common\Rules\Interfaces\RuleInterface;
 
 final class ChainRuleItem
 {

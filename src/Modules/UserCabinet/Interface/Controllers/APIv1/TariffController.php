@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers\APIv1;
+namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
 use App\Modules\UserCabinet\Application\LkClientTariffService;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;

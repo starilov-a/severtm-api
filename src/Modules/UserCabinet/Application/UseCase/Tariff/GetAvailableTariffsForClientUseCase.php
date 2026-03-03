@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\UserCabinet\UseCase\Tariff;
+namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
-use App\Modules\Common\Domain\Contexts\Definitions\Tariff\OnlyAvailableTariffsForClientContext;
-use App\Modules\Common\Domain\Entity\User;
-use App\Modules\Common\Domain\Policy\Definitions\Tariff\TariffAvailabilityForClientPolicy;
-use App\Modules\Common\Domain\Service\Dto\Request\TariffFilterDto;
-use App\Modules\Common\Domain\Service\TariffService;
+use App\Modules\UserCabinet\Domain\Contexts\Definitions\Tariff\OnlyAvailableTariffsForClientContext;
+use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\UserCabinet\Domain\Policy\Tariff\TariffAvailabilityForClientPolicy;
+use App\Modules\UserCabinet\Domain\Service\Dto\Request\TariffFilterDto;
+use App\Modules\UserCabinet\Domain\Service\TariffService;
 
 class GetAvailableTariffsForClientUseCase
 {

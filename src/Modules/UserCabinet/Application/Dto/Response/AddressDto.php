@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\UserCabinet\Service\Dto\Response;
+namespace App\Modules\UserCabinet\Application\Dto\Response;
 
-use App\Modules\Common\Domain\Entity\Address;
-use App\Modules\Common\Domain\Service\Dto\Dto;
+use App\Modules\UserCabinet\Domain\Entity\Address;
+use App\Modules\UserCabinet\Domain\Service\Dto\Dto;
 
 class AddressDto extends Dto
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\UserCabinet\UseCase\ProdServMode;
+namespace App\Modules\UserCabinet\Application\UseCase\ProdServMode;
 
-use App\Modules\Common\Domain\Entity\UserServMode;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Service\UserOwnDeviceService;
-use App\Modules\Common\Domain\Service\UserServModeService;
+use App\Modules\UserCabinet\Domain\Entity\UserServMode;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Service\UserOwnDeviceService;
+use App\Modules\UserCabinet\Domain\Service\UserServModeService;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;

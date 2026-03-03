@@ -4,9 +4,8 @@ namespace App\Modules\UserCabinet\Application\UseCase\Break;
 
 use App\Modules\UserCabinet\Domain\Repository\UserRepository;
 use App\Modules\UserCabinet\Domain\Service\BreakService;
-use Doctrine\ORM\EntityManagerInterface;
 
-class TakeBreakForOneDayUseCase
+class CanTakeBreakUseCase
 {
     public function __construct(
         protected UserRepository $userRepo,

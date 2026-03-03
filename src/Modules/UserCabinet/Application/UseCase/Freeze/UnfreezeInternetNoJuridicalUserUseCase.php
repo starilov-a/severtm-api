@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Modules\UserCabinet\UseCase\Freeze;
+namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
 
-use App\Modules\Common\Domain\Contexts\Definitions\User\UserContext;
-use App\Modules\Common\Domain\Entity\User;
-use App\Modules\Common\Domain\Entity\UserTask;
-use App\Modules\Common\Domain\Repository\BlockHistoryRepository;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\UserTaskRepository;
-use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
-use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Rules\Chains\Freeze\UnfreezeUserChain;
-use App\Modules\Common\Domain\Service\BlockHistoryService;
-use App\Modules\Common\Domain\Service\Definitions\Finances\UserPaymentsService;
-use App\Modules\Common\Domain\Service\TariffService;
-use App\Modules\Common\Domain\Service\TaskService;
-use App\Modules\Common\Domain\Service\UserService;
-use App\Modules\Common\Domain\Workflow\Tariff\ChangeCurrentTariffWorkflow;
+use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
+use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\UserCabinet\Domain\Entity\UserTask;
+use App\Modules\UserCabinet\Domain\Repository\BlockHistoryRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\UnfreezeUserChain;
+use App\Modules\UserCabinet\Domain\Service\BlockHistoryService;
+use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\UserPaymentsService;
+use App\Modules\UserCabinet\Domain\Service\TariffService;
+use App\Modules\UserCabinet\Domain\Service\TaskService;
+use App\Modules\UserCabinet\Domain\Service\UserService;
+use App\Modules\UserCabinet\Domain\Workflow\Tariff\ChangeCurrentTariffWorkflow;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;

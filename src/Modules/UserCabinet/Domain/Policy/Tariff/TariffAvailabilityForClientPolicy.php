@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Policy\Definitions\Tariff;
+namespace App\Modules\UserCabinet\Domain\Policy\Tariff;
 
+use App\Modules\Common\Policy\Policy;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasOldTariff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
-use App\Modules\UserCabinet\Domain\Policy\Policy;
 use App\Modules\UserCabinet\Domain\Repository\TariffGroupRepository;
 
 class TariffAvailabilityForClientPolicy extends Policy

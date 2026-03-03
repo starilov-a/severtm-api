@@ -3,13 +3,13 @@
 namespace App\Modules\UserCabinet\Application;
 
 use App\Modules\Common\Application\UseCase\Tariff\ChangeNextTariffUseCase;
-use App\Modules\Common\Domain\Repository\TariffRepository;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\WebActionRepository;
-use App\Modules\Common\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Application\Dto\Response\TariffDto;
 use App\Modules\UserCabinet\Application\UseCase\Tariff\ClientChangeNextTariffUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Tariff\GetAvailableTariffsForClientUseCase;
+use App\Modules\UserCabinet\Domain\Repository\TariffRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\WebActionRepository;
+use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 use Doctrine\ORM\EntityManagerInterface;
 

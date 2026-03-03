@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Rules\Interfaces;
+namespace App\Modules\Common\Rules\Interfaces;
 
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Results\RuleResult;
 
 interface RuleInterface
 {

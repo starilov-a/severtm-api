@@ -2,11 +2,11 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff;
 
+use App\Modules\Common\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasRegion;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
 use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
-use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class TariffAllowedForRegionGroupRule extends Rule
 {

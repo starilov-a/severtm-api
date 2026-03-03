@@ -2,7 +2,6 @@
 
 namespace App\Modules\UserCabinet\Domain\Repository;
 
-use App\Modules\Common\BaseRepository;
 use App\Modules\UserCabinet\Domain\Entity\WebUser;
 use Doctrine\Persistence\ManagerRegistry;
 

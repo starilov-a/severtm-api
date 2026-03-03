@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers\APIv1;
+namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
-use App\Modules\Common\Domain\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Application\LkPaymentsService;
+use App\Modules\UserCabinet\Application\UseCase\Break\CanTakeBreakUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Break\TakeBreakForOneDayUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetDebtUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetPaymentLinkUseCase;
+use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -168,10 +172,10 @@ class PaymentsController extends Controller
         name: 'getDebt',
         methods: ['GET']
     )]
-    public function getDebt(LkPaymentsService $paymentsService): JsonResponse
+    public function getDebt(GetDebtUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        return $this->responseData($paymentsService->getDebt($uid));
+        return $this->responseData($useCase->handle($uid));
     }
 
     #[OA\Get(
@@ -204,9 +208,9 @@ class PaymentsController extends Controller
         name: 'getPaymentLink',
         methods: ['GET']
     )]
-    public function getPaymentLink(LkPaymentsService $paymentsService): JsonResponse
+    public function getPaymentLink(GetPaymentLinkUseCase $useCase): JsonResponse
     {
-        $link = $paymentsService->getPaymentLink(UserSessionService::getDistrict());
+        $link = $useCase->handle(UserSessionService::getDistrict());
         return $this->responseData($link);
     }
 
@@ -244,10 +248,10 @@ class PaymentsController extends Controller
         name: 'canTakeBreak',
         methods: ['GET']
     )]
-    public function canTakeBreak(LkPaymentsService $paymentsService): JsonResponse
+    public function canTakeBreak(CanTakeBreakUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        return $this->response($paymentsService->canTakeBreak($uid), 'Текущая возможность взять отсрочку');
+        return $this->response($useCase->handle($uid), 'Текущая возможность взять отсрочку');
     }
 
     #[OA\Post(
@@ -277,11 +281,11 @@ class PaymentsController extends Controller
         name: 'takeBreak',
         methods: ['POST']
     )]
-    public function takeBreak(LkPaymentsService $paymentsService): JsonResponse
+    public function takeBreak(TakeBreakForOneDayUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
 
-        $paymentsService->takeBreak($uid);
+        $useCase->handle($uid);
 
         return $this->responseMessage('Отсрочка на сутки успешно активирована!');
     }

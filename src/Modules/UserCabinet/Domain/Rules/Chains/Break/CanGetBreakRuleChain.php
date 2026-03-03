@@ -2,11 +2,11 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\Break;
 
+use App\Modules\Common\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Rules\RuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Break\HasNoAvailableBreaksRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserHaveNotActiveBreakRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotFrozenRule;
-use App\Modules\UserCabinet\Domain\Rules\Results\ChainRuleItem;
-use App\Modules\UserCabinet\Domain\Rules\RuleChain;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 /**

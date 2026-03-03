@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Service\Dto\Validator;
+namespace App\Modules\UserCabinet\Application\Dto\Validator;
 
 abstract class ValidatorDto
 {

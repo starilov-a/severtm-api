@@ -2,15 +2,15 @@
 
 namespace App\Modules\UserCabinet\Application;
 
-use App\Modules\Common\Domain\Entity\FreezeReason;
-use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
-use App\Modules\Common\Domain\Repository\UserRepository;
-use App\Modules\Common\Domain\Repository\UserTaskRepository;
-use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
-use App\Modules\Common\Domain\Service\Dto\Request\CreateUserTaskDto;
-use App\Modules\Common\Domain\Service\FreezeService;
 use App\Modules\UserCabinet\Application\UseCase\Freeze\CreateTaskOnFreezeUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Freeze\UnfreezeInternetNoJuridicalUserUseCase;
+use App\Modules\UserCabinet\Domain\Entity\FreezeReason;
+use App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
+use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
+use App\Modules\UserCabinet\Domain\Service\FreezeService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LkFreezeService

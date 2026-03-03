@@ -21,28 +21,8 @@ doctrine:
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
-        mappings:
-            User:
-                is_bundle: false
-                type: attribute
-                dir: '%kernel.project_dir%/src/Modules/Common/Domain/Entity'
-                prefix: 'App\Modules\Common\Domain\Entity'
-                alias: User
-            Balance:
-                is_bundle: false
-                type: attribute
-                dir: '%kernel.project_dir%/src/Modules/Common/Domain/Entity'
-                prefix: 'App\Modules\Common\Domain\Entity'
-                alias: Balance
-            WriteOff:
-                is_bundle: false
-                type: attribute
-                dir: '%kernel.project_dir%/src/Modules/Common/Domain/Entity'
-                prefix: 'App\Modules\Common\Domain\Entity'
-                alias: WriteOff
         controller_resolver:
             auto_mapping: false
-
 when@test:
     doctrine:
         dbal:

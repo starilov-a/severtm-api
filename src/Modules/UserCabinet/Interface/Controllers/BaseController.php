@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Controllers;
+namespace App\Modules\UserCabinet\Interface\Controllers;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

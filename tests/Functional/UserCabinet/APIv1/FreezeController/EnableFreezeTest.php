@@ -2,10 +2,10 @@
 
 namespace App\Tests\Functional\UserCabinet\APIv1\FreezeController;
 
-use App\Modules\Common\Domain\Repository\FreezeReasonRepository;
-use App\Modules\Common\Domain\Repository\UserTaskRepository;
-use App\Modules\Common\Domain\Repository\UserTaskStateRepository;
-use App\Modules\Common\Domain\Repository\UserTaskTypeRepository;
+use App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepository;
+use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
 use App\Tests\Functional\TransactionalWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 

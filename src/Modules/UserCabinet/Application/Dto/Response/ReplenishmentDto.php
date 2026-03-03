@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\UserCabinet\Service\Dto\Response;
+namespace App\Modules\UserCabinet\Application\Dto\Response;
 
 
-use App\Modules\Common\Domain\Service\Dto\Dto;
-use DateTimeInterface;
+use App\Modules\UserCabinet\Domain\Service\Dto\Dto;
 
 class ReplenishmentDto extends Dto
 {

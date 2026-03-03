@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Break;
 
+use App\Modules\Common\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasCountAvailableBreaks;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
-use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class HasNoAvailableBreaksRule extends Rule
 {

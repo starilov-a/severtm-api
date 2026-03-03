@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\Console\UseCase\TariffGroup;
+namespace App\Modules\UserCabinet\Application\UseCase\TariffGroup;
 
-use App\Modules\Common\Domain\Entity\TariffGroup;
-use App\Modules\Common\Domain\Service\TariffGroupService;
+use App\Modules\UserCabinet\Domain\Entity\TariffGroup;
+use App\Modules\UserCabinet\Domain\Service\TariffGroupService;
 
 class CommandCreateTariffGroupUseCase
 {

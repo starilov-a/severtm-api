@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Interface\Cli\Tariff;
 
-use App\Modules\Common\Domain\Repository\ProdServModeRepository;
-use App\Modules\Common\Domain\Repository\TariffGroupRepository;
-use App\Modules\Console\UseCase\TariffGroup\CommandLinkTariffForGroupUseCase;
+use App\Modules\UserCabinet\Application\UseCase\TariffGroup\CommandLinkTariffForGroupUseCase;
+use App\Modules\UserCabinet\Domain\Repository\ProdServModeRepository;
+use App\Modules\UserCabinet\Domain\Repository\TariffGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\User;
 
+use App\Modules\Common\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
 use App\Modules\UserCabinet\Domain\Repository\BlockStateRepository;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
-use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class UserIsFrozenRule extends Rule
 {

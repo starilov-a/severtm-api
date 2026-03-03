@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Rules\Results;
+namespace App\Modules\Common\Rules\Results;
 
 class RuleResult
 {

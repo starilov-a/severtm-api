@@ -1,11 +1,7 @@
 <?php
 
-namespace App\Modules\Common;
+namespace App\Modules\UserCabinet\Domain\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 abstract class BaseRepository extends ServiceEntityRepository
 {

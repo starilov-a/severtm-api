@@ -2,12 +2,12 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\Tariff;
 
+use App\Modules\Common\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Rules\RuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff\IssetRentProdModeNowForDisconnectRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff\TariffAllowedForRegionGroupRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff\TariffAllowedForRegionNoBannedRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff\TariffsForChangeAreSameRule;
-use App\Modules\UserCabinet\Domain\Rules\Results\ChainRuleItem;
-use App\Modules\UserCabinet\Domain\Rules\RuleChain;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class ChangeTariffRuleChain extends RuleChain

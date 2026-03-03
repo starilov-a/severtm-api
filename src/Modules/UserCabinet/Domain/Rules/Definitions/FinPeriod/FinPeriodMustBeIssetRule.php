@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\FinPeriod;
 
+use App\Modules\Common\Rules\Results\RuleResult;
+use App\Modules\Common\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasNullbleVar;
-use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
-use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class FinPeriodMustBeIssetRule extends Rule
 {

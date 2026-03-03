@@ -2,8 +2,8 @@
 
 namespace App\Tests\Functional;
 
-use App\Modules\Common\Domain\Entity\User;
-use App\Modules\Common\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\UserCabinet\Domain\Repository\UserRepository;
 use App\Tests\Support\Dto\TestUserCredentials;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;

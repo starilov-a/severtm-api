@@ -2,7 +2,7 @@
 namespace App\Modules\UserCabinet\Infrastructure\Service\Auth\Dto;
 
 
-use App\Modules\Common\Domain\Service\Dto\Dto;
+use App\Modules\UserCabinet\Domain\Service\Dto\Dto;
 
 class SessionDto extends Dto
 {

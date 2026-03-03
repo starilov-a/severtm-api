@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\EventListener;
+namespace App\Modules\UserCabinet\Infrastructure\EventListener;
 
 use App\Modules\UserCabinet\Infrastructure\Exception\AuthException;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;

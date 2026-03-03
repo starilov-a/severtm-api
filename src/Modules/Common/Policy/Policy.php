@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Policy;
+namespace App\Modules\Common\Policy;
 
 abstract class Policy implements PolicyInterface
 {
