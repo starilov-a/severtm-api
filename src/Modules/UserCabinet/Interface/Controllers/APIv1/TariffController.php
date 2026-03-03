@@ -2,7 +2,9 @@
 
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
-use App\Modules\UserCabinet\Application\LkClientTariffService;
+use App\Modules\UserCabinet\Application\UseCase\Tariff\ChangeNextTariffForClientUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Tariff\GetCurrentTariffForClientUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Tariff\ListAvailableTariffsForClientUseCase;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,10 +55,10 @@ TXT
         name: 'getCurrentTariff',
         methods: ['GET']
     )]
-    public function getCurrentTariff(Request $request, LkClientTariffService $tariffService): JsonResponse
+    public function getCurrentTariff(Request $request, GetCurrentTariffForClientUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        $responseDto = $tariffService->getCurrentTariff($uid);
+        $responseDto = $useCase->handle($uid);
         return $this->responseData($responseDto->toArray());
     }
 
@@ -102,13 +104,13 @@ TXT
         name: 'changeNextTariff',
         methods: ['POST'],
     )]
-    public function changeNextTariff(Request $request, LkClientTariffService $tariffService): JsonResponse
+    public function changeNextTariff(Request $request, ChangeNextTariffForClientUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         $data = $request->toArray();
         $tariffId = $data['tariff_id'];
 
-        $tariffService->changeNextTariff($uid, $tariffId);
+        $useCase->handle($uid, $tariffId);
 
         return $this->response(true, 'Тариф на следующий месяц успешно изменен');
     }
@@ -151,12 +153,12 @@ TXT
         name: 'getAvailableTariffs',
         methods: ['GET']
     )]
-    public function getAvailableTariffs(LkClientTariffService $tariffService): JsonResponse
+    public function getAvailableTariffs(ListAvailableTariffsForClientUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
 
         return $this->json([
-            'data' => $tariffService->getAvailableTariffs($uid),
+            'data' => $useCase->handle($uid),
             'message' => 'Список доступных тарифов'
         ]);
     }

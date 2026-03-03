@@ -2,11 +2,13 @@
 
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
-use App\Modules\UserCabinet\Application\LkPaymentsService;
 use App\Modules\UserCabinet\Application\UseCase\Break\CanTakeBreakUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Break\TakeBreakForOneDayUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetBalanceUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetDebtUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetPaymentLinkUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetReplenishmentsUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetWriteOffsUseCase;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;
@@ -42,10 +44,10 @@ class PaymentsController extends Controller
         )
     )]
     #[Route('/get-balance', name: 'getBalance', methods: ['GET'])]
-    public function getBalance(LkPaymentsService $paymentsService): JsonResponse
+    public function getBalance(GetBalanceUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        return $this->responseData($paymentsService->getBalance($uid));
+        return $this->responseData($useCase->handle($uid));
     }
 
     #[OA\Get(
@@ -83,7 +85,7 @@ class PaymentsController extends Controller
         name: 'getWriteOffs',
         methods: ['GET']
     )]
-    public function getWriteOffs(Request $request, LkPaymentsService $paymentsService): JsonResponse
+    public function getWriteOffs(Request $request, GetWriteOffsUseCase $useCase): JsonResponse
     {
         $filterDto = new FilterDto();
         if ($request->query->get('limit'))
@@ -93,7 +95,7 @@ class PaymentsController extends Controller
 
         $uid = UserSessionService::getUserId();
 
-        return $this->responseData($paymentsService->getWriteOffs($uid, $filterDto)->toArray());
+        return $this->responseData($useCase->handle($uid, $filterDto)->toArray());
     }
 
     #[OA\Get(
@@ -134,7 +136,7 @@ class PaymentsController extends Controller
         name: 'getReplenishments',
         methods: ['GET']
     )]
-    public function getReplenishments(Request $request, LkPaymentsService $paymentsService): JsonResponse
+    public function getReplenishments(Request $request, GetReplenishmentsUseCase $useCase): JsonResponse
     {
         $filterDto = new FilterDto();
 
@@ -145,7 +147,7 @@ class PaymentsController extends Controller
 
         $uid = UserSessionService::getUserId();
 
-        return $this->responseData($paymentsService->getReplenishments($uid, $filterDto)->toArray());
+        return $this->responseData($useCase->handle($uid, $filterDto)->toArray());
     }
 
     #[OA\Get(

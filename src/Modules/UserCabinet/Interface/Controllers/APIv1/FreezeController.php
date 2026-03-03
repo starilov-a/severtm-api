@@ -3,7 +3,10 @@
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
 use App\Modules\UserCabinet\Application\Dto\Validator\EnableFreezeValidatorDto;
-use App\Modules\UserCabinet\Application\LkFreezeService;
+use App\Modules\UserCabinet\Application\UseCase\Freeze\FreezeProfileUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Freeze\GetFreezeStatusUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Freeze\GetReasonForFreezeUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Freeze\UnfreezeProfileUseCase;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,9 +57,9 @@ class FreezeController extends Controller
         name: 'getReasonForFreeze',
         methods: ['GET']
     )]
-    public function getReasonForFreeze(LkFreezeService $freezeService)
+    public function getReasonForFreeze(GetReasonForFreezeUseCase $useCase)
     {
-        return $this->response($freezeService->getReasonForFreeze(), 'Список доступных причин заморозки');
+        return $this->response($useCase->handle(), 'Список доступных причин заморозки');
     }
 
     #[OA\Post(
@@ -121,14 +124,14 @@ class FreezeController extends Controller
         name: 'enableFreeze',
         methods: ['POST']
     )]
-    public function enableFreeze(Request $request, LkFreezeService $freezeService): JsonResponse
+    public function enableFreeze(Request $request, FreezeProfileUseCase $useCase): JsonResponse
     {
         $data = !empty($request->getContent()) ? $request->toArray() : [];
         $this->validate(new EnableFreezeValidatorDto(), $data);
 
         $uid = UserSessionService::getUserId();
 
-        $freezeService->freezeProfile($uid, $data['startDate'], $data['reason_id']);
+        $useCase->handle($uid, $data['startDate'], $data['reason_id']);
 
         return $this->responseMessage('Аккаунт будет заморожен с указанного числа!');
     }
@@ -195,11 +198,11 @@ class FreezeController extends Controller
         name: 'disableFreeze',
         methods: ['POST']
     )]
-    public function disableFreeze(LkFreezeService $freezeService): JsonResponse
+    public function disableFreeze(UnfreezeProfileUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
 
-        $freezeService->unfreezeProfile($uid);
+        $useCase->handle($uid);
 
         return $this->responseMessage('Аккаунт разморожен!');
     }
@@ -238,10 +241,10 @@ class FreezeController extends Controller
         name: 'getStatusFreeze',
         methods: ['GET']
     )]
-    public function getStatusFreeze(LkFreezeService $freezeService): JsonResponse
+    public function getStatusFreeze(GetFreezeStatusUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
 
-        return $this->response($freezeService->getFreezeStatus($uid), 'Информация о заморозке');
+        return $this->response($useCase->handle($uid), 'Информация о заморозке');
     }
 }

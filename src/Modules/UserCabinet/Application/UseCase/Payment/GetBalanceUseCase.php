@@ -3,19 +3,27 @@
 namespace App\Modules\UserCabinet\Application\UseCase\Payment;
 
 use App\Modules\UserCabinet\Domain\Repository\BalanceRepository;
+use App\Modules\UserCabinet\Domain\Repository\DebtRepository;
 use App\Modules\UserCabinet\Domain\Repository\UserRepository;
+use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\BalanceService;
 
 class GetBalanceUseCase
 {
-    protected function __construct(
+    public function __construct(
         protected UserRepository $userRepo,
-        protected BalanceRepository $balanceRepo
+        protected BalanceService $balanceService,
+        protected DebtRepository $debtRepo,
+        protected BalanceRepository $balanceRepo,
     ) {}
-    public function handle()
+
+    /*
+     * Получение баланса
+     * */
+    public function handle(int $uid): array
     {
         $user = $this->userRepo->find($uid);
-        $balance = $this->balanceService->getUserBalance($user);
-        $debt = $this->debtService->getUserDebt($user);
+        $balance = $this->balanceRepo->find($user->getId());
+        $debt = $this->debtRepo->sumByUser($user);
 
         return [
             'balance' => $balance->get() - $debt

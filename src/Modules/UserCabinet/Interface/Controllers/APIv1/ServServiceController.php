@@ -2,7 +2,9 @@
 
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
-use App\Modules\UserCabinet\Application\LkClientServService;
+use App\Modules\UserCabinet\Application\UseCase\Service\DisableServiceUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Service\GetCurrentServicesUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Service\ListAvailableServicesUseCase;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -68,9 +70,9 @@ class ServServiceController extends Controller
         name: 'getAvailableServs',
         methods: ['GET']
     )]
-    public function getAvailableServs(LkClientServService $servService): JsonResponse
+    public function getAvailableServs(ListAvailableServicesUseCase $useCase): JsonResponse
     {
-        $data = $servService->listAvailableServices();
+        $data = $useCase->handle();
 
         return $this->responseData($data);
     }
@@ -128,10 +130,10 @@ class ServServiceController extends Controller
         name: 'getCurrentServs',
         methods: ['GET']
     )]
-    public function getCurrentServs(LkClientServService $servService): JsonResponse
+    public function getCurrentServs(GetCurrentServicesUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
-        $data = $servService->getCurrentServices($uid);
+        $data = $useCase->handle($uid);
 
         return $this->responseData($data);
     }
@@ -185,12 +187,12 @@ TXT
         name: 'disableServ',
         methods: ['POST']
     )]
-    public function disableServ(Request $request, LkClientServService $servService): JsonResponse
+    public function disableServ(Request $request, DisableServiceUseCase $useCase): JsonResponse
     {
         $uid = UserSessionService::getUserId();
         $data = $request->toArray();
 
-        $servService->disableService($uid, $data['mode_id']);
+        $useCase->handle($uid, $data['mode_id']);
 
         return $this->response(
             true,

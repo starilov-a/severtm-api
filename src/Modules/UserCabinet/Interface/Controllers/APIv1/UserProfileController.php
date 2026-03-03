@@ -4,7 +4,10 @@ namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
 use App\Modules\UserCabinet\Application\Dto\Validator\PasswordValidatorDto;
 use App\Modules\UserCabinet\Application\Dto\Validator\WebUserValidatorDto;
-use App\Modules\UserCabinet\Application\LkUserProfileService;
+use App\Modules\UserCabinet\Application\UseCase\UserProfile\CheckUserPasswordUseCase;
+use App\Modules\UserCabinet\Application\UseCase\UserProfile\GetShortUserInfoUseCase;
+use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserInfoUseCase;
+use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserPasswordUseCase;
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -55,9 +58,9 @@ TXT
         name: 'getShortUserInfo',
         methods: ['GET']
     )]
-    public function getShortUserInfo(LkUserProfileService $userInfoService): JsonResponse
+    public function getShortUserInfo(GetShortUserInfoUseCase $useCase): JsonResponse
     {
-        $dtoResponse = $userInfoService->getShortUserInfo(UserSessionService::getUserId());
+        $dtoResponse = $useCase->handle(UserSessionService::getUserId());
         return $this->responseData($dtoResponse);
     }
 
@@ -108,7 +111,7 @@ TXT
         name: 'updateUserInfo',
         methods: ['POST']
     )]
-    public function updateUserInfo(Request $request, LkUserProfileService $userProfileService, ValidatorInterface $validator): JsonResponse
+    public function updateUserInfo(Request $request, UpdateUserInfoUseCase $useCase, ValidatorInterface $validator): JsonResponse
     {
         $data = $request->toArray();
         $allowFields = ['comment', 'phone', 'email'];
@@ -134,7 +137,7 @@ TXT
         $data['id'] = $uid;
 
         $webUseDto = new WebUserRequestDto(...$data);
-        return $this->response($userProfileService->updateUserInfo($uid, $webUseDto), 'Пользовательская информация обновлена');
+        return $this->response($useCase->handle($uid, $webUseDto), 'Пользовательская информация обновлена');
     }
 
     #[OA\Post(
@@ -180,7 +183,7 @@ TXT
         name: 'updateUserPassword',
         methods: ['POST']
     )]
-    public function updateUserPassword(Request $request, LKUserProfileService $userProfileService, ValidatorInterface $validator): JsonResponse
+    public function updateUserPassword(Request $request, CheckUserPasswordUseCase $checkUserPasswordUseCase, UpdateUserPasswordUseCase $updateUserPasswordUseCase, ValidatorInterface $validator): JsonResponse
     {
         $data = $request->toArray();
         $allowFields = ['old_password', 'password', 'password_confirmation'];
@@ -200,14 +203,13 @@ TXT
             throw new ValidationException($errorsArr, implode(".\n", $errorsArr));
         }
 
-        // проверка, нужно внести в сервис
-        $userProfileService->checkPassword($data['old_password'] ?? false);
-
-        $webUseDto = new WebUserRequestDto(id: UserSessionService::getUserId(), passwd_hash:$data['password']);
-
         $uid = UserSessionService::getUserId();
 
-        return $this->response($userProfileService->updateUserPassword($uid, $webUseDto), 'Пользовательский пароль обновлен');
+        $checkUserPasswordUseCase->handle($uid, $data['old_password'] ?? '');
+
+        $webUseDto = new WebUserRequestDto(id: $uid, passwd_hash: $data['password']);
+
+        return $this->response($updateUserPasswordUseCase->handle($uid, $webUseDto), 'Пользовательский пароль обновлен');
 
     }
 }
