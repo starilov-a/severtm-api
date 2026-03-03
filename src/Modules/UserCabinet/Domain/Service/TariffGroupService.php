@@ -4,7 +4,6 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\TariffGroup;
-use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffGroupRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 

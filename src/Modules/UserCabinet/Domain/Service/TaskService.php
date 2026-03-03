@@ -3,7 +3,6 @@
 namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
-use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;

@@ -4,7 +4,6 @@ namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
 use App\Modules\UserCabinet\Domain\Entity\ProdDiscountTemp;
 use App\Modules\UserCabinet\Domain\Entity\UserPayable;
-use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountTempRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
@@ -12,7 +11,6 @@ use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionServi
 class ProdDiscountTempService
 {
     public function __construct(
-        protected UnitOfWorkInterface $uow,
         protected ProdDiscountTempRepositoryInterface $discountTempRepo,
         protected UserRepositoryInterface $userRepo,
     ) {}

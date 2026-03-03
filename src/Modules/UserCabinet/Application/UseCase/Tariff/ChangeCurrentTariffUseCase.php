@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Workflow\Tariff;
+namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
+use App\Modules\UserCabinet\Application\UseCase\ProdServMode\AddCurrentServiceModeUseCase;
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface;
@@ -11,12 +12,11 @@ use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterf
 use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Domain\Service\UserService;
 use App\Modules\UserCabinet\Domain\Service\UserServModeService;
-use App\Modules\UserCabinet\Domain\Workflow\ProdServMode\AddCurrentServiceModeWorkflow;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
-class ChangeCurrentTariffWorkflow
+class ChangeCurrentTariffUseCase
 {
     public function __construct(
         protected UserRepositoryInterface                $userRepo,
@@ -29,7 +29,7 @@ class ChangeCurrentTariffWorkflow
         protected UserServModeService           $userServModeService,
         protected TariffService                 $tariffService,
 
-        protected AddCurrentServiceModeWorkflow $addCurrentServiceModeUseCase,
+        protected AddCurrentServiceModeUseCase $addCurrentServiceModeUseCase,
     ) {}
 
     /**

@@ -6,7 +6,6 @@ use App\Modules\UserCabinet\Domain\Contexts\Definitions\UserServMode\AddServiceM
 use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserJurStateRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
@@ -22,7 +21,6 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class UserServModeService
 {
     public function __construct(
-        protected UnitOfWorkInterface       $uow,
         protected UserServModeRepositoryInterface    $userServModeRepo,
         protected DeviceService             $deviceService,
         protected LoggerService             $loggerService,

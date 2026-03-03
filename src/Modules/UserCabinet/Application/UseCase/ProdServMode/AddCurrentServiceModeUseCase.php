@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Domain\Workflow\ProdServMode;
+namespace App\Modules\UserCabinet\Application\UseCase\ProdServMode;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\OnlyUserContext;
 use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
@@ -11,7 +11,7 @@ use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\UserPaymentsServ
 use App\Modules\UserCabinet\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\UserCabinet\Domain\Service\UserServModeService;
 
-class AddCurrentServiceModeWorkflow
+class AddCurrentServiceModeUseCase
 {
     public function __construct(
         protected FinPeriodRepositoryInterface       $finPeriodRepo,

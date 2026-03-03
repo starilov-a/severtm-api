@@ -7,7 +7,6 @@ use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
-use App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;

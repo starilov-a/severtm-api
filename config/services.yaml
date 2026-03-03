@@ -156,8 +156,6 @@ services:
     App\Modules\UserCabinet\Domain\Repository\WebUserRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\WebUserRepository
 
-    App\Modules\UserCabinet\Domain\Persistence\UnitOfWorkInterface:
-        alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\UnitOfWork
 
 # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

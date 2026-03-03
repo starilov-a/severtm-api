@@ -3,6 +3,7 @@
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
 
+use App\Modules\UserCabinet\Application\UseCase\Tariff\ChangeCurrentTariffUseCase;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
@@ -17,7 +18,6 @@ use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\UserPaymentsServ
 use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Domain\Service\TaskService;
 use App\Modules\UserCabinet\Domain\Service\UserService;
-use App\Modules\UserCabinet\Domain\Workflow\Tariff\ChangeCurrentTariffWorkflow;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
@@ -25,22 +25,22 @@ use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 class UnfreezeInternetNoJuridicalUserUseCase
 {
     public function __construct(
-        protected LoggerService                 $loggerService,
-        protected TaskService                   $taskService,
-        protected TariffService                 $tariffService,
-        protected BlockHistoryService           $blockHistoryService,
-        protected UserPaymentsService           $userPaymentsService,
-        protected UserService                   $userService,
+        protected LoggerService                   $loggerService,
+        protected TaskService                     $taskService,
+        protected TariffService                   $tariffService,
+        protected BlockHistoryService             $blockHistoryService,
+        protected UserPaymentsService             $userPaymentsService,
+        protected UserService                     $userService,
 
-        protected ChangeCurrentTariffWorkflow    $changeCurrentTariffWorkflow,
+        protected ChangeCurrentTariffUseCase      $changeCurrentTariffWorkflow,
 
-        protected UserTaskTypeRepositoryInterface        $taskTypeRepo,
-        protected UserTaskRepositoryInterface            $userTaskRepo,
-        protected UserRepositoryInterface                $userRepo,
-        protected WebActionRepositoryInterface           $webActionRepo,
-        protected BlockHistoryRepositoryInterface        $blockHistoryRepo,
+        protected UserTaskTypeRepositoryInterface $taskTypeRepo,
+        protected UserTaskRepositoryInterface     $userTaskRepo,
+        protected UserRepositoryInterface         $userRepo,
+        protected WebActionRepositoryInterface    $webActionRepo,
+        protected BlockHistoryRepositoryInterface $blockHistoryRepo,
 
-        protected UnfreezeUserChain             $unfreezeUserChain,
+        protected UnfreezeUserChain               $unfreezeUserChain,
 
     ) {}
     /**
