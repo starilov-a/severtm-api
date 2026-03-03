@@ -1,0 +1,53 @@
+<?php declare(strict_types=1);
+
+namespace App\Modules\UserCabinet\Domain\Entity;
+
+use App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: UserTaskTypeRepository::class)]
+#[ORM\Table(name: 'user_task_types')]
+#[ORM\UniqueConstraint(name: 'uidx_user_task_types_str_code', columns: ['str_code'])]
+class UserTaskType
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'task_type_id', type: Types::SMALLINT)]
+    private int $id;
+
+    #[ORM\Column(name: 'str_code', type: Types::STRING, length: 32)]
+    private string $code;
+
+    #[ORM\Column(name: 'description', type: Types::STRING, length: 255, nullable: true)]
+    private ?string $description = null;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+}
