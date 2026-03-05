@@ -4,9 +4,9 @@ namespace App\Modules\UserCabinet\Application\UseCase\Payment;
 
 use App\Modules\UserCabinet\Application\Dto\Response\WriteOffCollectionDto;
 use App\Modules\UserCabinet\Application\Dto\Response\WriteOffDto;
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountHistoryRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 
 class GetWriteOffsUseCase
 {

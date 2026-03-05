@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\ProdServMode;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\OptionsUserServModeDto;
 use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\UserCabinet\Domain\Service\UserServModeService;
 
 class AddNextServiceModeUseCase

@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\DeviceDto;
 use App\Modules\UserCabinet\Domain\Entity\Device;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\DeviceRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\DeviceDto;
 
 class DeviceService
 {

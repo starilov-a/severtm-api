@@ -2,9 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\TariffFilterDto;
 
 interface TariffRepositoryInterface extends RepositoryInterface
 {

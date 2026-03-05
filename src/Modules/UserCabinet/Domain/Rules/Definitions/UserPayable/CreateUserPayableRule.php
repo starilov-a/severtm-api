@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\UserPayable;
 
-use App\Modules\Common\Rules\Results\RuleResult;
-use App\Modules\Common\Rules\Rule;
+use App\Modules\Common\Domain\Rules\Results\RuleResult;
+use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasIsAppliedWriteOff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasIsRealWriteOff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasPayableType;

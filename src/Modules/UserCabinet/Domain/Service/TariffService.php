@@ -3,6 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Tariff\ChangeTariffContext;
+use App\Modules\UserCabinet\Domain\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
 use App\Modules\UserCabinet\Domain\Entity\Tariff;
 use App\Modules\UserCabinet\Domain\Entity\User;
@@ -13,7 +14,6 @@ use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Tariff\ChangeTariffRuleChain;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\TariffFilterDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class TariffService

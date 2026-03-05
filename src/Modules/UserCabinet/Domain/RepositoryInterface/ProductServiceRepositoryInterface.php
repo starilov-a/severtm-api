@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\ServiceFilterDto;
 use App\Modules\UserCabinet\Domain\Entity\ProductService;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServiceFilterDto;
 
 interface ProductServiceRepositoryInterface extends RepositoryInterface
 {

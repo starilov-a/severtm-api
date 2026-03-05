@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\UserTask;
 
-use App\Modules\Common\Rules\Results\RuleResult;
-use App\Modules\Common\Rules\Rule;
+use App\Modules\Common\Domain\Rules\Results\RuleResult;
+use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;

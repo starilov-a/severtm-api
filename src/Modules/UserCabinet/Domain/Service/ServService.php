@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\ServiceFilterDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProductServiceRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServiceFilterDto;
 
 class ServService
 {

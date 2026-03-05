@@ -3,6 +3,8 @@
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Application\UseCase\Tariff\ChangeCurrentTariffUseCase;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
 use App\Modules\UserCabinet\Domain\Entity\User;
@@ -19,8 +21,6 @@ use App\Modules\UserCabinet\Domain\Service\TariffService;
 use App\Modules\UserCabinet\Domain\Service\TaskService;
 use App\Modules\UserCabinet\Domain\Service\UserService;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class UnfreezeInternetNoJuridicalUserUseCase
 {

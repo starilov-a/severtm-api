@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\CreateUserTaskDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FreezeProfileUseCase

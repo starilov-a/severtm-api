@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\ProdServModes;
 
-use App\Modules\Common\Rules\Results\RuleResult;
-use App\Modules\Common\Rules\Rule;
+use App\Modules\Common\Domain\Rules\Results\RuleResult;
+use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasProdServMode;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasRegion;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeRepositoryInterface;

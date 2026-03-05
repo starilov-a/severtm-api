@@ -8,7 +8,7 @@ use App\Modules\UserCabinet\Application\UseCase\UserProfile\CheckUserPasswordUse
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\GetShortUserInfoUseCase;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserInfoUseCase;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserPasswordUseCase;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
+use App\Modules\UserCabinet\Domain\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;

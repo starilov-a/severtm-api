@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\UserPayable;
 
-use App\Modules\Common\Rules\Results\ChainRuleItem;
-use App\Modules\Common\Rules\RuleChain;
+use App\Modules\Common\Domain\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Domain\Rules\RuleChain;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\UserPayable\CreateUserPayableRule;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class ShouldMakeUserPayableRuleChain extends RuleChain
 {

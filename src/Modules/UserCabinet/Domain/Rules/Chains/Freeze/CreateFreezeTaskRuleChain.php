@@ -2,8 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\Freeze;
 
-use App\Modules\Common\Rules\Results\ChainRuleItem;
-use App\Modules\Common\Rules\RuleChain;
+use App\Modules\Common\Domain\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Domain\Rules\RuleChain;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze\CurrentTariffMustAllowFreezeRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze\FreezeEligibilityByBalanceOrSeniorityOrFutureMonthRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze\FreezeOnlyOncePerMonthRule;
@@ -12,7 +13,6 @@ use App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze\NoExistingNewFreezeT
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze\StartDateMustBeTodayOrFutureRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotFrozenRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserMustNotBeBlockedRule;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class CreateFreezeTaskRuleChain extends RuleChain
 {

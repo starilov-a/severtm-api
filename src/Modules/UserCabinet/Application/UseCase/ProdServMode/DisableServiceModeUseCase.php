@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\ProdServMode;
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
@@ -9,8 +11,6 @@ use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterf
 use App\Modules\UserCabinet\Domain\Service\UserOwnDeviceService;
 use App\Modules\UserCabinet\Domain\Service\UserServModeService;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class DisableServiceModeUseCase
 {

@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\UserProfile;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebUserRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\WebUserDto as WebUserRequestDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateUserPasswordUseCase

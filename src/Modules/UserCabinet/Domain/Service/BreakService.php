@@ -2,8 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Break\BreakContext;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Break\OnlyBreakContext;
+use App\Modules\UserCabinet\Domain\Dto\Request\CreditHistoryLogDto;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ConfigRepositoryInterface;
@@ -11,9 +13,7 @@ use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryIn
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Break\CanGetBreakRuleChain;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreditHistoryLogDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class BreakService
 {

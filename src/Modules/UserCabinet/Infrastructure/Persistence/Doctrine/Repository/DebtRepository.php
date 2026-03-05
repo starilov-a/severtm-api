@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Domain\Entity\Debt;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\DebtRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -2,8 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\ProdDiscountHistory;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 
 interface ProdDiscountHistoryRepositoryInterface extends RepositoryInterface
 {

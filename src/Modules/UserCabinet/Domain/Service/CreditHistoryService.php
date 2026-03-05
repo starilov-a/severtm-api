@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\CreditHistoryLogDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreditHistoryLogDto;
 
 class CreditHistoryService
 {

@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\ServiceFilterDto;
+use App\Modules\UserCabinet\Domain\Dto\Request\ServModeFilterDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServiceFilterDto;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServModeFilterDto;
 use App\Modules\UserCabinet\Service\Dto;
 
 class UserServService

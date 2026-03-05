@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Application\Dto\Response;
 
 
-use App\Modules\UserCabinet\Domain\Service\Dto\Dto;
+use App\Modules\Common\Application\Dto\Dto;
 
 class UserFullInfoDto extends Dto
 {

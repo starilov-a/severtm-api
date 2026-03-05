@@ -2,7 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\UserServMode\AddServiceModeContext;
+use App\Modules\UserCabinet\Domain\Dto\Request\OptionsUserServModeDto;
 use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserServMode;
@@ -13,10 +16,7 @@ use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInt
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\UserServMode\AddServiceModeRuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotNotActivatedRule;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\OptionsUserServModeDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class UserServModeService
 {

@@ -2,15 +2,15 @@
 
 namespace App\Modules\UserCabinet\Infrastructure\EventListener;
 
+use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\ErrorLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Infrastructure\Exception\AuthException;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Infrastructure\Exception\HiddenImportantBusinessException;
-use App\Modules\UserCabinet\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\ErrorLogDto;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

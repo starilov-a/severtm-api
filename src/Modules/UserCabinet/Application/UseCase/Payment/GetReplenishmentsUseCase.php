@@ -4,9 +4,9 @@ namespace App\Modules\UserCabinet\Application\UseCase\Payment;
 
 use App\Modules\UserCabinet\Application\Dto\Response\ReplenishmentDto;
 use App\Modules\UserCabinet\Application\Dto\Response\ReplenishmentsCollectionDto;
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ReplenishmentRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 
 class GetReplenishmentsUseCase
 {

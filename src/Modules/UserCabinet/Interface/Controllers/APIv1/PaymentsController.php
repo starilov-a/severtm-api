@@ -9,7 +9,7 @@ use App\Modules\UserCabinet\Application\UseCase\Payment\GetDebtUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetPaymentLinkUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetReplenishmentsUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetWriteOffsUseCase;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;

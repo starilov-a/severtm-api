@@ -2,18 +2,18 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
+use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Freeze\CreateFreezeTaskContext;
+use App\Modules\UserCabinet\Domain\Dto\Request\CreateUserTaskDto;
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\CreateFreezeTaskRuleChain;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
 use App\Modules\UserCabinet\Domain\Service\TaskService;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\Dto\BusinessLogDto;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class CreateTaskOnFreezeUseCase
 {

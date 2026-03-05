@@ -3,13 +3,13 @@
 namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
+use App\Modules\UserCabinet\Domain\Dto\Response\FreezeUserStatusDto;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\CanFreezeUserRuleChain;
 use App\Modules\UserCabinet\Domain\Rules\Chains\Freeze\CanUnfreezeUserRuleChain;
-use App\Modules\UserCabinet\Domain\Service\Dto\Response\FreezeUserStatusDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class FreezeService

@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\Policy\Tariff;
 
-use App\Modules\Common\Policy\Policy;
+use App\Modules\Common\Domain\Policy\Policy;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasOldTariff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffGroupRepositoryInterface;

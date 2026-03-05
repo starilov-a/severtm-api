@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\FinPeriod;
 
-use App\Modules\Common\Rules\Results\RuleResult;
-use App\Modules\Common\Rules\Rule;
+use App\Modules\Common\Domain\Rules\Results\RuleResult;
+use App\Modules\Common\Domain\Rules\Rule;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasFinPeriod;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class IsCurrentFinPeriodRule extends Rule
 {

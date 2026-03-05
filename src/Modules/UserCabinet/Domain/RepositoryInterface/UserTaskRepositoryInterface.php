@@ -6,7 +6,6 @@ use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\Entity\UserTask;
 use App\Modules\UserCabinet\Domain\Entity\UserTaskState;
 use App\Modules\UserCabinet\Domain\Entity\UserTaskType;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\CreateUserTaskDto;
 
 interface UserTaskRepositoryInterface extends RepositoryInterface
 {

@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Domain\Entity\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountHistoryRepositoryInterface;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 
 class ProdDiscountHistoryService
 {

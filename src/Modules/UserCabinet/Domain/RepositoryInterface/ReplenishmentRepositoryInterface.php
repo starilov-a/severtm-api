@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
+use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
 use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\FilterDto;
 
 interface ReplenishmentRepositoryInterface extends RepositoryInterface
 {

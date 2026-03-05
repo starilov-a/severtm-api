@@ -2,13 +2,13 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\UserServMode;
 
-use App\Modules\Common\Rules\Results\ChainRuleItem;
-use App\Modules\Common\Rules\RuleChain;
+use App\Modules\Common\Domain\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Domain\Rules\RuleChain;
+use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\FinPeriod\FinPeriodMustBeIssetRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\ProdServModes\JurStatusIsCorrectRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\ProdServModes\ModeAllowedForRegionRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\ProdServModes\UnitsMustBePositiveRule;
-use App\Modules\UserCabinet\Infrastructure\Service\Logger\LoggerService;
 
 class AddServiceModeRuleChain extends RuleChain
 {

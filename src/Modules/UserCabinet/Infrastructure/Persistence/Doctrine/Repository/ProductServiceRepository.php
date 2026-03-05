@@ -2,10 +2,9 @@
 
 namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
-use App\Modules\UserCabinet\Domain\RepositoryInterface\ProductServiceRepositoryInterface;
-
+use App\Modules\UserCabinet\Domain\Dto\Request\ServiceFilterDto;
 use App\Modules\UserCabinet\Domain\Entity\ProductService;
-use App\Modules\UserCabinet\Domain\Service\Dto\Request\ServiceFilterDto;
+use App\Modules\UserCabinet\Domain\RepositoryInterface\ProductServiceRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
