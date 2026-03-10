@@ -2,14 +2,14 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\Freeze;
 
-use App\Modules\Common\Domain\Rules\Results\ChainRuleItem;
-use App\Modules\Common\Domain\Rules\Results\RuleMode;
-use App\Modules\Common\Domain\Rules\RuleChain;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Freeze\NotFoundHistoryFreezeLogRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\Semaphore\CloseMonthSemaphoreIsNotRunningRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserFreezingBeforeRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsFrozenRule;
+use App\Modules\UserCabinet\Domain\Rules\Results\ChainRuleItem;
+use App\Modules\UserCabinet\Domain\Rules\Results\RuleMode;
+use App\Modules\UserCabinet\Domain\Rules\RuleChain;
 
 class UnfreezeUserChain extends RuleChain
 {

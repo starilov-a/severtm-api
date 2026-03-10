@@ -30,5 +30,4 @@ class Application
     {
         return $this->applicationStatus;
     }
-
 }

@@ -22,11 +22,11 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
-            UserCabinet:
+            billing:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Modules/UserCabinet/Domain/Entity'
-                prefix: 'App\Modules\UserCabinet\Domain\Entity'
+                dir: '%kernel.project_dir%/src/Modules/Common/Infrastructure/Persistence/Doctrine/Entity/Billing'
+                prefix: 'App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing'
         controller_resolver:
             auto_mapping: false
 when@test:

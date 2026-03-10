@@ -18,10 +18,9 @@ class GetBuilderApplicationUseCase
     /**
      * @return array<Application>
      */
-    public function handle(): array
+    public function handle(int $builderId): array
     {
         // Получение сущностей, с которыми будет работать
-        $builderId = 123;
         $builder = $this->builderRepo->find($builderId);
         $availableStatuses = $this->applicationStatusService->getStatusesForBuilderList();
 

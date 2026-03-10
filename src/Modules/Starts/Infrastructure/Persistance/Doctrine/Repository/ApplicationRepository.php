@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ApplicationRepository extends ServiceEntityRepository implements ApplicationRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry, )
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Application::class);
     }

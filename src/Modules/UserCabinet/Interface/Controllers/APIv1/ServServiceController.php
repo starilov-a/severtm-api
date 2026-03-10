@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
+use App\Modules\Common\Interface\Api\Controller;
 use App\Modules\UserCabinet\Application\UseCase\Service\DisableServiceUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Service\GetCurrentServicesUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Service\ListAvailableServicesUseCase;

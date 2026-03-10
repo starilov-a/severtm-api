@@ -2,12 +2,12 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Chains\Freeze;
 
-use App\Modules\Common\Domain\Rules\Results\ChainRuleItem;
-use App\Modules\Common\Domain\Rules\Results\RuleMode;
-use App\Modules\Common\Domain\Rules\RuleChain;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsFrozenRule;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\UserTask\IssetNewFreezeTaskRule;
+use App\Modules\UserCabinet\Domain\Rules\Results\ChainRuleItem;
+use App\Modules\UserCabinet\Domain\Rules\Results\RuleMode;
+use App\Modules\UserCabinet\Domain\Rules\RuleChain;
 
 class CanUnfreezeUserRuleChain extends RuleChain
 {

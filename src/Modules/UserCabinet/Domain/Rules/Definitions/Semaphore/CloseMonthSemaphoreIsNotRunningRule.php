@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Semaphore;
 
-use App\Modules\Common\Domain\Rules\Results\RuleResult;
-use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\SemaphoreRepositoryInterface;
+use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
+use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class CloseMonthSemaphoreIsNotRunningRule extends Rule
 {

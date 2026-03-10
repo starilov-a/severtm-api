@@ -11,6 +11,7 @@ use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserPasswordUs
 use App\Modules\UserCabinet\Domain\Dto\Request\WebUserDto as WebUserRequestDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
+use App\Modules\Common\Interface\Api\Controller;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

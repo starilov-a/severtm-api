@@ -2,13 +2,13 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\UserPayable;
 
-use App\Modules\Common\Domain\Rules\Results\RuleResult;
-use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasIsAppliedWriteOff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasIsRealWriteOff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasPayableType;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasRefundFinPeriodNullable;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUserServMode;
+use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
+use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class CreateUserPayableRule extends Rule
 {

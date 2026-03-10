@@ -2,11 +2,11 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\User;
 
-use App\Modules\Common\Domain\Rules\Results\RuleResult;
-use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
+use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
+use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class UserFreezingBeforeRule extends Rule
 {

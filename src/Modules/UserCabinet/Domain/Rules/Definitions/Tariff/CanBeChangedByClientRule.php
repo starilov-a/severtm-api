@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Rules\Definitions\Tariff;
 
-use App\Modules\Common\Domain\Rules\Results\RuleResult;
-use App\Modules\Common\Domain\Rules\Rule;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
+use App\Modules\UserCabinet\Domain\Rules\Results\RuleResult;
+use App\Modules\UserCabinet\Domain\Rules\Rule;
 
 class CanBeChangedByClientRule extends Rule
 {

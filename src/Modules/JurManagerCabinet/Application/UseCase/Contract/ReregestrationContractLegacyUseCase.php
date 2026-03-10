@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Modules\JurManagerCabinet\Application\UseCase\Customer;
+namespace App\Modules\JurManagerCabinet\Application\UseCase\Contract;
 
 
 use App\Modules\JurManagerCabinet\Application\Dto\Request\CreateJurContractDto;
 use App\Modules\JurManagerCabinet\Application\Dto\Request\ReregestrationContractLegacyDto;
+use App\Modules\JurManagerCabinet\Domain\Contexts\Definitions\Contract\ReregestractionContext;
 use App\Modules\JurManagerCabinet\Domain\Entity\Contract;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ManagerRepositoryInterface;
@@ -18,7 +19,7 @@ class ReregestrationContractLegacyUseCase
         protected ManagerRepositoryInterface            $managerRepo,
         protected ContractRepositoryInterface           $contractRepo,
 
-        protected CreateJurContractUseCase              $createJurContractUseCase,
+        protected CreateJurContractUseCase            $createJurContractUseCase,
 
         protected CanReregestrationContractRuleChain    $ruleChain,
     ) {}
@@ -26,20 +27,18 @@ class ReregestrationContractLegacyUseCase
     public function handle(ReregestrationContractLegacyDto $dto): Contract
     {
         $manager = $this->managerRepo->find($dto->getManagerId());
-        $webAction = $this->webActionRepo->findIdByCid('W3_FIRST_FREEZE_ACCOUNT');
         $oldContract = $this->contractRepo->find($dto->getContractId());
 
         // 1. Бизнес логика
-        $this->ruleChain->checkAll(
+        $result = $this->ruleChain->checkAll(
             new ReregestractionContext(
-                $webAction,
-                $manager,
-                $oldContract,
                 $dto->getNewInn(),
-                $dto->getLogin()
+                $oldContract->getInn()
             )
         );
-
+        if (!$result->ok){
+            // делаем логику если ошибка
+        }
 
 
         // 2. Наполнение dto для создания нового договора

@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
+use App\Modules\Common\Interface\Api\Controller;
 use App\Modules\UserCabinet\Application\UseCase\Break\CanTakeBreakUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Break\TakeBreakForOneDayUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetBalanceUseCase;

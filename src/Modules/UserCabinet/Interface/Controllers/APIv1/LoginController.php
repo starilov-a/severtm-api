@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
 
+use App\Modules\Common\Interface\Api\Controller;
 use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\Auth;
 use OpenApi\Attributes as OA;

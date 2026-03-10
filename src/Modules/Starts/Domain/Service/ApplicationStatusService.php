@@ -22,12 +22,14 @@ class ApplicationStatusService
     {
         $allStatuses = $this->appStatusRepo->findAll();
 
-        // Либо просто сделать бизнес проверку в цикле
-        // (in_array($status->getCode, ['connection', 'transfer', 'uncallable', 'uncalled', 'problem'])) - так будет нагляднее
         $statusesForList = [];
         foreach ($allStatuses as $status)
-            if ($this->policy->isAllowed(new ApplicationStatusContext($status)))
+            if (in_array($status->getStrCode(), ['connection', 'transfer', 'uncallable', 'uncalled', 'problem']))
                 $statusesForList[] = $status;
+
+        // Либо сделать бизнес проверку через политику
+        // if ($this->policy->isAllowed(new ApplicationStatusContext($status)))
+        //     $statusesForList[] = $status;
 
         return $statusesForList;
     }

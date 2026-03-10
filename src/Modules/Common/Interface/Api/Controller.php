@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Interface\Controllers\APIv1;
+namespace App\Modules\Common\Interface\Api;
 
 use App\Modules\UserCabinet\Application\Dto\Validator\ValidatorDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-//use App\Modules\UserCabinet\Service\Dto\FilterDto;
 
 class Controller extends AbstractController
 {
