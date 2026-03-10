@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\UserContext;
 use App\Modules\UserCabinet\Domain\Dto\Response\FreezeUserStatusDto;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;

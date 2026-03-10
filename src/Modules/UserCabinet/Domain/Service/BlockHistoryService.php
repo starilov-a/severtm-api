@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Service;
 
-use App\Modules\UserCabinet\Domain\Entity\BlockHistory;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\BlockHistory;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockHistoryRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;

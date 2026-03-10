@@ -4,8 +4,8 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeCostRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
-use App\Modules\UserCabinet\Domain\Entity\ProdServModeCost;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServModeCost;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

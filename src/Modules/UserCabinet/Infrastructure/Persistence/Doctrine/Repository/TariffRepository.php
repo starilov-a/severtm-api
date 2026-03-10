@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Modules\UserCabinet\Domain\Dto\Request\TariffFilterDto;
-use App\Modules\UserCabinet\Domain\Entity\Tariff;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Tariff;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;

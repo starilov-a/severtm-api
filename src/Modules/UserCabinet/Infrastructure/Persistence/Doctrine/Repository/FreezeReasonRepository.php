@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\FreezeReason;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FreezeReason;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

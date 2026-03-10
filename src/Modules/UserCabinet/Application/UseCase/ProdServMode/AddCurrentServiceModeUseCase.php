@@ -4,8 +4,8 @@ namespace App\Modules\UserCabinet\Application\UseCase\ProdServMode;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\User\OnlyUserContext;
 use App\Modules\UserCabinet\Domain\Dto\Request\OptionsUserServModeDto;
-use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Rules\Definitions\User\UserIsNotNotActivatedRule;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\UserPaymentsService;

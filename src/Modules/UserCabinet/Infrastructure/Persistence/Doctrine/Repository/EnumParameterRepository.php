@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\EnumParameterRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\EnumParameter;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\EnumParameter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

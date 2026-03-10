@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\DiscountRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\Discount;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Discount;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

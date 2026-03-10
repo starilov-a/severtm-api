@@ -4,8 +4,8 @@ namespace App\Modules\UserCabinet\Domain\Contexts\Definitions\ProductService;
 
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasProductService;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasPsGroup;
-use App\Modules\UserCabinet\Domain\Entity\ProductService;
-use App\Modules\UserCabinet\Domain\Entity\PsGroup;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProductService;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\PsGroup;
 
 class ProductServiceGroupContext implements HasProductService, HasPsGroup
 {

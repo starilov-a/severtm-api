@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Application\Dto\Response;
 
 use App\Modules\Common\Application\Dto\Dto;
-use App\Modules\UserCabinet\Domain\Entity\WebUser;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUser;
 
 class WebUserDto extends Dto
 {

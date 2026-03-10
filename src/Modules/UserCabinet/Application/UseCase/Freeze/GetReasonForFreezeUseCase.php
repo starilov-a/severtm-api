@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
-use App\Modules\UserCabinet\Domain\Entity\FreezeReason;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FreezeReason;
 use App\Modules\UserCabinet\Domain\Service\FreezeService;
 
 class GetReasonForFreezeUseCase

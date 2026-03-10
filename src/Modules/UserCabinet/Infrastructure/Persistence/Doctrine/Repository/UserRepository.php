@@ -6,7 +6,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

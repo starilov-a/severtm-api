@@ -4,10 +4,10 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Tariff\ChangeTariffContext;
 use App\Modules\UserCabinet\Domain\Dto\Request\TariffFilterDto;
-use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
-use App\Modules\UserCabinet\Domain\Entity\Tariff;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\UserServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FinPeriod;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Tariff;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserServMode;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;

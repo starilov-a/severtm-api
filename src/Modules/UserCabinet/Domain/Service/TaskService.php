@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\Common\Infrastructure\Exception\ImportantBusinessException;
 use App\Modules\UserCabinet\Domain\Dto\Request\CreateUserTaskDto;
-use App\Modules\UserCabinet\Domain\Entity\UserTask;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTask;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;

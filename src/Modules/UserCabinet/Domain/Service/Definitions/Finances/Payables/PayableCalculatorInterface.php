@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables;
 
-use App\Modules\UserCabinet\Domain\Entity\UserServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserServMode;
 
 interface PayableCalculatorInterface
 {

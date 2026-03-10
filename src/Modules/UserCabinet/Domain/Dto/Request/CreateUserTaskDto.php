@@ -3,10 +3,10 @@
 namespace App\Modules\UserCabinet\Domain\Dto\Request;
 
 use App\Modules\Common\Application\Dto\Dto;
-use App\Modules\UserCabinet\Domain\Entity\FreezeReason;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\UserTaskState;
-use App\Modules\UserCabinet\Domain\Entity\UserTaskType;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FreezeReason;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskState;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskType;
 
 class CreateUserTaskDto extends Dto
 {

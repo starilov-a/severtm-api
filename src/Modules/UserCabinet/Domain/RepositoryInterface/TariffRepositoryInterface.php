@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
 use App\Modules\UserCabinet\Domain\Dto\Request\TariffFilterDto;
-use App\Modules\UserCabinet\Domain\Entity\Tariff;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Tariff;
 
 interface TariffRepositoryInterface extends RepositoryInterface
 {

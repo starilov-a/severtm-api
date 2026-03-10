@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\Dto\Request;
 
 use App\Modules\Common\Application\Dto\Dto;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 
 class CreditHistoryLogDto extends Dto
 {

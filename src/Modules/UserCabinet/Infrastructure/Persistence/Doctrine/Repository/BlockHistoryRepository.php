@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockHistoryRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\BlockHistory;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\BlockHistory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

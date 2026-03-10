@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebHistoryRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\WebHistory;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebHistory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;

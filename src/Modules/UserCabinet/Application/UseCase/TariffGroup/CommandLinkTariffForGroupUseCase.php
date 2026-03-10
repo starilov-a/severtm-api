@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Application\UseCase\TariffGroup;
 
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
-use App\Modules\UserCabinet\Domain\Entity\Tariff;
-use App\Modules\UserCabinet\Domain\Entity\TariffGroup;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Tariff;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\TariffGroup;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\TariffGroupService;

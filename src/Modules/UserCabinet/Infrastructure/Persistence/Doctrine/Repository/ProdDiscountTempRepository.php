@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountTempRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\ProdDiscountTemp;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdDiscountTemp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

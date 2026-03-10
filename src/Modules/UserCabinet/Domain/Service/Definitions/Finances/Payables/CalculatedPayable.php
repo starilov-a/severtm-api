@@ -2,11 +2,11 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables;
 
-use App\Modules\UserCabinet\Domain\Entity\Device;
-use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\UserPayableType;
-use App\Modules\UserCabinet\Domain\Entity\UserServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Device;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FinPeriod;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserPayableType;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserServMode;
 
 class CalculatedPayable
 {

@@ -2,9 +2,9 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
-use App\Modules\UserCabinet\Domain\Entity\Device;
-use App\Modules\UserCabinet\Domain\Entity\UserPayable;
-use App\Modules\UserCabinet\Domain\Entity\UserPayableParameter;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Device;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserPayable;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserPayableParameter;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\EnumParameterRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableParameterRepositoryInterface;
 

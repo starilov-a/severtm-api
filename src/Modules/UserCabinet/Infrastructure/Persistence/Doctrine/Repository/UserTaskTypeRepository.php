@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\UserTaskType;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

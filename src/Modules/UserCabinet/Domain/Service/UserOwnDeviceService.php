@@ -4,9 +4,9 @@ namespace App\Modules\UserCabinet\Domain\Service;
 
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
-use App\Modules\UserCabinet\Domain\Entity\Device;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\UserOwnDevice;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Device;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserOwnDevice;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserOwnDeviceRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;

@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\BlockHistory;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\BlockHistory;
 
 interface BlockHistoryRepositoryInterface extends RepositoryInterface
 {

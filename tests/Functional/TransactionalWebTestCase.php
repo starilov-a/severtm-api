@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional;
 
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Tests\Support\Dto\TestUserCredentials;
 use Doctrine\ORM\EntityManagerInterface;

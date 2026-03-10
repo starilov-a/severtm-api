@@ -9,11 +9,11 @@ use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasNullbleVar;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasProdServMode;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasRegion;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasWebAction;
-use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
-use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
-use App\Modules\UserCabinet\Domain\Entity\Region;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\WebAction;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FinPeriod;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Region;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebAction;
 
 class AddServiceModeContext implements HasWebAction, HasMaster, HasProdServMode, HasRegion, HasBoolVar, HasNullbleVar, HasModeUnitCount
 {

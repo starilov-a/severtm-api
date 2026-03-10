@@ -4,9 +4,9 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\TariffBannedAddressRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\Address;
-use App\Modules\UserCabinet\Domain\Entity\Tariff;
-use App\Modules\UserCabinet\Domain\Entity\TariffBannedAddress;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Address;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Tariff;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\TariffBannedAddress;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;

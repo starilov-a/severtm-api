@@ -6,7 +6,7 @@ use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Break\BreakContext;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Break\OnlyBreakContext;
 use App\Modules\UserCabinet\Domain\Dto\Request\CreditHistoryLogDto;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ConfigRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface;

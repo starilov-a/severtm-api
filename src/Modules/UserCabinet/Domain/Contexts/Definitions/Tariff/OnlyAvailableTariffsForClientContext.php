@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Domain\Contexts\Definitions\Tariff;
 
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasOldTariff;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasTariff;
-use App\Modules\UserCabinet\Domain\Entity\Tariff;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Tariff;
 
 class OnlyAvailableTariffsForClientContext implements HasTariff, HasOldTariff
 {

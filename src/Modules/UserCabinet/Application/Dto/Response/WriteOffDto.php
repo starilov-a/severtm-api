@@ -5,7 +5,7 @@ namespace App\Modules\UserCabinet\Application\Dto\Response;
 
 
 use App\Modules\Common\Application\Dto\Dto;
-use App\Modules\UserCabinet\Domain\Entity\ProdDiscountHistory;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdDiscountHistory;
 
 class WriteOffDto extends Dto
 {

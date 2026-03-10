@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebUserRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\WebUser;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUser;
 use Doctrine\Persistence\ManagerRegistry;
 
 

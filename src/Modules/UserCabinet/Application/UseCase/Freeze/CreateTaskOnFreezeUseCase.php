@@ -6,7 +6,7 @@ use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Freeze\CreateFreezeTaskContext;
 use App\Modules\UserCabinet\Domain\Dto\Request\CreateUserTaskDto;
-use App\Modules\UserCabinet\Domain\Entity\UserTask;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTask;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface;

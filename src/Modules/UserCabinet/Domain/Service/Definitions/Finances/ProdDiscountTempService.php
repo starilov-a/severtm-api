@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
-use App\Modules\UserCabinet\Domain\Entity\ProdDiscountTemp;
-use App\Modules\UserCabinet\Domain\Entity\UserPayable;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdDiscountTemp;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserPayable;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountTempRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;

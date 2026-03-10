@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\UserPayable\ShouldCreateUserPayableContext;
-use App\Modules\UserCabinet\Domain\Entity\UserPayable;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserPayable;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;

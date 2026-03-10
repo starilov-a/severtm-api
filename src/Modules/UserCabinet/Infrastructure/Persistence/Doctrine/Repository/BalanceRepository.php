@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BalanceRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\Balance;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Balance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

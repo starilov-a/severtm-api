@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Infrastructure\Service\Auth\Service;
 
-use App\Modules\UserCabinet\Domain\Entity\WebUser;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUser;
 use App\Modules\UserCabinet\Infrastructure\Exception\AuthException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Dto\SessionDto;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Entity\Session;

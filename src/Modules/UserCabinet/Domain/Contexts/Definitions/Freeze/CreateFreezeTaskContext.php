@@ -6,8 +6,8 @@ use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasMaster;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasStartFreezeDate;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasWebAction;
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\WebAction;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebAction;
 
 class CreateFreezeTaskContext implements HasUser, HasWebAction, HasStartFreezeDate, HasMaster
 {

@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\User;
-use App\Modules\UserCabinet\Domain\Entity\UserTask;
-use App\Modules\UserCabinet\Domain\Entity\UserTaskState;
-use App\Modules\UserCabinet\Domain\Entity\UserTaskType;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTask;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskState;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskType;
 
 interface UserTaskRepositoryInterface extends RepositoryInterface
 {

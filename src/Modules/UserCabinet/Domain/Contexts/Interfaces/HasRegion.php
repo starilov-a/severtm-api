@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\Contexts\Interfaces;
 
-use App\Modules\UserCabinet\Domain\Entity\Region;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Region;
 
 interface HasRegion
 {

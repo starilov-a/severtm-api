@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\WebAction;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebAction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

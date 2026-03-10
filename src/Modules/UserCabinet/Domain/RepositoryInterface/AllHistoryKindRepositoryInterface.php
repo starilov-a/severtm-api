@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\AllHistoryKind;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\AllHistoryKind;
 
 interface AllHistoryKindRepositoryInterface extends RepositoryInterface
 {

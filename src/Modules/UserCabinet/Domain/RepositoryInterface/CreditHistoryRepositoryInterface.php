@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
 use App\Modules\UserCabinet\Domain\Dto\Request\CreditHistoryLogDto;
-use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FinPeriod;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 
 interface CreditHistoryRepositoryInterface extends RepositoryInterface
 {

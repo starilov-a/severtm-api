@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\UserPayableType;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserPayableType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

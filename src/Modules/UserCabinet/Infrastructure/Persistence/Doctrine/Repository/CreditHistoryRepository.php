@@ -3,9 +3,9 @@
 namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Modules\UserCabinet\Domain\Dto\Request\CreditHistoryLogDto;
-use App\Modules\UserCabinet\Domain\Entity\CreditHistory;
-use App\Modules\UserCabinet\Domain\Entity\FinPeriod;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\CreditHistory;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FinPeriod;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;

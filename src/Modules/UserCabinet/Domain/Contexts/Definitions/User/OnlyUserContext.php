@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\Contexts\Definitions\User;
 
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasUser;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 
 class OnlyUserContext implements HasUser
 {

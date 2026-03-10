@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
-use App\Modules\UserCabinet\Domain\Entity\ProdServModeCost;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServModeCost;
 
 interface ProdServModeCostRepositoryInterface extends RepositoryInterface
 {

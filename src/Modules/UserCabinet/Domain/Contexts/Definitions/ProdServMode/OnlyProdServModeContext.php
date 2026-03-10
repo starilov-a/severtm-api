@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Domain\Contexts\Definitions\ProdServMode;
 
 use App\Modules\UserCabinet\Domain\Contexts\Interfaces\HasProdServMode;
-use App\Modules\UserCabinet\Domain\Entity\ProdServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProdServMode;
 
 class OnlyProdServModeContext implements HasProdServMode
 {

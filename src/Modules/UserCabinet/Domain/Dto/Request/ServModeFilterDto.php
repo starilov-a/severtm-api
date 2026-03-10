@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\Dto\Request;
 
-use App\Modules\UserCabinet\Domain\Entity\ProductService;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ProductService;
 
 class ServModeFilterDto extends FilterDto
 {

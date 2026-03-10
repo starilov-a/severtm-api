@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Application\UseCase\Tariff;
 
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Tariff\OnlyAvailableTariffsForClientContext;
 use App\Modules\UserCabinet\Domain\Dto\Request\TariffFilterDto;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\Policy\Tariff\TariffAvailabilityForClientPolicy;
 use App\Modules\UserCabinet\Domain\Service\TariffService;
 

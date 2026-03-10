@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances;
 
-use App\Modules\UserCabinet\Domain\Entity\Balance;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Balance;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\BalanceRepositoryInterface;
 
 class BalanceService

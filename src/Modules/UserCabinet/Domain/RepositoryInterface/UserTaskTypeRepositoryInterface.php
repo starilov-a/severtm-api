@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\RepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\UserTaskType;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskType;
 
 interface UserTaskTypeRepositoryInterface extends RepositoryInterface
 {

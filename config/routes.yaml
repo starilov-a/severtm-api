@@ -6,7 +6,7 @@ user-cabinet-api-v1:
         version: 1
 starts-api-v1:
     prefix: /starts/
-    resource: ../src/Modules/Starts/Interface/Controllers
+    resource: ../src/Modules/Starts/Interface/Api/Controllers
     type:     attribute
     defaults:
         version: 1

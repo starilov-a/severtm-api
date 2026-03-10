@@ -3,8 +3,8 @@
 namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Modules\UserCabinet\Domain\Dto\Request\FilterDto;
-use App\Modules\UserCabinet\Domain\Entity\Debt;
-use App\Modules\UserCabinet\Domain\Entity\User;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\Debt;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\DebtRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

@@ -4,7 +4,7 @@ namespace App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository
 
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserJurStateRepositoryInterface;
 
-use App\Modules\UserCabinet\Domain\Entity\UserJurState;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserJurState;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\Calculators;
 
-use App\Modules\UserCabinet\Domain\Entity\UserServMode;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserServMode;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface;
 use App\Modules\UserCabinet\Domain\Service\Definitions\Finances\Payables\CalculatedPayable;
