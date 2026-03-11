@@ -11,8 +11,6 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
             - '../src/Kernel.php'
 
     _defaults:
@@ -159,3 +157,7 @@ services:
 
 # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Builderman-cabinet
+    App\Modules\BuildermanCabinet\Domain\RepositoryInterface\BuilderRepositoryInterface:
+        alias: App\Modules\BuildermanCabinet\Infrastructure\Persistence\Doctrine\Repository\BuilderRepository

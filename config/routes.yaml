@@ -1,12 +1,12 @@
 user-cabinet-api-v1:
     prefix: /user-cabinet/
-    resource: ../src/Modules/UserCabinet/Interface/Controllers/APIv1
+    resource: ../src/Modules/UserCabinet/Adapter/Controllers/APIv1
     type:     attribute
     defaults:
         version: 1
-starts-api-v1:
-    prefix: /starts/
-    resource: ../src/Modules/Starts/Interface/Api/Controllers
+builderman-cabinet-v1:
+    prefix: /builderman-cabinet/
+    resource: ../src/Modules/BuildermanCabinet/Adapter/Api/Controllers
     type:     attribute
     defaults:
         version: 1

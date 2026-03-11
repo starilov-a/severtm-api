@@ -29,6 +29,10 @@ class Application
     #[ORM\Column(name: 'application_address', type: Types::INTEGER, options: ['unsigned' => true])]
     private int $addressId = 0;
 
+    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn(name: 'application_address', referencedColumnName: 'address_id', nullable: false)]
+    private Address $address;
+
     #[ORM\Column(name: 'application_client', type: Types::STRING, length: 255)]
     private string $client = '';
 
@@ -105,7 +109,7 @@ class Application
 
     public function getFlat(): string { return $this->flat; }
     public function getAddressId(): int { return $this->addressId; }
-
+    public function getAddress(): Address { return $this->address; }
     public function getClient(): string { return $this->client; }
     public function getPhone(): string { return $this->phone; }
     public function getMobile(): string { return $this->mobile; }
@@ -124,7 +128,7 @@ class Application
 
     public function getDistrictId(): int { return $this->districtId; }
 
-    public function getStatus(): string { return $this->status; }
+    public function getStatus(): ApplicationStatus { return $this->status; }
 
     public function getType(): ?ApplicationType { return $this->type; }
 

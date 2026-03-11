@@ -21,7 +21,7 @@ class ReregestrationContractLegacyUseCase
 
         protected CreateJurContractUseCase            $createJurContractUseCase,
 
-        protected CanReregestrationContractRuleChain    $ruleChain,
+        protected CanReregestrationContractRuleChain    $canReregestrationContractRuleChain,
     ) {}
 
     public function handle(ReregestrationContractLegacyDto $dto): Contract
@@ -30,21 +30,21 @@ class ReregestrationContractLegacyUseCase
         $oldContract = $this->contractRepo->find($dto->getContractId());
 
         // 1. Бизнес логика
-        $result = $this->ruleChain->checkAll(
+        $result = $this->canReregestrationContractRuleChain->checkAll(
             new ReregestractionContext(
                 $dto->getNewInn(),
                 $oldContract->getInn()
             )
         );
-        if (!$result->ok){
-            // делаем логику если ошибка
+        if (!$result->ok) {
+            //TODO: поправить тип исключения
+            throw new \DomainException($result->message);
         }
-
 
         // 2. Наполнение dto для создания нового договора
         $createJurContractDto = new CreateJurContractDto();
 
-        // 3. Создание нового договора через Starts
+        // 3. Создание нового договора через BuildermanCabinet
         $contract = $this->createJurContractUseCase->handle($dto);
 
         // 4. Перенос существующих настроек
