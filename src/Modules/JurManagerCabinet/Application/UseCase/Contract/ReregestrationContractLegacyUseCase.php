@@ -11,6 +11,7 @@ use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryI
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ManagerRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\Rules\Chains\Contract\CanReregestrationContractRuleChain;
+use App\Modules\JurManagerCabinet\Domain\Service\ContractReissueService;
 
 class ReregestrationContractLegacyUseCase
 {
@@ -19,7 +20,9 @@ class ReregestrationContractLegacyUseCase
         protected ManagerRepositoryInterface            $managerRepo,
         protected ContractRepositoryInterface           $contractRepo,
 
-        protected CreateJurContractUseCase            $createJurContractUseCase,
+        protected ContractReissueService                $contractReissueService,
+
+        protected CreateJurContractUseCase              $createJurContractUseCase,
 
         protected CanReregestrationContractRuleChain    $canReregestrationContractRuleChain,
     ) {}
@@ -29,7 +32,7 @@ class ReregestrationContractLegacyUseCase
         $manager = $this->managerRepo->find($dto->getManagerId());
         $oldContract = $this->contractRepo->find($dto->getContractId());
 
-        // 1. Бизнес логика
+        // 1. Бизнес проверки
         $result = $this->canReregestrationContractRuleChain->checkAll(
             new ReregestractionContext(
                 $dto->getNewInn(),
@@ -41,21 +44,27 @@ class ReregestrationContractLegacyUseCase
             throw new \DomainException($result->message);
         }
 
-        // 2. Наполнение dto для создания нового договора
-        $createJurContractDto = new CreateJurContractDto();
+        // 2. Получение существуюих настроек
+        $settings = $this->contractReissueService->collectSettings($oldContract);
 
         // 3. Создание нового договора через BuildermanCabinet
-        $contract = $this->createJurContractUseCase->handle($dto);
+        $newContract = $this->createJurContractUseCase->execute(
+            new CreateJurContractDto(
+                (string)$dto->getNewInn(),
+                $dto->getFio(),
+                $dto->getLogin(),
+                $dto->getPassword(),
+                $dto->getEmail(),
+                $dto->getPhone(),
+            )
+        );
 
-        // 4. Перенос существующих настроек
+        //4. Перенос данных со старого договора на новый
+        $this->contractReissueService->transferSettings($newContract, $settings);
 
+        //5. Отключение старого договора
+        $this->contractRepo->archiveForReissue($oldContract);
 
-        // 5. Закрытие прошлого договора
-
-
-        // 6. Логирование
-
-        return $contract;
-
+        return $newContract;
     }
 }

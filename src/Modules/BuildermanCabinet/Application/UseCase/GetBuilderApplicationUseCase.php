@@ -2,7 +2,7 @@
 
 namespace App\Modules\BuildermanCabinet\Application\UseCase;
 
-use App\Modules\BuildermanCabinet\Domain\Entity\Application;
+use App\Modules\BuildermanCabinet\Application\Dto\Response\ApplicationListItemDto;
 use App\Modules\BuildermanCabinet\Domain\RepositoryInterface\ApplicationRepositoryInterface;
 use App\Modules\BuildermanCabinet\Domain\RepositoryInterface\BuilderRepositoryInterface;
 use App\Modules\BuildermanCabinet\Domain\Service\ApplicationStatusService;
@@ -16,15 +16,17 @@ class GetBuilderApplicationUseCase
     ) {}
 
     /**
-     * @return array<Application>
+     * @return array<ApplicationListItemDto>
      */
     public function execute(int $builderId): array
     {
         // Получение сущностей, с которыми будет работать
         $builder = $this->builderRepo->findById($builderId);
+
         $availableStatuses = $this->applicationStatusService->getStatusesForBuilderList();
 
         //получение целевой сущности
+        /** @var array<ApplicationListItemDto> $applicationList */
         $applicationList = $this->applicationRepo->findActiveAppListByBuilder($builder, $availableStatuses);
 
         return $applicationList;

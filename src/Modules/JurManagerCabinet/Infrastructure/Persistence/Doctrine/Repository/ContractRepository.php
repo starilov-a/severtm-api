@@ -17,12 +17,15 @@ class ContractRepository implements ContractRepositoryInterface
     {
         $user = $this->userRepo->find($id);
 
-        $contract = new Contract(
+        return new Contract(
             $user->getId(),
             $user->getCustomerInn()->getInn(),
+            $user->getFullName(),
+            $user->getLogin(),
+            (string)$user->getEmail(),
+            (string)$user->getPhoneExtra(),
+            (bool)$user->isDeleted(),
         );
-
-        return $contract;
     }
 
 
@@ -32,14 +35,24 @@ class ContractRepository implements ContractRepositoryInterface
 
         $contracts = [];
         foreach ($tableUsers as $tableUser) {
-            $contract = new Contract(
+            $contracts[] = new Contract(
                 $tableUser->getId(),
                 $tableUser->getCustomerInn()->getInn(),
+                $tableUser->getFullName(),
+                $tableUser->getLogin(),
+                (string)$tableUser->getEmail(),
+                (string)$tableUser->getPhoneExtra(),
+                (bool)$tableUser->isDeleted(),
             );
-
-            array_push($contracts, $contract);
         }
 
         return $contracts;
+    }
+
+    public function archiveForReissue(Contract $contract): void
+    {
+        $user = $this->userRepo->find($contract->getId());
+        $user->setLogin($user->getLogin() . '_old');
+        $this->userRepo->save($user);
     }
 }
