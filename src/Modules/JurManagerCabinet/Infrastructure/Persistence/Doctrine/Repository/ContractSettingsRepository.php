@@ -38,21 +38,22 @@ class ContractSettingsRepository implements ContractSettingsRepositoryInterface
             $parameters[$parameter->getParameter()->getCode()] = $parameter->getValue();
         }
 
+        // данные таблицы web_user_ip_addrs
         $webIps = [];
         foreach ($this->em->getRepository(WebUserIpAddr::class)->findBy(['webUser' => $user->getWebUser()]) as $webIp) {
             $webIps[] = [
-                'ip' => $webIp->getIp(),
-                'persistent' => $webIp->isPersistent(),
+                'ip' => $webIp->getIp(),                // IP
+                'persistent' => $webIp->isPersistent(), // ???
             ];
         }
 
         $networkIps = [];
         foreach ($this->em->getRepository(ZIpaddr::class)->findBy(['user' => $user]) as $networkIp) {
             $networkIps[] = [
-                'ip' => $networkIp->getIp(),
-                'ipBin' => $networkIp->getIpBin(),
-                'switchIp' => $networkIp->getSwitchIp(),
-                'switchPort' => $networkIp->getSwitchPort(),
+                'ip' => $networkIp->getIp(),                    // Ip
+                'ipBin' => $networkIp->getIpBin(),              // IpBin
+                'switchIp' => $networkIp->getSwitchIp(),        //
+                'switchPort' => $networkIp->getSwitchPort(),    //
                 'mac' => $networkIp->getMac(),
                 'district' => $networkIp->getDistrict(),
                 'fwOn' => $networkIp->isFwOn(),

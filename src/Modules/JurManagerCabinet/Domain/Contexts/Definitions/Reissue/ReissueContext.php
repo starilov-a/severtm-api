@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\JurManagerCabinet\Domain\Contexts\Definitions\Contract;
+namespace App\Modules\JurManagerCabinet\Domain\Contexts\Definitions\Reissue;
 
 use App\Modules\JurManagerCabinet\Domain\Contexts\Interfaces\HasNewInn;
 use App\Modules\JurManagerCabinet\Domain\Contexts\Interfaces\HasOldInn;
 
-class ReregestractionContext implements HasNewInn, HasOldInn
+class ReissueContext implements HasNewInn, HasOldInn
 {
     public function __construct(
         protected string $newInn,

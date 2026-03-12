@@ -4,7 +4,7 @@ namespace App\Modules\JurManagerCabinet\Application\Dto\Request;
 
 use App\Modules\Common\Application\Dto\Dto;
 
-class ReregestrationContractLegacyDto extends Dto
+class ReissueContractDto extends Dto
 {
     public function __construct(
         protected int $contractId,
@@ -13,7 +13,6 @@ class ReregestrationContractLegacyDto extends Dto
         protected string $fio,
         protected string $login,
         protected string $password,
-        protected string $email,
         protected string $phone
     ) {}
 
