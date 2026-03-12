@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\UserProfile;
 
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Application\Dto\Response\AddressDto;
 use App\Modules\UserCabinet\Application\Dto\Response\UserDto;
 use App\Modules\UserCabinet\Application\Dto\Response\UserFullInfoDto;
@@ -16,6 +17,7 @@ class GetFullUserInfoUseCase
 
     public function handle(int $uid): array
     {
+        /** @var $user User */
         $user = $this->userRepo->find($uid);
 
         $dtoUser = new UserDto($user);

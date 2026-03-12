@@ -5,6 +5,7 @@ namespace App\Modules\UserCabinet\Adapter\Controllers\APIv1;
 use App\Modules\UserCabinet\Application\Dto\Validator\PasswordValidatorDto;
 use App\Modules\UserCabinet\Application\Dto\Validator\WebUserValidatorDto;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\CheckUserPasswordUseCase;
+use App\Modules\UserCabinet\Application\UseCase\UserProfile\GetFullUserInfoUseCase;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\GetShortUserInfoUseCase;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserInfoUseCase;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserPasswordUseCase;
@@ -60,6 +61,27 @@ TXT
         methods: ['GET']
     )]
     public function getShortUserInfo(GetShortUserInfoUseCase $useCase): JsonResponse
+    {
+        $dtoResponse = $useCase->handle(UserSessionService::getUserId());
+        return $this->responseData($dtoResponse);
+    }
+
+    #[OA\Get(
+        summary: 'Полная информация о пользователе',
+        description: <<<TXT
+Возвращает полную информацию о пользователе:
+TXT
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Информация о пользователе'
+    )]
+    #[Route(
+        '/get-full-user-info',
+        name: 'getFullUserInfo',
+        methods: ['GET']
+    )]
+    public function getFullUserInfo(GetFullUserInfoUseCase $useCase): JsonResponse
     {
         $dtoResponse = $useCase->handle(UserSessionService::getUserId());
         return $this->responseData($dtoResponse);
