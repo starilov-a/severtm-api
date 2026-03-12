@@ -17,8 +17,8 @@ class GetReasonForFreezeUseCase
 
         return array_map(static function (FreezeReason $reason): array {
             return [
-                'id' => $reason->getId(),
-                'name' => $reason->getName(),
+                'value' => $reason->getId(),
+                'label' => $reason->getName(),
             ];
         }, $reasons);
     }
