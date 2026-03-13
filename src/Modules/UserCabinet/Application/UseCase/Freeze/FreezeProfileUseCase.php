@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\FreezeReason;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\UserCabinet\Domain\Dto\Request\CreateUserTaskDto;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
@@ -23,10 +25,16 @@ class FreezeProfileUseCase
             $startDate,
             $reasonId,
         ) {
+            /* @var User $user*/
+            $user = $this->userRepo->find($uid);
+
+            /* @var FreezeReason $freezeReason */
+            $freezeReason = $this->freezeReasonRepo->find($reasonId);
+
             $taskDto = new CreateUserTaskDto(
-                $this->userRepo->find($uid),
+                $user,
                 new \DateTimeImmutable($startDate),
-                $this->freezeReasonRepo->find($reasonId)
+                $freezeReason
             );
 
             $this->createTaskOnFreezeUseCase->handle($taskDto);

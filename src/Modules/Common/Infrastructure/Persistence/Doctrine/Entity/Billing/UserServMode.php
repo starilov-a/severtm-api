@@ -111,7 +111,7 @@ class UserServMode
         $this->units = $units;
     }
 
-    public function getUnits()
+    public function getUnits(): int
     {
         return $this->units;
     }

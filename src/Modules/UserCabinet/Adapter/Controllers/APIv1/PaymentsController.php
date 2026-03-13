@@ -6,6 +6,7 @@ use App\Modules\Common\Adapter\Api\Controller;
 use App\Modules\UserCabinet\Application\UseCase\Break\CanTakeBreakUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Break\TakeBreakForOneDayUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetBalanceUseCase;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetCurrentPaymentUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetDebtUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetPaymentLinkUseCase;
 use App\Modules\UserCabinet\Application\UseCase\Payment\GetReplenishmentsUseCase;
@@ -22,7 +23,7 @@ class PaymentsController extends Controller
 {
     public function authenticate(): bool
     {
-        return true;
+        return false;
     }
 
     #[OA\Get(
@@ -97,6 +98,18 @@ class PaymentsController extends Controller
         $uid = UserSessionService::getUserId();
 
         return $this->responseData($useCase->handle($uid, $filterDto)->toArray());
+    }
+
+    #[Route(
+        '/get-current-payment',
+        name: 'getCurrentPayment',
+        methods: ['GET']
+    )]
+    public function getCurrentPayment(GetCurrentPaymentUseCase $useCase): JsonResponse
+    {
+        $uid = UserSessionService::getUserId();
+
+        return $this->responseData($useCase->handle($uid));
     }
 
     #[OA\Get(

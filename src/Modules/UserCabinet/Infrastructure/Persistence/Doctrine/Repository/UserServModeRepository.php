@@ -125,7 +125,7 @@ final class UserServModeRepository extends ServiceEntityRepository implements Us
             ->andWhere('f.isCurrent = 1')
             ->setMaxResults(1)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /** Есть активная аренда в текущем финпериоде */

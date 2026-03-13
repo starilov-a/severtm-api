@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Freeze;
 
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\Common\Infrastructure\Service\Logger\Dto\BusinessLogDto;
 use App\Modules\Common\Infrastructure\Service\Logger\LoggerService;
 use App\Modules\UserCabinet\Domain\Contexts\Definitions\Freeze\CreateFreezeTaskContext;
@@ -32,6 +33,7 @@ class CreateTaskOnFreezeUseCase
 
     public function handle(CreateUserTaskDto $createUserTaskDto): UserTask
     {
+        /* @var User $master */
         $master = $this->userRepo->find(UserSessionService::getUserId());
         $webAction = $this->webActionRepo->findIdByCid('W3_FIRST_FREEZE_ACCOUNT');
 
