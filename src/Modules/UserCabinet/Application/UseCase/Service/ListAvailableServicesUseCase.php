@@ -22,6 +22,7 @@ class ListAvailableServicesUseCase
                 'modes' => array_map(function ($mode) {
                     return [
                         'id' => $mode->getId(),
+                        'price'=> $mode->getProdServModeCost()->getCost(),
                         'name' => $mode->getName(),
                         'code' => $mode->getStrCode()
                     ];
