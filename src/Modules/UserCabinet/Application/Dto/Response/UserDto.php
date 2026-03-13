@@ -412,12 +412,12 @@ class UserDto extends Dto
 
     public function setCurAbonPayment(int $curAbonPayment): void
     {
-        $this->curAbonPayment = $curAbonPayment;
+        $this->cur_abon_payment = $curAbonPayment;
     }
 
     public function getCurAbonPayment(): int
     {
-        return $this->curAbonPayment;
+        return $this->cur_abon_payment;
     }
 
 }
