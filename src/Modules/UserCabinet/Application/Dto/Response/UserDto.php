@@ -34,6 +34,7 @@ class UserDto extends Dto
     private int $groupId = 0;
     private bool $deleted = false;
     private string $comments;
+    private int $curAbonPayment = 0;
 
     /**
      * @param int|null $id
@@ -407,6 +408,16 @@ class UserDto extends Dto
     public function setWebUser(?WebUserDto $webUser): void
     {
         $this->webUser = $webUser;
-    } // DTO ��� ��������� �������� WebUser
+    }
+
+    public function setCurAbonPayment(int $curAbonPayment): void
+    {
+        $this->curAbonPayment = $curAbonPayment;
+    }
+
+    public function getCurAbonPayment(): int
+    {
+        return $this->curAbonPayment;
+    }
 
 }

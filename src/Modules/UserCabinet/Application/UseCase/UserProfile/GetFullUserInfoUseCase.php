@@ -7,12 +7,14 @@ use App\Modules\UserCabinet\Application\Dto\Response\AddressDto;
 use App\Modules\UserCabinet\Application\Dto\Response\UserDto;
 use App\Modules\UserCabinet\Application\Dto\Response\UserFullInfoDto;
 use App\Modules\UserCabinet\Application\Dto\Response\WebUserDto;
+use App\Modules\UserCabinet\Application\UseCase\Payment\GetCurrentPaymentUseCase;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 
 class GetFullUserInfoUseCase
 {
     public function __construct(
         protected UserRepositoryInterface $userRepo,
+        protected GetCurrentPaymentUseCase $getCurrentPaymentUseCase
     ) {}
 
     public function handle(int $uid): array
@@ -21,6 +23,8 @@ class GetFullUserInfoUseCase
         $user = $this->userRepo->find($uid);
 
         $dtoUser = new UserDto($user);
+        $dtoUser->setCurAbonPayment($this->getCurrentPaymentUseCase->handle($uid));
+
         $dtoWebUser = new WebUserDto($user->getWebUser());
         $dtoAddress = new AddressDto($user->getAddress());
 

@@ -20,7 +20,7 @@ class GetCurrentPaymentUseCase
     /*
      * Получение текущей абонентской платы
      * */
-    public function handle(int $uid): array
+    public function handle(int $uid): int
     {
         /* @var User $user */
         $user = $this->userRepo->find($uid);
@@ -36,8 +36,6 @@ class GetCurrentPaymentUseCase
             $currentPayment += $countServ * $costServ;
         }
 
-        return [
-            'currentPayment' => $currentPayment
-        ];
+        return $currentPayment;
     }
 }

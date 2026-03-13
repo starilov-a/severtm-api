@@ -100,18 +100,6 @@ class PaymentsController extends Controller
         return $this->responseData($useCase->handle($uid, $filterDto)->toArray());
     }
 
-    #[Route(
-        '/get-current-payment',
-        name: 'getCurrentPayment',
-        methods: ['GET']
-    )]
-    public function getCurrentPayment(GetCurrentPaymentUseCase $useCase): JsonResponse
-    {
-        $uid = UserSessionService::getUserId();
-
-        return $this->responseData($useCase->handle($uid));
-    }
-
     #[OA\Get(
         summary: 'Пополнения',
         description: <<<TXT
