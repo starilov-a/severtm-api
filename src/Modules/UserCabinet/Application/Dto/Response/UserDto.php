@@ -34,7 +34,7 @@ class UserDto extends Dto
     private int $groupId = 0;
     private bool $deleted = false;
     private string $comments;
-    private int $curAbonPayment = 0;
+    private int $cur_abon_payment = 0;
 
     /**
      * @param int|null $id
