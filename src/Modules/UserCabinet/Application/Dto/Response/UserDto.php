@@ -89,7 +89,7 @@ class UserDto extends Dto
         $this->credit = $user->isCredit();
         $this->blockDate = $user->getBlockDate();
         $this->blockComments = $user->getBlockComments();
-        $this->regDate = $user->getRegDate();
+        $this->regDate = $user->getRegDate()->getTimestamp();
         $this->abPstart = $user->getAbPstart();
         $this->abPend = $user->getAbPend();
         $this->abLdiscount = $user->getAbLdiscount();
