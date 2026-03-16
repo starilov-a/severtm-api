@@ -14,4 +14,7 @@ nelmio_cors:
         '^/user-cabinet/':
             allow_origin: [ '%env(CORS_ALLOW_ORIGIN)%' ]
             allow_credentials: true
+        '^/builderman_cabinet/':
+            allow_origin: [ '%env(CORS_ALLOW_ORIGIN)%' ]
+            allow_credentials: true
 

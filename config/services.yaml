@@ -34,124 +34,124 @@ services:
     App\Modules\Common\Infrastructure\Service\Logger\ErrorLoggerInterface:
         alias: App\Modules\Common\Infrastructure\Service\Logger\Adapters\ErrorLogAdapter
 
-    App\Modules\UserCabinet\Domain\Repository\AddressRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\AddressRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\AddressRepository
 
-    App\Modules\UserCabinet\Domain\Repository\AllHistoryKindRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\AllHistoryKindRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\AllHistoryKindRepository
 
-    App\Modules\UserCabinet\Domain\Repository\AllHistoryRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\AllHistoryRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\AllHistoryRepository
 
-    App\Modules\UserCabinet\Domain\Repository\BalanceRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\BalanceRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\BalanceRepository
 
-    App\Modules\UserCabinet\Domain\Repository\BlockHistoryRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\BlockHistoryRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\BlockHistoryRepository
 
-    App\Modules\UserCabinet\Domain\Repository\BlockStateRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\BlockStateRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\BlockStateRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ConfigRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ConfigRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ConfigRepository
 
-    App\Modules\UserCabinet\Domain\Repository\CreditHistoryRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\CreditHistoryRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\CreditHistoryRepository
 
-    App\Modules\UserCabinet\Domain\Repository\DebtRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\DebtRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\DebtRepository
 
-    App\Modules\UserCabinet\Domain\Repository\DeviceRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\DeviceRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\DeviceRepository
 
-    App\Modules\UserCabinet\Domain\Repository\DiscountRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\DiscountRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\DiscountRepository
 
-    App\Modules\UserCabinet\Domain\Repository\EnumParameterRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\EnumParameterRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\EnumParameterRepository
 
-    App\Modules\UserCabinet\Domain\Repository\FinPeriodRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\FinPeriodRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\FinPeriodRepository
 
-    App\Modules\UserCabinet\Domain\Repository\FreezeReasonRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\FreezeReasonRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\FreezeReasonRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ProdDiscountHistoryRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountHistoryRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ProdDiscountHistoryRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ProdDiscountTempRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ProdDiscountTempRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ProdDiscountTempRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ProdServModeCostRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeCostRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ProdServModeCostRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ProdServModeRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ProdServModeRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ProdServModeRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ProductServiceRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ProductServiceRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ProductServiceRepository
 
-    App\Modules\UserCabinet\Domain\Repository\PsGroupRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\PsGroupRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\PsGroupRepository
 
-    App\Modules\UserCabinet\Domain\Repository\RegionRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\RegionRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\RegionRepository
 
-    App\Modules\UserCabinet\Domain\Repository\ReplenishmentRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\ReplenishmentRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\ReplenishmentRepository
 
-    App\Modules\UserCabinet\Domain\Repository\SemaphoreRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\SemaphoreRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\SemaphoreRepository
 
-    App\Modules\UserCabinet\Domain\Repository\TariffBannedAddressRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\TariffBannedAddressRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\TariffBannedAddressRepository
 
-    App\Modules\UserCabinet\Domain\Repository\TariffGroupRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\TariffGroupRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\TariffGroupRepository
 
-    App\Modules\UserCabinet\Domain\Repository\TariffRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\TariffRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\TariffRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserJurStateRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserJurStateRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserJurStateRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserOwnDeviceHistoryRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserOwnDeviceHistoryRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserOwnDeviceHistoryRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserOwnDeviceRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserOwnDeviceRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserOwnDeviceRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserPayableParameterRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableParameterRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserPayableParameterRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserPayableRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserPayableRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserPayableTypeRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserPayableTypeRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserPayableTypeRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserServModeRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserServModeRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserTaskRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserTaskRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserTaskStateRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskStateRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserTaskStateRepository
 
-    App\Modules\UserCabinet\Domain\Repository\UserTaskTypeRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\UserTaskTypeRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\UserTaskTypeRepository
 
-    App\Modules\UserCabinet\Domain\Repository\WebActionRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\WebActionRepository
 
-    App\Modules\UserCabinet\Domain\Repository\WebHistoryRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\WebHistoryRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\WebHistoryRepository
 
-    App\Modules\UserCabinet\Domain\Repository\WebUserRepositoryInterface:
+    App\Modules\UserCabinet\Domain\RepositoryInterface\WebUserRepositoryInterface:
         alias: App\Modules\UserCabinet\Infrastructure\Persistence\Doctrine\Repository\WebUserRepository
 
 
