@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\JurManagerCabinet\Application\Dto\Request;
+namespace App\Modules\JurManagerCabinet\Application\Dto\Request\Reissue;
 
 use App\Modules\Common\Application\Dto\Dto;
 
@@ -10,11 +10,23 @@ class ReissueContractDto extends Dto
         protected int $contractId,
         protected int $managerId,
         protected int $newInn,
+        protected \DateTimeImmutable $dateReissue,
         protected string $fio,
         protected string $login,
         protected string $password,
-        protected string $phone
+        protected string $phone,
+        protected string $comment
     ) {}
+
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment): void
+    {
+        $this->comment = $comment;
+    }
 
     public function getContractId(): int
     {
@@ -75,17 +87,6 @@ class ReissueContractDto extends Dto
     {
         $this->password = $password;
     }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
     public function getPhone(): string
     {
         return $this->phone;
@@ -94,6 +95,11 @@ class ReissueContractDto extends Dto
     public function setPhone(string $phone): void
     {
         $this->phone = $phone;
+    }
+
+    public function getDateReissue(): \DateTimeImmutable
+    {
+        return $this->dateReissue;
     }
 
 }

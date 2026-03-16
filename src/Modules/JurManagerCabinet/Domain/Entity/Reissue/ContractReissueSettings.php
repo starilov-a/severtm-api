@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Modules\JurManagerCabinet\Domain\Entity;
+namespace App\Modules\JurManagerCabinet\Domain\Entity\Reissue;
 
+/**
+ * Настройки, которые переносятся при переоформлении
+ */
 class ContractReissueSettings
 {
     public function __construct(

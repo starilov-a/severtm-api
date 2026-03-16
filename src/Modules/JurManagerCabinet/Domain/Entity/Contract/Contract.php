@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Modules\JurManagerCabinet\Domain\Entity;
+namespace App\Modules\JurManagerCabinet\Domain\Entity\Contract;
 
 class Contract
 {
     public function __construct(
         protected int $id,
         protected string $inn,
+        protected ContractStatus $status,
         protected string $fullName,
         protected string $login,
         protected string $email,
         protected string $phone,
-        protected bool $isArchived = false,
+        protected bool   $isReissued
     ) {}
 
     public function getId(): int
@@ -44,8 +45,8 @@ class Contract
         return $this->phone;
     }
 
-    public function isArchived(): bool
+    public function isReissued(): bool
     {
-        return $this->isArchived;
+        return $this->isReissued;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Modules\JurManagerCabinet\Domain\Entity;
 
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
+
 class Customer
 {
 

@@ -2,8 +2,8 @@
 
 namespace App\Modules\JurManagerCabinet\Domain\Service;
 
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract;
-use App\Modules\JurManagerCabinet\Domain\Entity\ContractReissueSettings;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueSettings;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractSettingsRepositoryInterface;
 
@@ -21,14 +21,7 @@ class ContractReissueService
 
     public function transferSettings(Contract $newContract, ContractReissueSettings $settings): void
     {
+        // Переносим только критичные установки (сетевые)
         $this->contractSettingsRepository->applyForReissue($newContract, $settings);
-        // 1. Сетевые настройки
-        // 2. Параметры пользователя
-        // 3. Перенос услуги и тарифов
-    }
-
-    public function scheduleReissue(Contract $contract, ContractReissueSettings $settings): void
-    {
-        // 1. Создаем задачу на Переоформление
     }
 }

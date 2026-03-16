@@ -3,16 +3,15 @@
 namespace App\Modules\JurManagerCabinet\Application\UseCase\Reissue;
 
 
-use App\Modules\JurManagerCabinet\Application\Dto\Request\CreateJurContractDto;
-use App\Modules\JurManagerCabinet\Application\Dto\Request\ReregestrationContractDto;
-use App\Modules\JurManagerCabinet\Application\Dto\Request\ReregestrationContractLegacyDto;
+
 use App\Modules\JurManagerCabinet\Application\UseCase\Contract\CreateJurContractUseCase;
-use App\Modules\JurManagerCabinet\Domain\Contexts\Definitions\Contract\ReregestractionContext;
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\ContractStatus;
+use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueProcess;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
+use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractStatusRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ManagerRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
-use App\Modules\JurManagerCabinet\Domain\Rules\Chains\Contract\CanReregestrationContractRuleChain;
 use App\Modules\JurManagerCabinet\Domain\Service\ContractReissueService;
 
 class StartReissueContractUseCase
@@ -21,6 +20,8 @@ class StartReissueContractUseCase
         protected WebActionRepositoryInterface          $webActionRepo,
         protected ManagerRepositoryInterface            $managerRepo,
         protected ContractRepositoryInterface           $contractRepo,
+        protected ContractStatusRepositoryInterface     $contractStatusRepo,
+
 
         protected ContractReissueService                $contractReissueService,
 
@@ -28,15 +29,14 @@ class StartReissueContractUseCase
 
     ) {}
 
-    public function handle(): Contract
+    public function handle(ContractReissueProcess $contractReissueProcess): Contract
     {
-        // 1. Получение настроек для создания нового пользователя
+        // 1. Получение договоров
+        $oldContract = $this->contractRepo->find($contractReissueProcess->getOldContractId());
+        $newContract = $this->contractRepo->find($contractReissueProcess->getNewContractId());
+
+        // 2. Получение настроек, необходимых для переноса
         $settings = $this->contractReissueService->collectSettings($oldContract);
-
-        // 2. Получение нового договора
-
-        $newContract = $this->contractReissueService->find($id);
-        $oldContract = $this->contractRepo->find($dto->getContractId());
 
         // 3. Перенос настроек
         $this->contractReissueService->transferSettings($newContract, $settings);
@@ -44,7 +44,8 @@ class StartReissueContractUseCase
         // 4. Отключение старого договора со след месяца
         $this->contractRepo->archiveForReissue($oldContract);
 
-        // 5. Активируем статус договора
+        // 5. Выставляем статус "Разблокирован"
+        $this->contractStatusRepo->changeContractStatus($newContract, ContractStatus::UNBLOCKED);
 
         // 6. Возвращаем информацию
         return $newContract;

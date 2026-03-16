@@ -109,7 +109,7 @@ class UserTask
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): \DateTimeInterface
     {
         return $this->startTime;
     }

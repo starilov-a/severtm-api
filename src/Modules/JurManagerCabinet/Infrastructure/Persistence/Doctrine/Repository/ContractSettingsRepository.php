@@ -17,8 +17,8 @@ use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserSe
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUser;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUserIpAddr;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\ZIpaddr;
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract;
-use App\Modules\JurManagerCabinet\Domain\Entity\ContractReissueSettings;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueSettings;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractSettingsRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 

@@ -4,7 +4,7 @@ namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repo
 
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\CustomerInnRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserRepository;
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
 
 class ContractRepository implements ContractRepositoryInterface

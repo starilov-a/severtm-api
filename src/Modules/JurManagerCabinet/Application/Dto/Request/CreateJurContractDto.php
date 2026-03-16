@@ -11,7 +11,6 @@ class CreateJurContractDto extends Dto
         protected string $fullName,
         protected string $login,
         protected string $password,
-        protected string $email,
         protected string $phone,
         protected bool $isJuridical = true,
     ) {}

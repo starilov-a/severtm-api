@@ -2,7 +2,7 @@
 
 namespace App\Modules\JurManagerCabinet\Domain\RepositoryInterface;
 
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
 
 interface ContractCreationRepositoryInterface
 {
