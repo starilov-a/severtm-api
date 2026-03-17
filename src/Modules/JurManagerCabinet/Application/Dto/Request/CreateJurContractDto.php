@@ -7,9 +7,10 @@ use App\Modules\Common\Application\Dto\Dto;
 class CreateJurContractDto extends Dto
 {
     public function __construct(
+        protected string $login,
+        protected string $password,
         protected string $inn,
         protected string $fullName,
-        protected string $login,
         protected string $password,
         protected string $phone,
         protected bool $isJuridical = true,

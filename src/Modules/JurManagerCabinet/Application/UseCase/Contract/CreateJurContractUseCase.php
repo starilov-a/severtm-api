@@ -14,14 +14,12 @@ class CreateJurContractUseCase
 
     public function execute(CreateJurContractDto $dto): Contract
     {
-        return $this->contractCreationRepository->create(
-            $dto->getInn(),
-            $dto->getFullName(),
-            $dto->getLogin(),
-            $dto->getPassword(),
-            $dto->getEmail(),
-            $dto->getPhone(),
-            $dto->isJuridical(),
-        );
+
+        // 1. Бизнес проверки
+
+        // 2. Создание договора
+        $contract = $this->contractCreationRepository->create($dto);
+
+        return $contract;
     }
 }

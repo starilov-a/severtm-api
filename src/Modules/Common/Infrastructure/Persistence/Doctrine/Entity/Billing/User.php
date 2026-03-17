@@ -228,6 +228,11 @@ class User
         return $this->district;
     }
 
+    public function setDistrict(int $district): void
+    {
+        $this->district = $district;
+    }
+
     public function getCurrentTariff(): ?Tariff
     {
         return $this->currentTariff;
