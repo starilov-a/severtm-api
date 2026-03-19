@@ -40,10 +40,10 @@ class WebUser
     private string $name;
 
     #[ORM\Column(type: "string", length: 64)]
-    private string $patronymic;
+    private string $patronymic = '';
 
     #[ORM\Column(type: "string", length: 64)]
-    private string $surname;
+    private string $surname = '';
 
     #[ORM\Column(type: "string", length: 255)]
     private string $email;

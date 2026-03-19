@@ -4,6 +4,7 @@ namespace App\Modules\JurManagerCabinet\Adapter\Api\Legacy;
 
 use App\Modules\Common\Adapter\Api\Controller;
 use App\Modules\JurManagerCabinet\Application\Dto\Request\Reissue\ReissueContractDto;
+use App\Modules\JurManagerCabinet\Application\Dto\Validator\ReissueContractValidatorDto;
 use App\Modules\JurManagerCabinet\Application\UseCase\Reissue\ScheduleReissueContractUseCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,18 +25,18 @@ class ReissueController extends Controller
     public function ScheduleReissueContract(Request $request, ScheduleReissueContractUseCase $useCase): JsonResponse
     {
         $data = !empty($request->getContent()) ? $request->toArray() : [];
-        //$this->validate(new ReissueContractValidatorDto(), $data);
+        $this->validate(new ReissueContractValidatorDto(), $data);
 
         $useCase->execute(new ReissueContractDto(
             $data['contractId'],
             $data['managerId'],
             $data['newInn'],
-            $data['dateReissue'],
+            new \DateTimeImmutable($data['dateReissue']),
             $data['fio'],
             $data['login'],
             $data['password'],
-            $data['phone'],
-            $data['comment']
+            $data['phone'] ?? '',
+            $data['comment'] ?? ''
         ));
 
         return $this->response(

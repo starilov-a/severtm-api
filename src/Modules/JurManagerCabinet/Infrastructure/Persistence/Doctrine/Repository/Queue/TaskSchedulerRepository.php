@@ -4,7 +4,7 @@ namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repo
 
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTask;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskParameter;
-use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\EnumTaskRepository;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\EnumParameterRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserTaskParameterRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserTaskRepository;
@@ -23,7 +23,7 @@ class TaskSchedulerRepository implements TaskSchedulerInterface
         private UserTaskTypeRepository $userTaskTypeRepo,
         private UserRepository $userRepo,
         private WebUserRepository $webUserRepo,
-        private EnumTaskRepository $enumTaskRepo,
+        private EnumParameterRepository $enumParamRepo,
         private UserTaskParameterRepository $userTaskParameterRepo,
     ) {}
 
@@ -60,7 +60,7 @@ class TaskSchedulerRepository implements TaskSchedulerInterface
 
     private function saveParameter(UserTask $task, string $code, ?string $value): void
     {
-        $type = $this->enumTaskRepo->find($code);
+        $type = $this->enumParamRepo->find($code);
         if ($type === null) {
             return;
         }

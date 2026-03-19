@@ -2,18 +2,20 @@
 
 namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
-use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\AutoIncrementUid;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\BlockState;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\CustomerInn;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUser;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\AddressRegionRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\AddressRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\AutoIncrementUidRepository;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\BlockStateRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\CustomerInnRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\PasswordHashRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\TariffRepository;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserJurStateRepository;
 use App\Modules\JurManagerCabinet\Application\Dto\Request\CreateJurContractDto;
 use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract\ContractStatus;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractCreationRepositoryInterface;
 use App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\Mappers\ContractMapper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,13 +23,15 @@ use Doctrine\ORM\EntityManagerInterface;
 class ContractCreationRepository implements ContractCreationRepositoryInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
+        private EntityManagerInterface      $em,
 
-        private readonly AddressRepository $addressRepo,
-        private readonly TariffRepository $tariffRepo,
-        private readonly CustomerInnRepository $customerInnRepo,
-        private readonly AutoIncrementUidRepository $autoIncrementUidRepo,
-        private readonly PasswordHashRepository $passwordHashRepo,
+        private AddressRepository           $addressRepo,
+        private TariffRepository            $tariffRepo,
+        private CustomerInnRepository       $customerInnRepo,
+        private AutoIncrementUidRepository  $autoIncrementUidRepo,
+        private PasswordHashRepository      $passwordHashRepo,
+        private UserJurStateRepository      $userJurStateRepo,
+        private BlockStateRepository        $blockStateRepo,
     ) {}
 
     public function create(CreateJurContractDto $contractDto): Contract
@@ -47,7 +51,9 @@ class ContractCreationRepository implements ContractCreationRepositoryInterface
         }
 
         $addressTable = $this->addressRepo->find($contractDto->getAddress()->getId());
-        $tariffTable = $this->tariffRepo->find(1);
+        $tariffTable = $this->tariffRepo->find(1); //TODO: возможно стоит вынести в DTO
+        $jurStateTable = $this->userJurStateRepo->find(2);
+        $blockStateTable = $this->blockStateRepo->findByCode('blocked');
 
         $tableUser = new User();
         $tableUser->setId($newId);
@@ -55,14 +61,17 @@ class ContractCreationRepository implements ContractCreationRepositoryInterface
         $tableUser->setPassword($passes['encryptHash']);
         $tableUser->setFullName($contractDto->getFullName());
         $tableUser->setPassport($contractDto->getPassport());
-        $tableUser->setDistrict($addressTable->getDistrict());
+        $tableUser->setDistrict($addressTable->getDistrict()->getId());
         $tableUser->setAddress($addressTable);
         $tableUser->setPhoneExtra($contractDto->getPhoneExtra());                  // дополнительный телефон
-        $tableUser->setIsJuridical(2);                                    // Всегда неактивированный, тк юрик
+        $tableUser->setJurState($jurStateTable);                                   // Всегда неактивированный, тк юрик
+        $tableUser->setBlockState($blockStateTable);
+        $tableUser->setBlockDate($now);
         $tableUser->setBill(0.0);
         $tableUser->setBonus(0.0);
         $tableUser->setBillAbs(0.0);
         $tableUser->setCredit(false);
+        $tableUser->setCurrentBankAccount('');
         $tableUser->setRegDate($now);
         $tableUser->setAbPstart($now);
         $tableUser->setAbPend($periodEnd);

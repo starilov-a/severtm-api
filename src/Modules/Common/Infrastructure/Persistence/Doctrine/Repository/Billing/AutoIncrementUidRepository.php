@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing;
 
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\AutoIncrementUid;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\PsGroup;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
 
-class AutoIncrementUidRepository
+class AutoIncrementUidRepository extends ServiceEntityRepository
 {
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-    ) {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, AutoIncrementUid::class);
     }
 
     /**
@@ -25,30 +27,25 @@ class AutoIncrementUidRepository
      */
     public function getAndIncreaseNextUserId(): int
     {
-        return $this->entityManager->wrapInTransaction(function (): int {
-            /** @var AutoIncrementUid|null $counter */
-            $counter = $this->entityManager->find(
-                AutoIncrementUid::class,
-                1,
-                LockMode::PESSIMISTIC_WRITE
-            );
+        /** @var AutoIncrementUid|null $counter */
+        $counter = $this->findOneBy([], ['id' => 'DESC']);
 
-            if ($counter === null) {
-                throw new RuntimeException('Row in organisations_uid was not found.');
-            }
+        if ($counter === null) {
+            throw new RuntimeException('Row in organisations_uid was not found.');
+        }
 
-            $currentId = $counter->getValue();
+        $currentId = $counter->getValue();
 
-            if ($currentId <= 0) {
-                throw new RuntimeException('Invalid value in organisations_uid.');
-            }
+        if ($currentId <= 0) {
+            throw new RuntimeException('Invalid value in organisations_uid.');
+        }
 
-            $counter->increment();
+        $counter->increment();
 
-            $this->entityManager->persist($counter);
-            $this->entityManager->flush();
+        $em = $this->getEntityManager();
+        $em->persist($counter);
+        $em->flush();
 
-            return $currentId;
-        });
+        return $currentId;
     }
 }

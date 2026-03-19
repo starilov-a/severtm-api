@@ -11,15 +11,15 @@ class UserTaskParameter
 {
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: UserTask::class)]
-    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'user_task_id', referencedColumnName: 'id', nullable: false)]
     private UserTask $task;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: EnumTask::class)]
-    #[ORM\JoinColumn(name: 'param_code', referencedColumnName: 'param_code', nullable: false)]
-    private EnumTask $type;
+    #[ORM\ManyToOne(targetEntity: EnumParameter::class)]
+    #[ORM\JoinColumn(name: 'params_type', referencedColumnName: 'param_code', nullable: false)]
+    private EnumParameter $type;
 
-    #[ORM\Column(name: 'param_value', type: Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(name: 'params_value', type: Types::STRING, length: 255, nullable: true)]
     private ?string $value = null;
 
     public function getTask(): UserTask
@@ -33,12 +33,12 @@ class UserTaskParameter
         return $this;
     }
 
-    public function getType(): EnumTask
+    public function getType(): EnumParameter
     {
         return $this->type;
     }
 
-    public function setType(EnumTask $type): self
+    public function setType(EnumParameter $type): self
     {
         $this->type = $type;
         return $this;

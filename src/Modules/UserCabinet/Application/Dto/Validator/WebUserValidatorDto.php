@@ -2,6 +2,7 @@
 
 namespace App\Modules\UserCabinet\Application\Dto\Validator;
 
+use App\Modules\Common\Application\Dto\ValidatorDto;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class WebUserValidatorDto extends ValidatorDto

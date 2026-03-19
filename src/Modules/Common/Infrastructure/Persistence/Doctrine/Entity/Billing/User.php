@@ -53,7 +53,11 @@ class User
     private ?string $passport = null;
 
     #[ORM\Column(name: 'tax_number', type: Types::STRING, length: 35)]
-    private string $taxNumber;
+    private string $taxNumber = '';
+
+    #[ORM\Column(name: 'current_bank_account', type: Types::STRING, length: 35)]
+    private string $currentBankAccount;
+
 
     #[ORM\Column(name: 'birthdate', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
@@ -81,9 +85,6 @@ class User
     private ?int $flat = null;
 
     /* ---------- Финансы ---------- */
-
-    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
-    private int $isJuridical = 0;
 
     #[ORM\ManyToOne(targetEntity: UserJurState::class)]
     #[ORM\JoinColumn(name: 'is_juridical', referencedColumnName: 'entity_id', nullable: true)]
@@ -131,7 +132,14 @@ class User
     #[ORM\Column(name: 'ab_ldiscount', type: Types::INTEGER, options: ['unsigned' => true])]
     private int $abLdiscount;
 
-    /* ---------- Разное ---------- */
+    #[ORM\Column(name: 'servpack_id', type: Types::INTEGER, options: ['unsigned' => true])]
+    private int $servpackId = 0;
+
+    #[ORM\Column(name: 'next_servpack_id', type: Types::INTEGER, options: ['unsigned' => true])]
+    private int $nextServpackId = 0;
+
+    #[ORM\Column(name: 'paid_traffic', type: Types::INTEGER, options: ['unsigned' => true])]
+    private int $paidTraffic = 0;
 
     #[ORM\Column(name: 'priv_level', type: Types::INTEGER, options: ['unsigned' => true, 'default' => 0])]
     private int $privLevel = 0;
@@ -163,7 +171,7 @@ class User
     #[ORM\ManyToOne(targetEntity: CustomerInn::class)]
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'customer_id', nullable: true)]
     private ?CustomerInn $customerInn = null;
-//
+
 //    #[ORM\ManyToOne(targetEntity: Unit::class)]
 //    #[ORM\JoinColumn(name: 'unit_id', referencedColumnName: 'id', nullable: false)]
 //    private Unit $unit;
@@ -254,6 +262,15 @@ class User
         return $this->webUser;
     }
 
+    public function getServpackId(): int
+    {
+        return $this->servpackId;
+    }
+
+    public function setServpackId(int $servpackId): void
+    {
+        $this->servpackId = $servpackId;
+    }
 
     public function getPassword(): ?string
     {
@@ -276,6 +293,16 @@ class User
     {
         $this->taxNumber = $taxNumber;
         return $this;
+    }
+
+    public function getCurrentBankAccount(): string
+    {
+        return $this->currentBankAccount;
+    }
+
+    public function setCurrentBankAccount(string $currentBankAccount): void
+    {
+        $this->currentBankAccount = $currentBankAccount;
     }
 
     public function setBirthdate(?\DateTimeInterface $birthdate): self

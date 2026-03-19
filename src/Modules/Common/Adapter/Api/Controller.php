@@ -2,7 +2,8 @@
 
 namespace App\Modules\Common\Adapter\Api;
 
-use App\Modules\UserCabinet\Application\Dto\Validator\ValidatorDto;
+
+use App\Modules\Common\Application\Dto\ValidatorDto;
 use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
