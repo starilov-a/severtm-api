@@ -11,13 +11,11 @@ use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueProcess;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractStatusRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ManagerRepositoryInterface;
-use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\WebActionRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\Service\ContractReissueService;
 
 class StartReissueContractUseCase
 {
     public function __construct(
-        protected WebActionRepositoryInterface          $webActionRepo,
         protected ManagerRepositoryInterface            $managerRepo,
         protected ContractRepositoryInterface           $contractRepo,
         protected ContractStatusRepositoryInterface     $contractStatusRepo,

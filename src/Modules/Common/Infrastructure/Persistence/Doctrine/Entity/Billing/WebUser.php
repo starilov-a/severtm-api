@@ -14,7 +14,6 @@ class WebUser
     private User $user;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
     private int $uid;
 

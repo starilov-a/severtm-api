@@ -46,7 +46,7 @@ class Controller extends AbstractController
         return false;
     }
 
-    protected function validate(object $dto, array $data): void
+    protected function validate(object $dto, array $data): object
     {
         if (!($dto instanceof ValidatorDto))
             throw new \LogicException('Wrong validate DTO');
@@ -62,5 +62,7 @@ class Controller extends AbstractController
 
             throw new ValidationException($errorsArr, 'Ошибка валидации');
         }
+
+        return $dto;
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Modules\JurManagerCabinet\Application\Dto\Request\Queue;
 
 use App\Modules\JurManagerCabinet\Application\Dto\Request\Reissue\ReissueContractDto;
-use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueProcess;
 
 class ScheduleReissueTaskDto
 {
@@ -88,12 +87,12 @@ class ScheduleReissueTaskDto
         $this->comment = $comment;
     }
 
-    public function getContractReissueProcess(): ContractReissueProcess
+    public function getContractReissueProcess(): ReissueContractDto
     {
         return $this->contractReissueProcess;
     }
 
-    public function setContractReissueProcess(ContractReissueProcess $contractReissueProcess): void
+    public function setContractReissueProcess(ReissueContractDto $contractReissueProcess): void
     {
         $this->contractReissueProcess = $contractReissueProcess;
     }

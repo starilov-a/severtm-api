@@ -161,3 +161,16 @@ services:
     # Builderman-cabinet
     App\Modules\BuildermanCabinet\Domain\RepositoryInterface\BuilderRepositoryInterface:
         alias: App\Modules\BuildermanCabinet\Infrastructure\Persistence\Doctrine\Repository\BuilderRepository
+
+    # Jur-manager-cabinet
+
+    App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface:
+        alias: App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\ContractRepository
+
+    App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractStatusRepositoryInterface:
+        alias: App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\ContractStatusRepository
+
+
+    App\Modules\JurManagerCabinet\Domain\RepositoryInterface\TaskSchedulerRepositoryInterface:
+        alias: App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\Queue\TaskSchedulerRepository
+

@@ -7,5 +7,7 @@ use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueProcess;
 
 interface ContractReissueProcessRepositoryInterface
 {
+    public function getReissueProcessByContract(Contract $contract): ContractReissueProcess;
+
     public function findScheduledByContract(Contract $contract): ContractReissueProcess;
 }

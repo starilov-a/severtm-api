@@ -2,10 +2,14 @@
 
 namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
+use App\Modules\JurManagerCabinet\Domain\Entity\Address;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\CustomerInnRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserRepository;
 use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
+use App\Modules\JurManagerCabinet\Domain\Entity\Contract\ContractStatus;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
+use App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\Mappers\ContractMapper;
 
 class ContractRepository implements ContractRepositoryInterface
 {
@@ -13,37 +17,27 @@ class ContractRepository implements ContractRepositoryInterface
         protected UserRepository $userRepo,
         protected CustomerInnRepository $customerInnRepo
     ) {}
+
     public function find(int $id): Contract
     {
-        $user = $this->userRepo->find($id);
+        $tableUser = $this->userRepo->find($id);
 
-        return new Contract(
-            $user->getId(),
-            $user->getCustomerInn()->getInn(),
-            $user->getFullName(),
-            $user->getLogin(),
-            (string)$user->getEmail(),
-            (string)$user->getPhoneExtra(),
-            (bool)$user->isDeleted(),
-        );
+        return ContractMapper::map($tableUser);
     }
-
 
     public function findAllByInn(string $inn): array
     {
-        $tableUsers = $this->userRepo->findBy(['customerInn' => $this->customerInnRepo->findby(['inn' => $inn])]);
+        $customerInn = $this->customerInnRepo->findOneBy(['inn' => $inn]);
+        if ($customerInn === null) {
+            return [];
+        }
 
+        /* @var User $tableUsers */
+        $tableUsers = $this->userRepo->findBy(['customerInn' => $customerInn]);
         $contracts = [];
+
         foreach ($tableUsers as $tableUser) {
-            $contracts[] = new Contract(
-                $tableUser->getId(),
-                $tableUser->getCustomerInn()->getInn(),
-                $tableUser->getFullName(),
-                $tableUser->getLogin(),
-                (string)$tableUser->getEmail(),
-                (string)$tableUser->getPhoneExtra(),
-                (bool)$tableUser->isDeleted(),
-            );
+            $contracts[] = ContractMapper::map($tableUser);
         }
 
         return $contracts;
@@ -51,8 +45,6 @@ class ContractRepository implements ContractRepositoryInterface
 
     public function archiveForReissue(Contract $contract): void
     {
-        $user = $this->userRepo->find($contract->getId());
-        $user->setLogin($user->getLogin() . '_old');
-        $this->userRepo->save($user);
+        // TODO: Implement archiveForReissue() method.
     }
 }

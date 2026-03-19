@@ -10,3 +10,9 @@ builderman-cabinet-v1:
     type:     attribute
     defaults:
         version: 1
+jur-manager-cabinet-v1:
+    prefix: /jur-manager-cabinet/
+    resource: ../src/Modules/JurManagerCabinet/Adapter/Api/Legacy
+    type:     attribute
+    defaults:
+        version: 1

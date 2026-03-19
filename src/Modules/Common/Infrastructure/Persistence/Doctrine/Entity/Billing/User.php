@@ -179,6 +179,12 @@ class User
         return $this->id;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
     public function getLogin(): string
     {
         return $this->login;
@@ -252,6 +258,102 @@ class User
     public function getPassword(): ?string
     {
         return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function setPassport(?string $passport): self
+    {
+        $this->passport = $passport;
+        return $this;
+    }
+
+    public function setTaxNumber(string $taxNumber): self
+    {
+        $this->taxNumber = $taxNumber;
+        return $this;
+    }
+
+    public function setBirthdate(?\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
+        return $this;
+    }
+
+    public function setPhoneExtra(string $phoneExtra): self
+    {
+        $this->phoneExtra = $phoneExtra;
+        return $this;
+    }
+
+    public function setFlat(?int $flat): self
+    {
+        $this->flat = $flat;
+        return $this;
+    }
+
+    public function setIsJuridical(int $isJuridical): self
+    {
+        $this->isJuridical = $isJuridical;
+        return $this;
+    }
+
+    public function setBill(float $bill): self
+    {
+        $this->bill = $bill;
+        return $this;
+    }
+
+    public function setBonus(float $bonus): self
+    {
+        $this->bonus = $bonus;
+        return $this;
+    }
+
+    public function setBillAbs(float $billAbs): self
+    {
+        $this->billAbs = $billAbs;
+        return $this;
+    }
+
+    public function setRegDate(\DateTimeImmutable $regDate): self
+    {
+        $this->regDate = $regDate->getTimestamp();
+        return $this;
+    }
+
+    public function setAbLdiscount(int $abLdiscount): self
+    {
+        $this->abLdiscount = $abLdiscount;
+        return $this;
+    }
+
+    public function setPrivLevel(int $privLevel): self
+    {
+        $this->privLevel = $privLevel;
+        return $this;
+    }
+
+    public function setGroupId(int $groupId): self
+    {
+        $this->groupId = $groupId;
+        return $this;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
+        return $this;
+    }
+
+    public function setComments(string $comments): self
+    {
+        $this->comments = $comments;
+        return $this;
     }
 
     public function getPassport(): ?string

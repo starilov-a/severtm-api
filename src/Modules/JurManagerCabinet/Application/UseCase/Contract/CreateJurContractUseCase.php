@@ -17,6 +17,8 @@ class CreateJurContractUseCase
 
         // 1. Бизнес проверки
 
+        // Какие?
+
         // 2. Создание договора
         $contract = $this->contractCreationRepository->create($dto);
 

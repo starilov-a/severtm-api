@@ -22,7 +22,7 @@ class ReissueNotYetScheduledRule extends Rule
         $alreadyScheduled = $this->processRepo->findScheduledByContract($context->getContract());
 
         //TODO: Получать дату переоформления и id нового договора
-        if ($alreadyScheduled->status() === ContractReissueStatus::SCHEDULED)
+        if ($alreadyScheduled->getStatus() === ContractReissueStatus::SCHEDULED)
             RuleResult::fail('Переоформление уже запланировано');
 
         return RuleResult::ok();

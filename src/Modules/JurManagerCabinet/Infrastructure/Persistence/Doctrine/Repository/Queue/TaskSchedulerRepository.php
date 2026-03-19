@@ -3,7 +3,10 @@
 namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\Queue;
 
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTask;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\UserTaskParameter;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\EnumTaskRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserRepository;
+use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserTaskParameterRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserTaskRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserTaskStateRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserTaskTypeRepository;
@@ -15,15 +18,17 @@ use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\TaskSchedulerInterf
 class TaskSchedulerRepository implements TaskSchedulerInterface
 {
     public function __construct(
-        private UserTaskRepository          $userTaskRepo,
-        private UserTaskStateRepository     $userTaskStateRepo,
-        private UserTaskTypeRepository      $userTaskTypeRepo,
-        private UserRepository              $userRepo,
-        private WebUserRepository           $webUserRepo,
+        private UserTaskRepository $userTaskRepo,
+        private UserTaskStateRepository $userTaskStateRepo,
+        private UserTaskTypeRepository $userTaskTypeRepo,
+        private UserRepository $userRepo,
+        private WebUserRepository $webUserRepo,
+        private EnumTaskRepository $enumTaskRepo,
+        private UserTaskParameterRepository $userTaskParameterRepo,
     ) {}
+
     public function scheduleForReissue(ScheduleReissueTaskDto $dto): ScheduledTask
     {
-        // Добавление значений по задаче
         $tableTask = new UserTask();
         $tableTask->setType($this->userTaskTypeRepo->findOneBy(['code' => $dto->getTaskType()]));
         $tableTask->setState($this->userTaskStateRepo->findOneBy(['code' => $dto->getTaskState()]));
@@ -34,9 +39,12 @@ class TaskSchedulerRepository implements TaskSchedulerInterface
         $tableTask->setComment($dto->getComment());
         $tableTask = $this->userTaskRepo->save($tableTask);
 
-        // Добавление параметров задачи
-        // TODO: Создать задачу
-
+        $reissueDto = $dto->getContractReissueProcess();
+        $this->saveParameter($tableTask, 'reissue_inn', (string) $reissueDto->getNewInn());
+        $this->saveParameter($tableTask, 'reissue_fio', $reissueDto->getFio());
+        $this->saveParameter($tableTask, 'reissue_login', $reissueDto->getLogin());
+        $this->saveParameter($tableTask, 'reissue_phone', $reissueDto->getPhone());
+        $this->saveParameter($tableTask, 'reissue_comment', $reissueDto->getComment());
 
         return new ScheduledTask(
             $tableTask->getId(),
@@ -44,9 +52,24 @@ class TaskSchedulerRepository implements TaskSchedulerInterface
             $tableTask->getState()->getCode(),
             $tableTask->getUser()->getId(),
             $tableTask->getAuthor()->getUid(),
-            new \DateTimeImmutable($tableTask->getStartTime()),
+            new \DateTimeImmutable($tableTask->getStartTime()->format('Y-m-d H:i:s')),
             [],
             0
         );
+    }
+
+    private function saveParameter(UserTask $task, string $code, ?string $value): void
+    {
+        $type = $this->enumTaskRepo->find($code);
+        if ($type === null) {
+            return;
+        }
+
+        $parameter = new UserTaskParameter();
+        $parameter->setTask($task);
+        $parameter->setType($type);
+        $parameter->setValue($value);
+
+        $this->userTaskParameterRepo->save($parameter);
     }
 }
