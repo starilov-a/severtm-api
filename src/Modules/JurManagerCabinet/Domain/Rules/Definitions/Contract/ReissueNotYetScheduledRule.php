@@ -19,11 +19,11 @@ class ReissueNotYetScheduledRule extends Rule
         if (!($context instanceof HasContract))
             throw new \LogicException('Wrong context passed to ReissueNotYetScheduledRule');
 
-        $alreadyScheduled = $this->processRepo->findScheduledByContract($context->getContract());
+        $notYetScheduled = $this->processRepo->issetScheduledByContract($context->getContract());
 
-        //TODO: Получать дату переоформления и id нового договора
-        if ($alreadyScheduled->getStatus() === ContractReissueStatus::SCHEDULED)
-            RuleResult::fail('Переоформление уже запланировано');
+        if (!$notYetScheduled) {
+            return RuleResult::fail('Переоформление уже запланировано');
+        }
 
         return RuleResult::ok();
     }

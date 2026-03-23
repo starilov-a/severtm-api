@@ -9,5 +9,5 @@ interface ContractReissueProcessRepositoryInterface
 {
     public function getReissueProcessByContract(Contract $contract): ContractReissueProcess;
 
-    public function findScheduledByContract(Contract $contract): ContractReissueProcess;
+    public function issetScheduledByContract(Contract $contract): bool;
 }

@@ -10,12 +10,18 @@ class ScheduleReissueTaskDto
         protected string $taskType,
         protected string $taskState,
         protected string $contractId,
+        protected string $newContractId,
         protected string $managerId,
         protected \DateTimeImmutable $createAt,
         protected \DateTimeImmutable $startAt,
         protected string $comment,
         protected ReissueContractDto $contractReissueProcess
     ) {}
+
+    public function getNewContractId(): string
+    {
+        return $this->newContractId;
+    }
 
     public function getTaskType(): string
     {

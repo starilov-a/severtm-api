@@ -10,7 +10,7 @@ class ApplicationStatusService
 {
     public function __construct(
         protected ApplicationStatusRepositoryInterface $appStatusRepo,
-        protected ApplicationStatusesAvailableForBuilderListPolicy $policy
+        // protected ApplicationStatusesAvailableForBuilderListPolicy $policy
     ) {}
 
 

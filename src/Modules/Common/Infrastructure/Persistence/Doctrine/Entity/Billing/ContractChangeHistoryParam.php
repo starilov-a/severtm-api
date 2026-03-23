@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ContractChangeHistoryParam
 {
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: ContractChangeHistory::class)]
+    #[ORM\ManyToOne(targetEntity: ContractChangeHistory::class, inversedBy: 'params')]
     #[ORM\JoinColumn(name: 'history_id', referencedColumnName: 'history_id', nullable: false)]
     private ContractChangeHistory $history;
 
@@ -25,8 +25,43 @@ class ContractChangeHistoryParam
     #[ORM\Column(name: 'value_before', type: Types::TEXT, nullable: true)]
     private ?string $valueBefore = null;
 
-    public function setHistory(ContractChangeHistory $history): void { $this->history = $history; }
-    public function setParameter(EnumParameter $parameter): void { $this->parameter = $parameter; }
-    public function setValueAfter(?string $valueAfter): void { $this->valueAfter = $valueAfter; }
-    public function setValueBefore(?string $valueBefore): void { $this->valueBefore = $valueBefore; }
+    public function getHistory(): ContractChangeHistory
+    {
+        return $this->history;
+    }
+
+    public function setHistory(ContractChangeHistory $history): void
+    {
+        $this->history = $history;
+    }
+
+    public function getParameter(): EnumParameter
+    {
+        return $this->parameter;
+    }
+
+    public function setParameter(EnumParameter $parameter): void
+    {
+        $this->parameter = $parameter;
+    }
+
+    public function getValueAfter(): ?string
+    {
+        return $this->valueAfter;
+    }
+
+    public function setValueAfter(?string $valueAfter): void
+    {
+        $this->valueAfter = $valueAfter;
+    }
+
+    public function getValueBefore(): ?string
+    {
+        return $this->valueBefore;
+    }
+
+    public function setValueBefore(?string $valueBefore): void
+    {
+        $this->valueBefore = $valueBefore;
+    }
 }

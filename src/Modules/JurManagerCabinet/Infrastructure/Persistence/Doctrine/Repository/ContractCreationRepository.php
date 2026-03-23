@@ -2,11 +2,9 @@
 
 namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
-use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\BlockState;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\CustomerInn;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\WebUser;
-use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\AddressRegionRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\AddressRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\AutoIncrementUidRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\BlockStateRepository;

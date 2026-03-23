@@ -69,6 +69,7 @@ class ScheduleReissueContractUseCase
             TaskType::CONTRACT_REISSUE,
             TaskState::NEW,
             $dto->getContractId(),
+            $newContract->getId(),
             $dto->getManagerId(),
             new \DateTimeImmutable(),
             $dto->getDateReissue(),

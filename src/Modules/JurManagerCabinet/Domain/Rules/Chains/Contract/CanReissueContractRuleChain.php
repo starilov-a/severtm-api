@@ -3,6 +3,7 @@
 namespace App\Modules\JurManagerCabinet\Domain\Rules\Chains\Contract;
 
 use App\Modules\Common\Domain\Rules\Results\ChainRuleItem;
+use App\Modules\Common\Domain\Rules\Results\RuleMode;
 use App\Modules\Common\Domain\Rules\RuleChain;
 use App\Modules\JurManagerCabinet\Domain\Rules\Definitions\Contract\ContractNotYetReissuedRule;
 use App\Modules\JurManagerCabinet\Domain\Rules\Definitions\Contract\CurrentOrNextFinPeriodRule;
@@ -12,17 +13,19 @@ use App\Modules\JurManagerCabinet\Domain\Rules\Definitions\Contract\ReissueNotYe
 class CanReissueContractRuleChain extends RuleChain
 {
     public function __construct(
+        IssetContractRule               $contractRule,
         OldInnAndNewInnAreDifferentRule $oldInnAndNewInnAreDifferentRule,
         CurrentOrNextFinPeriodRule      $currentOrNextFinPeriodRule,
         ReissueNotYetScheduledRule      $reissueNotYetScheduledRule,
-        ContractNotYetReissuedRule      $contractNotYetReissued
+        ContractNotYetReissuedRule      $contractNotYetReissued,
     )
     {
         $this->items = [
             new ChainRuleItem($oldInnAndNewInnAreDifferentRule),
             new ChainRuleItem($currentOrNextFinPeriodRule),
             new ChainRuleItem($reissueNotYetScheduledRule),
-            new ChainRuleItem($contractNotYetReissued)
+            new ChainRuleItem($contractNotYetReissued),
+            new ChainRuleItem($contractRule)
         ];
     }
 }

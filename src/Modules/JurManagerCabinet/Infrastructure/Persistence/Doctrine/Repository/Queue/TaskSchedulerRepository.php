@@ -44,6 +44,8 @@ class TaskSchedulerRepository implements TaskSchedulerInterface
         $this->saveParameter($tableTask, 'reissue_fio', $reissueDto->getFio());
         $this->saveParameter($tableTask, 'reissue_login', $reissueDto->getLogin());
         $this->saveParameter($tableTask, 'reissue_phone', $reissueDto->getPhone());
+        $this->saveParameter($tableTask, 'reissue_old_contract', $dto->getContractId());
+        $this->saveParameter($tableTask, 'reissue_new_contract', $dto->getNewContractId());
         $this->saveParameter($tableTask, 'reissue_comment', $reissueDto->getComment());
 
         return new ScheduledTask(

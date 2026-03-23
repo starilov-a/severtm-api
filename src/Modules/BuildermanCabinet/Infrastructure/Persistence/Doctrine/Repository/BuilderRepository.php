@@ -20,7 +20,9 @@ class BuilderRepository extends ServiceEntityRepository implements BuilderReposi
      */
     public function findById(int $id): Builder
     {
+        /* @var User $userTable */
         $userTable = $this->find($id);
+        
 
         $builder = new Builder(
             $userTable->getId(),

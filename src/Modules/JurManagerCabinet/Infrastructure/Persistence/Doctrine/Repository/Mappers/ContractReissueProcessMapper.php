@@ -16,7 +16,7 @@ class ContractReissueProcessMapper
      * @param int $newContractId
      * @return ContractReissueProcess
      */
-    static public function map(UserTask $tableUserTask, array $tableEnumParams, int $newContractId): ContractReissueProcess
+    static public function map(UserTask $tableUserTask, array $tableEnumParams,): ContractReissueProcess
     {
 
         $scheduleAt = $tableUserTask->getStartTime() ?? $tableUserTask->getCreatedAt();
@@ -36,7 +36,7 @@ class ContractReissueProcessMapper
 
         return new ContractReissueProcess(
             oldContractId: $tableUserTask->getUser()->getId(),
-            newContractId: $newContractId,
+            newContractId: $tableEnumParams['reissue_new_contract'],
             contractReissueDto: $reissueDto,
             scheduleAt: $scheduleAtImmutable,
             status: self::mapStatus($tableUserTask->getState()->getCode()),
