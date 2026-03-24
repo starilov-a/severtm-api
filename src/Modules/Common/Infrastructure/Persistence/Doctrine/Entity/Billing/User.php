@@ -86,6 +86,9 @@ class User
 
     /* ---------- Финансы ---------- */
 
+    #[ORM\Column(name: 'is_juridical', type: Types::INTEGER, options: ['default' => 0])]
+    private int $isJuridical = 0;
+
     #[ORM\ManyToOne(targetEntity: UserJurState::class)]
     #[ORM\JoinColumn(name: 'is_juridical', referencedColumnName: 'entity_id', nullable: true)]
     private ?UserJurState $jurState = null;

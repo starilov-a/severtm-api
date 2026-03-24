@@ -23,8 +23,8 @@ class GetReasonForFreezeTest extends TransactionalWebTestCase
 
         if (!empty($payload['data'])) {
             $first = $payload['data'][0];
-            $this->assertArrayHasKey('id', $first);
-            $this->assertArrayHasKey('name', $first);
+            $this->assertArrayHasKey('value', $first);
+            $this->assertArrayHasKey('label', $first);
         }
     }
 }
