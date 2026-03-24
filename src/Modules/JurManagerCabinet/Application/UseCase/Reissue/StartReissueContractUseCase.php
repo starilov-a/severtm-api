@@ -20,7 +20,6 @@ class StartReissueContractUseCase
         protected ContractRepositoryInterface           $contractRepo,
         protected ContractStatusRepositoryInterface     $contractStatusRepo,
 
-
         protected ContractReissueService                $contractReissueService,
 
         protected CreateJurContractUseCase              $createJurContractUseCase,

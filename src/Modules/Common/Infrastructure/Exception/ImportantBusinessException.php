@@ -2,7 +2,6 @@
 
 namespace App\Modules\Common\Infrastructure\Exception;
 
-use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
 
 class ImportantBusinessException extends BusinessException

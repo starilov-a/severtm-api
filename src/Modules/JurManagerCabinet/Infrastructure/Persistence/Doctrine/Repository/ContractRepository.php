@@ -3,11 +3,9 @@
 namespace App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Entity\Billing\User;
-use App\Modules\JurManagerCabinet\Domain\Entity\Address;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\CustomerInnRepository;
 use App\Modules\Common\Infrastructure\Persistence\Doctrine\Repository\Billing\UserRepository;
 use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
-use App\Modules\JurManagerCabinet\Domain\Entity\Contract\ContractStatus;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
 use App\Modules\JurManagerCabinet\Infrastructure\Persistence\Doctrine\Repository\Mappers\ContractMapper;
 
@@ -18,9 +16,13 @@ class ContractRepository implements ContractRepositoryInterface
         protected CustomerInnRepository $customerInnRepo
     ) {}
 
-    public function find(int $id): Contract
+    public function find(int $id): ?Contract
     {
         $tableUser = $this->userRepo->find($id);
+
+        if (is_null($tableUser)) {
+            return null;
+        }
 
         return ContractMapper::map($tableUser);
     }

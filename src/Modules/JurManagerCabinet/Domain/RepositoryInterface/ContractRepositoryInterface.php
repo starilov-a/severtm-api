@@ -6,7 +6,7 @@ use App\Modules\JurManagerCabinet\Domain\Entity\Contract\Contract;
 
 interface ContractRepositoryInterface
 {
-    public function find(int $id): Contract;
+    public function find(int $id): ?Contract;
 
     public function findAllByInn(string $inn): array;
 

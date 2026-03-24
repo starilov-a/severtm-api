@@ -2,10 +2,10 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Service;
 
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Application\UseCase\ProdServMode\DisableServiceModeUseCase;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserRepositoryInterface;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\UserServModeRepositoryInterface;
-use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DisableServiceUseCase

@@ -2,7 +2,7 @@
 
 namespace App\Modules\Common\Infrastructure\EventListener;
 
-use App\Modules\UserCabinet\Infrastructure\Exception\AuthException;
+use App\Modules\Common\Infrastructure\Exception\AuthException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\Auth;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;

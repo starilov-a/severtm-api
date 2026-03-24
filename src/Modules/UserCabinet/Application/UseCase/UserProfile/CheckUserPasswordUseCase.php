@@ -2,8 +2,8 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\UserProfile;
 
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Domain\RepositoryInterface\WebUserRepositoryInterface;
-use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
 
 class CheckUserPasswordUseCase
 {

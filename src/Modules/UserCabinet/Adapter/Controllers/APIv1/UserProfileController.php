@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserCabinet\Adapter\Controllers\APIv1;
 
+use App\Modules\Common\Adapter\Api\Controller;
+use App\Modules\Common\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Application\Dto\Validator\PasswordValidatorDto;
 use App\Modules\UserCabinet\Application\Dto\Validator\WebUserValidatorDto;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\CheckUserPasswordUseCase;
@@ -10,9 +12,7 @@ use App\Modules\UserCabinet\Application\UseCase\UserProfile\GetShortUserInfoUseC
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserInfoUseCase;
 use App\Modules\UserCabinet\Application\UseCase\UserProfile\UpdateUserPasswordUseCase;
 use App\Modules\UserCabinet\Domain\Dto\Request\WebUserDto as WebUserRequestDto;
-use App\Modules\UserCabinet\Infrastructure\Exception\ValidationException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\UserSessionService;
-use App\Modules\Common\Adapter\Api\Controller;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

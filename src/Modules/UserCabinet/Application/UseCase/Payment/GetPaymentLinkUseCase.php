@@ -2,7 +2,7 @@
 
 namespace App\Modules\UserCabinet\Application\UseCase\Payment;
 
-use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 
 class GetPaymentLinkUseCase
 {

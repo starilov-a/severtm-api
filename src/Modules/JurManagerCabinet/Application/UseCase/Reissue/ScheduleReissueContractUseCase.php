@@ -2,6 +2,7 @@
 
 namespace App\Modules\JurManagerCabinet\Application\UseCase\Reissue;
 
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\JurManagerCabinet\Application\Dto\Request\CreateJurContractDto;
 use App\Modules\JurManagerCabinet\Application\Dto\Request\Queue\ScheduleReissueTaskDto;
 use App\Modules\JurManagerCabinet\Application\Dto\Request\Reissue\ReissueContractDto;
@@ -11,29 +12,28 @@ use App\Modules\JurManagerCabinet\Domain\Entity\Contract\ContractStatus;
 use App\Modules\JurManagerCabinet\Domain\Entity\Reissue\ContractReissueProcess;
 use App\Modules\JurManagerCabinet\Domain\Entity\Task\TaskState;
 use App\Modules\JurManagerCabinet\Domain\Entity\Task\TaskType;
-
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\ContractStatusRepositoryInterface;
 use App\Modules\JurManagerCabinet\Domain\RepositoryInterface\TaskSchedulerInterface;
-
 use App\Modules\JurManagerCabinet\Domain\Rules\Chains\Contract\CanReissueContractRuleChain;
+use App\Modules\JurManagerCabinet\Domain\Service\ContractService;
 
 class ScheduleReissueContractUseCase
 {
     public function __construct(
-        protected ContractRepositoryInterface               $contractRepo,
         protected ContractStatusRepositoryInterface         $contractStatusRepo,
         protected TaskSchedulerInterface                    $taskSchedulerRepo,
 
         protected CanReissueContractRuleChain               $canReissueContractRuleChain,
+
+        protected ContractService                           $contractService,
 
         protected CreateJurContractUseCase                  $createJurContractUseCase,
     ) {}
 
     public function execute(ReissueContractDto $dto): ContractReissueProcess
     {
-        //TODO: добавить проверку наличия договоров и менеджеров в репо
-        $oldContract = $this->contractRepo->find($dto->getContractId());
+        $oldContract = $this->contractService->getContractById($dto->getContractId());
 
         // 1. Бизнес проверки
         $result = $this->canReissueContractRuleChain->checkAll(new ReissueContext(
@@ -42,10 +42,8 @@ class ScheduleReissueContractUseCase
             $dto->getDateReissue(),
             $oldContract
         ));
-
-        // 2. Обработка бизнеса ошибок
         if (!$result->ok) {
-            throw new \DomainException($result->message);
+            throw new BusinessException($result->message);
         }
 
         // 2. Создание нового договора
@@ -61,8 +59,8 @@ class ScheduleReissueContractUseCase
             $oldContract->getAddress()
         ));
 
-        // 3. Выставляем статус "На переоформлении"
-        $this->contractStatusRepo->changeContractStatus($newContract, ContractStatus::ON_REISSUED);
+        // 3. Выставляем статус "На переоформлении" - нужно сделать другую логику, сейчас в users нельзя сделать другой block_state
+         $this->contractStatusRepo->changeContractStatus($newContract, ContractStatus::ON_REISSUED);
 
         // 4. Заведение задачи на переоформление
         $task = $this->taskSchedulerRepo->scheduleForReissue(new ScheduleReissueTaskDto(

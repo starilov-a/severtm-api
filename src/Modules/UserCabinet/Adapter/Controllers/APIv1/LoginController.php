@@ -3,7 +3,7 @@
 namespace App\Modules\UserCabinet\Adapter\Controllers\APIv1;
 
 use App\Modules\Common\Adapter\Api\Controller;
-use App\Modules\UserCabinet\Infrastructure\Exception\BusinessException;
+use App\Modules\Common\Infrastructure\Exception\BusinessException;
 use App\Modules\UserCabinet\Infrastructure\Service\Auth\Service\Auth;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;

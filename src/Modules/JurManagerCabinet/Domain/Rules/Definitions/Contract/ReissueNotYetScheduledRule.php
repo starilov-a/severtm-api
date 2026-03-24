@@ -21,7 +21,7 @@ class ReissueNotYetScheduledRule extends Rule
 
         $notYetScheduled = $this->processRepo->issetScheduledByContract($context->getContract());
 
-        if (!$notYetScheduled) {
+        if ($notYetScheduled) {
             return RuleResult::fail('Переоформление уже запланировано');
         }
 

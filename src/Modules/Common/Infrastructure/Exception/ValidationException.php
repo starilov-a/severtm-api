@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\UserCabinet\Infrastructure\Exception;
+namespace App\Modules\Common\Infrastructure\Exception;
 
 use Throwable;
 
